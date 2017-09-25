@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import FrontLogin from '@/exam/login'
 import FrontHome from '@/exam/home'
 import EndLogin from '@/examManage/login'
-
+import EndHome from '@/examManage/home'
+import Index from '@/examManage/pages/index'
 Vue.use(Router)
 
 export default new Router({
@@ -13,6 +14,11 @@ export default new Router({
       children: [
       ]
     },
-    { path: '/managelogin', name: 'EndLogin', component: EndLogin}
+    { path: '/managelogin', name: 'EndLogin', component: EndLogin},
+    { path: '/endhome', name: 'EndHome', component: EndHome,
+      children: [
+        { path: 'index', name: 'Index', component: Index}
+      ]
+    }
   ]
 })
