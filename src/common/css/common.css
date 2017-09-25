@@ -1,7 +1,7 @@
 /*css初始化*/
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
 body{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-  font-size:14px;background:#f7f7f7;-webkit-text-size-adjust:100%;color: rgb(31, 43, 61);}
+  font-size:14px;background:#f3f2f2;-webkit-text-size-adjust:100%;color: rgb(31, 43, 61);}
 a{text-decoration:none; color: #333;}
 a:hover{text-decoration:none}
 em{font-style:normal}
@@ -85,8 +85,21 @@ p{word-wrap:break-word}
 
 /*左浮动，右浮动*/
 .pull-left{
-    float: left;
-  }
-  .pull-right{
-    float: right;
-  }
+  float: left;
+}
+.pull-right{
+  float: right;
+}
+
+/*fa字体*/
+.fa-icon{
+  font-weight:400;
+  font-size: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+}
+.text-center{text-align: center;}
+.text-left{text-align: left}
+.text-right{text-align: right}

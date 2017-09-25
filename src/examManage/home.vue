@@ -1,15 +1,90 @@
 <template>
   <div class="endhome">
-    <router-view></router-view>
+    <div class="sidebar-wrapper">
+      <div class="in-wrapper">
+        <side-bar></side-bar>
+      </div>
+    </div>
+    <div class="nav-top">
+      <div class="nav-top-user">
+        <user></user>
+      </div>
+      <div class="breadcrumb-wrapper">
+        <bread-nav></bread-nav>
+      </div>
+    </div>
+    <div class="app-main">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+  import SideBar from '@/components/sidebar'
+  import User from '@/components/user'
+  import BreadNav from '@/components/breadnav'
 export default {
-  name: 'endhome'
+  name: 'endhome',
+  components: {
+    SideBar,
+    User,
+    BreadNav
+  }
 }
 </script>
 
-<style>
+<style rel="stylesheet/scss" scoped="scoped" lang="scss">
+  .endhome{
+    height:100%;
+    width: 100%;
+  }
+  .sidebar-wrapper{
+    position: fixed;
+    z-index: 1000;
+    top:0;
+    overflow: hidden;
+    height: 100%;
+    width: 200px;
+    background: #eef1f6;
+    .in-wrapper{
+      height: 100%;
+      width: 220px;
+      overflow-y: scroll;
+    }
+  }
+  /*底部导航*/
+  .nav-top{
+    height:38px;
+    width: 100%;
+    line-height: 38px;
+    text-align: left;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 999;
+    background-color: #eef1f6;
+    /*顶部用户*/
+    .nav-top-user{
+      float: right;
+      margin-right: 18px;
+    }
+    /*面包屑导航*/
+    .breadcrumb-wrapper{
+      display: inline-block;
+      margin-left: 220px;
+      transition: all 0.28s;
+    }
 
+  }
+  .app-main{
+    position: relative;
+    height: 100%;
+    transition: all .28s ease-out;
+    margin-left: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    padding-top: 48px;
+    transition: all .3s;
+    overflow: hidden;
+  }
 </style>
