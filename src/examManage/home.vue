@@ -1,12 +1,15 @@
 <template>
-  <div id="app">
+  <div id="endhome">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'endhome'
 }
 </script>
 
+<style>
+
+</style>

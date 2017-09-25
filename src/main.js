@@ -3,7 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import ElementUI from 'element-ui' // 加载ElementUI
+import VueLazyLoad from 'vue-lazyload'
+import axios from 'axios'
+import '../static/font-awesome/css/font-awesome.min.css' // 加载fontawesome字体
 
+Vue.use(ElementUI) // 全局使用elementUI
+Vue.use(VueLazyLoad, { // 全局使用图片懒加载
+  loading: 'static/loading-svg/loading-bars.svg',
+  try: 3 // default 1
+})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

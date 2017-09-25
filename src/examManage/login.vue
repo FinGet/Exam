@@ -1,12 +1,14 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div id="endlogin">
+    endlogin
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'endlogin'
 }
 </script>
 
+<style>
+</style>
