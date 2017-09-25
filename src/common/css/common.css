@@ -1,0 +1,92 @@
+/*css初始化*/
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
+body{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-size:14px;background:#f7f7f7;-webkit-text-size-adjust:100%;color: rgb(31, 43, 61);}
+a{text-decoration:none; color: #333;}
+a:hover{text-decoration:none}
+em{font-style:normal}
+li{list-style:none}
+img{border:0;vertical-align:middle}
+table{border-collapse:collapse;border-spacing:0}
+p{word-wrap:break-word}
+/*=================================================================
+  padding
+  =================================================================*/
+.paddingT0 { padding-top: 0; }
+.paddingT5  { padding-top: 5px; }
+.paddingT10 { padding-top: 10px; }
+.paddingT15 { padding-top: 15px; }
+.paddingT20 { padding-top: 20px; }
+.paddingT30 { padding-top: 30px; }
+.paddingT40 { padding-top: 40px; }
+.paddingT50 { padding-top: 50px; }
+
+.paddingB0 { padding-bottom: 0; }
+.paddingB5  { padding-bottom: 5px; }
+.paddingB10 { padding-bottom: 10px; }
+.paddingB15 { padding-bottom: 15px; }
+.paddingB20 { padding-bottom: 20px; }
+.paddingB30 { padding-bottom: 30px; }
+.paddingB40 { padding-bottom: 40px; }
+.paddingB50 { padding-bottom: 50px; }
+
+.paddingL0 { padding-left: 0; }
+.paddingL5  { padding-left: 5px; }
+.paddingL10 { padding-left: 10px; }
+.paddingL15 { padding-left: 15px; }
+.paddingL20 { padding-left: 20px; }
+
+.paddingR0 { padding-right: 0; }
+.paddingR5  { padding-right: 5px; }
+.paddingR10 { padding-right: 10px; }
+.paddingR15 { padding-right: 15px; }
+.paddingR20 { padding-right: 20px; }
+
+.padding0{padding: 0;}
+.padding20 { padding:  20px; }
+
+/*=================================================================
+  margin
+  =================================================================*/
+.marginL0 { margin-left: 0;}
+.marginT0 { margin-top: 0;}
+
+.marginT10 { margin-top: 10px; }
+.marginT20 { margin-top: 20px; }
+.marginT30 { margin-top: 30px; }
+.marginT40 { margin-top: 40px; }
+.marginT50 { margin-top: 50px; }
+.marginT60 { margin-top: 60px; }
+
+.marginL10 { margin-left: 10px; }
+.marginL20 { margin-left: 20px; }
+.marginL30 { margin-left: 30px; }
+.marginL40 { margin-left: 40px; }
+.marginL50 { margin-left: 50px; }
+.marginL60 { margin-left: 60px; }
+
+.marginR10 { margin-right: 10px; }
+.marginR20 { margin-right: 20px; }
+.marginR30 { margin-right: 30px; }
+.marginR40 { margin-right: 40px; }
+.marginR50 { margin-right: 50px; }
+.marginR60 { margin-right: 60px; }
+
+.marginB10 { margin-bottom: 10px; }
+.marginB20 { margin-bottom: 20px; }
+.marginB30 { margin-bottom: 30px; }
+.marginB40 { margin-bottom: 40px; }
+.marginB50 { margin-bottom: 50px; }
+.marginB60 { margin-bottom: 60px; }
+
+
+/*清除浮动*/
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+
+/*左浮动，右浮动*/
+.pull-left{
+    float: left;
+  }
+  .pull-right{
+    float: right;
+  }

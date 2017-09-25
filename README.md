@@ -18,4 +18,10 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# 小坑总集
+## vue-lazyload 路径问题
+```
+<img width="300" height="53" v-lazy="logoSrc" alt="">
+logoSrc:require('../common/img/logo.png')
+// 不能写成：<img width="300" height="53" v-lazy="../common/img/logo.png" alt="">
+```

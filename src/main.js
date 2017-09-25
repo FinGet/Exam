@@ -5,13 +5,15 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui' // 加载ElementUI
 import VueLazyLoad from 'vue-lazyload'
+import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
 import '../static/font-awesome/css/font-awesome.min.css' // 加载fontawesome字体
+import '@/common/css/common.css'
 
 Vue.use(ElementUI) // 全局使用elementUI
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-bars.svg',
-  try: 3 // default 1
+  try: 1 // default 1
 })
 Vue.config.productionTip = false
 
