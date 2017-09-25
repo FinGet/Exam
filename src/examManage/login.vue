@@ -2,7 +2,7 @@
     <div class="login_page">
         <div class="login-page-inner">
             <div class="input-text-wrapper">
-                <div class="login-logo marginB10"><img width="300" height="53" v-lazy="logoSrc" alt="logo"></div>
+                <div class="login-logo marginB10"><img width="300"  v-lazy="logoSrc" alt="logo"></div>
                 <el-input v-model="userName" placeholder="请输入账号" @keyup.enter="submit"></el-input>
                 <el-input v-model="password" placeholder="请输入密码" @keyup.enter="submit" class="marginT10"></el-input>
             </div>
@@ -33,16 +33,18 @@ export default {
     methods: {
 		// 登录
         submit() {
-            if (this.userName) {
+            if (this.userName && this.password) {
                 this.$message({
                     showClose: true,
                     message: '恭喜你，登录成功！',
                     type: 'success'
                 });
+                // 登录成功跳到后台首页
+                this.$router.push('/endhome/index')
             } else {
                 this.$message({
                     showClose: true,
-                    message: '请输入用户名！',
+                    message: '请输入用户名和密码！',
                     type: 'warning'
                 });
             }
@@ -51,9 +53,9 @@ export default {
     mounted() {
         var bg = new CanvasBackground({
             canvasContainerID: "canvas",
-            circleColor: "rgba(49,210,142,0.8)",
+            circleColor: "rgba(49,210,142,1)",
             lineColor: "rgba(49,210,142,1)",
-            canvasOpacity: 0.2
+            canvasOpacity: 0.3
         });
     }
 }
@@ -83,7 +85,7 @@ export default {
     margin: 0 auto;
     position: relative;
     top: 50%;
-    margin-top: -210px;
+    margin-top: -230px;
     padding: 20px;
     z-index: 10;
 }
