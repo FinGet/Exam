@@ -45,7 +45,7 @@ export default {
     overflow: hidden;
     height: 100%;
     width: 200px;
-    background: #eef1f6;
+    background: #324157;
     .in-wrapper{
       height: 100%;
       width: 220px;
@@ -62,7 +62,7 @@ export default {
     top:0;
     left:0;
     z-index: 999;
-    background-color: #eef1f6;
+    background-color: #324157;
     /*顶部用户*/
     .nav-top-user{
       float: right;
