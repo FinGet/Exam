@@ -103,3 +103,7 @@ p{word-wrap:break-word}
 .text-center{text-align: center;}
 .text-left{text-align: left}
 .text-right{text-align: right}
+
+.el-dropdown,.el-breadcrumb__item__inner, .el-breadcrumb__item__inner a  {
+  color: #f3f2f2;
+}
