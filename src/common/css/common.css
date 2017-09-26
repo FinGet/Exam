@@ -79,6 +79,12 @@ p{word-wrap:break-word}
 .marginB50 { margin-bottom: 50px; }
 .marginB60 { margin-bottom: 60px; }
 
+.input50 { width:50px;}
+.input100 { width:100px;}
+.input120 { width:120px;}
+.input150 { width:150px;}
+.input200 { width:200px;}
+
 
 /*清除浮动*/
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
@@ -119,4 +125,17 @@ p{word-wrap:break-word}
   padding-top: 48px;
   transition: all .3s;
   overflow: hidden;
+}
+
+/*搜索*/
+.search-title{
+  height:36px;
+  line-height: 36px;
+}
+/*table*/
+.el-table__body-wrapper{
+  overflow-x: hidden;
+}
+.el-table__body-wrapper::-webkit-scrollbar {
+  display:none;
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="bread">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in breadData" :to="{ name: item.meta.breadName=='管理系统'?'Index':item.name }">{{item.meta.breadName}}</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(item, index) in breadData" :key="item.id" :to="{ name: item.meta.breadName=='管理系统'?'Index':item.name }">{{item.meta.breadName}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 </template>
