@@ -5,8 +5,8 @@
           <img width="150" v-lazy="logoSrc" alt="logo">
         </el-col>
         <el-col>
-          <el-menu default-active="1" class="el-menu-vertical" @open="handleOpen" @close="handleClose" router>
-            <el-menu-item index="1" :route="{name:'Index'}"><i class="fa-icon fa fa-home"></i>首页</el-menu-item>
+          <el-menu theme="dark" default-active="1" class="el-menu-vertical" @open="handleOpen" @close="handleClose" router>
+            <el-menu-item index="/endhome/index"><i class="fa-icon fa fa-home"></i>首页</el-menu-item>
             <el-submenu index="2">
               <template slot="title"><i class="fa-icon fa fa-folder"></i>试卷管理</template>
                 <el-menu-item index="2-1">我的试卷</el-menu-item>
@@ -30,7 +30,7 @@
               <el-menu-item index="5-4">判断题管理</el-menu-item>
               <el-menu-item index="5-5">问答题管理</el-menu-item>
             </el-submenu>
-            <el-menu-item index="6"><i class="fa-icon fa fa-user"></i>我的信息管理</el-menu-item>
+            <el-menu-item index="/endhome/user"><i class="fa-icon fa fa-user"></i>我的信息管理</el-menu-item>
           </el-menu>
         </el-col>
       </el-row>
