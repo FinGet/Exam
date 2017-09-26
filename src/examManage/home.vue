@@ -76,15 +76,4 @@ export default {
     }
 
   }
-  .app-main{
-    position: relative;
-    height: 100%;
-    transition: all .28s ease-out;
-    margin-left: 200px;
-    padding: 10px;
-    box-sizing: border-box;
-    padding-top: 48px;
-    transition: all .3s;
-    overflow: hidden;
-  }
 </style>
