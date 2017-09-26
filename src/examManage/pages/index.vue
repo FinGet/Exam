@@ -168,6 +168,7 @@
   }
   .index {
     height:100%;
+    overflow-y:scroll ;
     .box{
       padding:0 10px;
     }
@@ -256,5 +257,8 @@
       color: #fff;
       width: 100%;
     }
+  }
+  .index::-webkit-scrollbar {
+    display:none
   }
 </style>

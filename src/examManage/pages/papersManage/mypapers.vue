@@ -82,7 +82,7 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <el-col class="marginT10" v-if="this.mypapers.length>14">
+        <el-col class="marginT10" v-if="this.mypapers.length>10">
           <div class="page-wrapper pull-right">
             <el-pagination
               @size-change="handleSizeChange"
@@ -252,8 +252,12 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" scoped="scoped" lang="scss">
-.mypapers{
-  width: 100%;
-  height:100%;
-}
+  .mypapers{
+    width: 100%;
+    height:100%;
+    overflow-y: scroll;
+  }
+  .mypapers::-webkit-scrollbar {
+    display:none
+  }
 </style>
