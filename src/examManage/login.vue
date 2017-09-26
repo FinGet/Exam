@@ -4,7 +4,7 @@
             <div class="input-text-wrapper">
                 <div class="login-logo marginB10"><img width="300"  v-lazy="logoSrc" alt="logo"></div>
                 <el-input v-model="userName" placeholder="请输入账号" @keyup.enter="submit"></el-input>
-                <el-input v-model="password" placeholder="请输入密码" @keyup.enter="submit" class="marginT10"></el-input>
+                <el-input type="password" v-model="password" placeholder="请输入密码" @keyup.enter="submit" class="marginT10"></el-input>
             </div>
             <div class="input-text-wrapper marginT30 text-center">
                 <el-button type="primary" @click="submit" class="loginBtn">登录</el-button>
@@ -34,13 +34,22 @@ export default {
 		// 登录
         submit() {
             if (this.userName && this.password) {
+              if (this.userName== 'admin' && this.password == '123456') {
                 this.$message({
-                    showClose: true,
-                    message: '恭喜你，登录成功！',
-                    type: 'success'
+                  showClose: true,
+                  message: '恭喜你，登录成功！',
+                  type: 'success'
                 });
                 // 登录成功跳到后台首页
                 this.$router.push('/endhome/index')
+              }else {
+                this.$message({
+                  showClose: true,
+                  message: '用户名或密码错误！',
+                  type: 'warning'
+                });
+                this.password = ''
+              }
             } else {
                 this.$message({
                     showClose: true,
