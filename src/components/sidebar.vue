@@ -9,7 +9,7 @@
             <el-menu-item index="/endhome/index"><i class="fa-icon fa fa-home"></i>首页</el-menu-item>
             <el-submenu index="2">
               <template slot="title"><i class="fa-icon fa fa-folder"></i>试卷管理</template>
-                <el-menu-item index="2-1">我的试卷</el-menu-item>
+                <el-menu-item index="/endhome/mypapers">我的试卷</el-menu-item>
                 <el-menu-item index="2-2">阅卷</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
