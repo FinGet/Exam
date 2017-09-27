@@ -239,21 +239,14 @@ export default {
     },
     // 批量删除
     deleteAll() {
-      for (var i in this.selections) {
-        for (var j in this.mypapers) {
-          if (this.selections[i] === this.mypapers[j]) {
-            // console.log(j)
-            this.mypapers.splice(j,this.selections.length)
-            this.$refs.multipleTable.clearSelection();
-            this.visible = false
-            this.$message({
-              message: '恭喜你，删除成功！',
-              type: 'success'
-            });
-          }
-        }
+      for(var index in this.mypapers){
+        if(this.selections.indexOf(this.mypapers[index])>=0)
+          // 一个个的判断mypapers中的元素是否存在于selection，如果有，正好删除当前这个值。
+          // 而不是去判断selections的值存在于mypapers中的位置
+          this.mypapers.splice(index,1);
       }
-      // this.mypapers.splice(this.selections,this.selections.length)
+      this.visible = false
+      this.$refs.multipleTable.clearSelection()
     }
   }
 }
