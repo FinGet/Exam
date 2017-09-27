@@ -22,7 +22,7 @@
       //面包屑
       initBreadData(){
         this.breadData=this.$router.currentRoute.matched;
-        console.log(this.breadData)
+        // console.log(this.breadData)
       }
     },
     created(){
