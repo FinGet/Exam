@@ -9,6 +9,7 @@ import EndHome from '@/examManage/home'
 import Index from '@/examManage/pages/index'
 // 试卷管理
 import MyPapers from '@/examManage/pages/papersManage/mypapers'
+import MarkPapers from '@/examManage/pages/papersManage/markpapers'
 // 我的信息管理
 import User from '@/examManage/pages/usermsg'
 Vue.use(Router)
@@ -28,6 +29,8 @@ export default new Router({
         { path: 'index', name: 'Index', component: Index, meta: {breadName:'首页'},}, // 后台首页
         // 试卷管理
         { path: 'mypapers', name: 'MyPapers', component: MyPapers, meta: {breadName: '我的试卷'}},
+        { path: 'markpapers', name: 'MarkPapers', component: MarkPapers, meta: {breadName: '阅卷'}},
+        // 我的信息
         { path: 'user', name: 'User', component: User, meta: {breadName:'我的信息'},} // 我的信息管理
       ]
     }
