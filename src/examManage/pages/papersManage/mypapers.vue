@@ -117,18 +117,39 @@ export default {
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '60',
-          date: '2017/09/03-2017/09/04',
+          date: '2017/09/04-2017/09/04',
           examnum: '50'
         },
         {
           name: '操作系统Windows XP基础测试',
           total: '100',
-          time: '60',
+          time: '50',
           date: '2017/09/01-2017/09/02',
           examnum: '20'
         },
         {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统Windows 7基础测试',
+          total: '100',
+          time: '60',
+          date: '2017/09/11-2017/09/12',
+          examnum: '0'
+        },
+        {
+          name: '操作系统Windows8基础测试',
+          total: '100',
+          time: '60',
+          date: '2017/09/03-2017/09/04',
+          examnum: '10'
+        },
+        {
+          name: '操作系统Windows 10基础测试',
+          total: '100',
+          time: '60',
+          date: '2017/09/01-2017/09/02',
+          examnum: '80'
+        },
+        {
+          name: '操作系统Windows office',
           total: '100',
           time: '60',
           date: '2017/09/11-2017/09/12',
@@ -138,18 +159,18 @@ export default {
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '60',
-          date: '2017/09/03-2017/09/04',
+          date: '2017/09/03-2017/09/07',
           examnum: '50'
         },
         {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统PPT基础测试',
           total: '100',
           time: '60',
           date: '2017/09/01-2017/09/02',
-          examnum: '20'
+          examnum: '30'
         },
         {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统execl基础测试',
           total: '100',
           time: '60',
           date: '2017/09/11-2017/09/12',
@@ -157,48 +178,27 @@ export default {
         },
         {
           name: '操作系统Windows XP基础测试',
-          total: '100',
+          total: '60',
           time: '60',
           date: '2017/09/03-2017/09/04',
           examnum: '50'
         },
         {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统Windows XP初级测试',
           total: '100',
           time: '60',
           date: '2017/09/01-2017/09/02',
           examnum: '20'
         },
         {
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/11-2017/09/12',
-          examnum: '0'
-        },
-        {
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/03-2017/09/04',
-          examnum: '50'
-        },
-        {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统Windows XP中级测试',
           total: '100',
           time: '60',
           date: '2017/09/01-2017/09/02',
           examnum: '20'
         },
         {
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/01-2017/09/02',
-          examnum: '20'
-        },
-        {
-          name: '操作系统Windows XP基础测试',
+          name: '操作系统Windows7高级测试',
           total: '100',
           time: '60',
           date: '2017/09/11-2017/09/12',
@@ -239,13 +239,21 @@ export default {
     },
     // 批量删除
     deleteAll() {
-      this.mypapers.splice(this.selections,this.selections.length)
-      this.$refs.multipleTable.clearSelection();
-      this.visible = false
-      this.$message({
-        message: '恭喜你，删除成功！',
-        type: 'success'
-      });
+      for (var i in this.selections) {
+        for (var j in this.mypapers) {
+          if (this.selections[i] === this.mypapers[j]) {
+            // console.log(j)
+            this.mypapers.splice(j,this.selections.length)
+            this.$refs.multipleTable.clearSelection();
+            this.visible = false
+            this.$message({
+              message: '恭喜你，删除成功！',
+              type: 'success'
+            });
+          }
+        }
+      }
+      // this.mypapers.splice(this.selections,this.selections.length)
     }
   }
 }
