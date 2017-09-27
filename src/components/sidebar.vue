@@ -5,12 +5,12 @@
           <img width="150" v-lazy="logoSrc" alt="logo">
         </el-col>
         <el-col>
-          <el-menu theme="dark" default-active="1" class="el-menu-vertical" @open="handleOpen" @close="handleClose" router>
+          <el-menu theme="dark" :default-active="activeIndex" class="el-menu-vertical" @open="handleOpen" @close="handleClose" router>
             <el-menu-item index="/endhome/index"><i class="fa-icon fa fa-home"></i>首页</el-menu-item>
             <el-submenu index="2">
               <template slot="title"><i class="fa-icon fa fa-folder"></i>试卷管理</template>
                 <el-menu-item index="/endhome/mypapers">我的试卷</el-menu-item>
-                <el-menu-item index="2-2">阅卷</el-menu-item>
+                <el-menu-item index="/endhome/markpapers">阅卷</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
               <template slot="title"><i class="fa-icon fa fa-bullhorn"></i>组织考试</template>
@@ -41,6 +41,7 @@
   export default {
     data() {
       return {
+        activeIndex:'/endhome/index',
         logoSrc:require('../common/img/sm-logo.png')
       }
     },
@@ -50,7 +51,26 @@
       },
       handleClose(key, keyPath) {
         // console.log(key, keyPath);
+      },
+      //初始化列表active状态
+      initActiveIndex(){
+        // var str =this.$router.currentRoute.path;
+        this.activeIndex=this.$router.currentRoute.path;
+        // console.log(str)
+        /*  if(str=='userrouter'){
+            this.activeIndex=this.$router.currentRoute.path;
+         } */
+//        if(str=='materialrouter'){
+//          this.activeIndex='/materialrouter/materials';
+//        }
+
       }
+    },
+    watch:{
+      '$route':'initActiveIndex'
+    },
+    created(){
+      this.initActiveIndex();
     }
   }
 </script>
