@@ -19,6 +19,7 @@
                   <el-button type="primary" size="mini" @click="deleteAll">确定</el-button>
                 </div>
               </el-popover>
+              <router-link :to="{path:'edit/add'}"><el-button type="primary">新增试卷</el-button></router-link>
               <el-button type="danger" :disabled="isSelected" v-popover:popover>批量删除</el-button>
             </div>
         </el-col>
@@ -48,17 +49,21 @@
             <el-table-column
               label="试卷总分"
               prop="total"
+              align="center"
               width="100">
             </el-table-column>
             <el-table-column
               prop="time"
               width="100"
+              align="center"
               label="考试时长"
              >
             </el-table-column>
             <el-table-column
               prop="date"
               sortable
+              width="190"
+              align="center"
               label="考试时间"
             >
             </el-table-column>
@@ -74,10 +79,13 @@
             </el-table-column>
             <el-table-column
               label="操作"
+              width="150"
+              align="center"
             >
               <template scope="scope">
                 <el-button type="primary" size="mini" :disabled="scope.row.examnum==='0'?false:true">发布</el-button>
-                <el-button type="danger" size="mini" @click="deleted(scope.row)">删除</el-button>
+                <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
+                <router-link :to="{path:'edit/' + scope.row.id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
             </el-table-column>
           </el-table>
@@ -107,6 +115,7 @@ export default {
       currentPage: 1, // 当前页
       mypapers: [
         {
+          id:0,
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '60',
@@ -114,6 +123,7 @@ export default {
           examnum: '70'
         },
         {
+          id:1,
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '60',
@@ -121,6 +131,7 @@ export default {
           examnum: '50'
         },
         {
+          id:2,
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '50',
@@ -128,6 +139,7 @@ export default {
           examnum: '20'
         },
         {
+          id:3,
           name: '操作系统Windows 7基础测试',
           total: '100',
           time: '60',
@@ -135,6 +147,7 @@ export default {
           examnum: '0'
         },
         {
+          id:4,
           name: '操作系统Windows8基础测试',
           total: '100',
           time: '60',
@@ -142,6 +155,7 @@ export default {
           examnum: '10'
         },
         {
+          id:5,
           name: '操作系统Windows 10基础测试',
           total: '100',
           time: '60',
@@ -149,6 +163,7 @@ export default {
           examnum: '80'
         },
         {
+          id:6,
           name: '操作系统Windows office',
           total: '100',
           time: '60',
@@ -156,6 +171,7 @@ export default {
           examnum: '0'
         },
         {
+          id:7,
           name: '操作系统Windows XP基础测试',
           total: '100',
           time: '60',
@@ -163,6 +179,7 @@ export default {
           examnum: '50'
         },
         {
+          id:8,
           name: '操作系统PPT基础测试',
           total: '100',
           time: '60',
@@ -170,6 +187,7 @@ export default {
           examnum: '30'
         },
         {
+          id:9,
           name: '操作系统execl基础测试',
           total: '100',
           time: '60',
@@ -177,6 +195,7 @@ export default {
           examnum: '0'
         },
         {
+          id:10,
           name: '操作系统Windows XP基础测试',
           total: '60',
           time: '60',
@@ -184,6 +203,7 @@ export default {
           examnum: '50'
         },
         {
+          id:11,
           name: '操作系统Windows XP初级测试',
           total: '100',
           time: '60',
@@ -191,6 +211,7 @@ export default {
           examnum: '20'
         },
         {
+          id:12,
           name: '操作系统Windows XP中级测试',
           total: '100',
           time: '60',
@@ -198,6 +219,7 @@ export default {
           examnum: '20'
         },
         {
+          id:13,
           name: '操作系统Windows7高级测试',
           total: '100',
           time: '60',
