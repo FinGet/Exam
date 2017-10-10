@@ -230,6 +230,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * 判断是否有选中项
+     * @return {Boolean}
+     */
     isSelected() {
       if (this.selections.length>0) {
         return false
@@ -239,7 +243,11 @@ export default {
     }
   },
   methods: {
-    // 勾选
+    /**
+     * 将选中项赋值给this.selections
+     * @param  {val} 框架自带，选中项
+     * @return {[type]}
+     */
     handleSelectionChange (val) {
       this.selections = val
     },
@@ -249,7 +257,11 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    // 删除当前行
+    /**
+     * 删除当前行
+     * @param  {[val]}，当前删除项
+     * @return {[type]}
+     */
     deleted(val) {
       // console.log(val)
       // 表格存在排序，所以要判断一下，当前删除行在数据中的实际位置
@@ -259,7 +271,10 @@ export default {
         }
       }
     },
-    // 批量删除
+    /**
+     * 批量删除
+     * @return {[type]}
+     */
     deleteAll() {
       for(var index in this.mypapers){
         if(this.selections.indexOf(this.mypapers[index])>=0)

@@ -18,7 +18,10 @@
       // console.log(this.$route.params.id)
     },
     methods: {
-      // 返回
+      /**
+       * 返回上一级
+       * @return {[type]}
+       */
       back() {
         this.$router.go(-1)
       }
