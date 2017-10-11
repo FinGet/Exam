@@ -10,6 +10,8 @@ import axios from 'axios'
 import '../static/font-awesome/css/font-awesome.min.css' // 加载fontawesome字体
 import '@/common/css/common.css'
 
+Vue.prototype.$axios=axios
+
 Vue.use(ElementUI) // 全局使用elementUI
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-bars.svg',

@@ -25,6 +25,14 @@ npm run build --report
 logoSrc:require('../common/img/logo.png')
 // 不能写成：<img width="300" height="53" v-lazy="../common/img/logo.png" alt="">
 ```
+## 全局定义axios
+首先axios不支持vue.use()式声明
+```
+在main.js中如下声明使用
+import axios from 'axios';
+Vue.prototype.$axios=axios;
+那么在其他vue组件中就可以this.$axios调用使用
+```
 # 面包屑导航
 > 绑定面包屑要根据实际情况来定，但是`this.$router.currentRoute.matched`是最主要的
 ```

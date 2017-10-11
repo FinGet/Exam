@@ -38,7 +38,7 @@
        * @return {[type]}
        */
       init() {
-        axios.get('xxx').then((response) => {
+        this.$axios.get('xxx').then((response) => {
           params: {
             paperId: paperId
           }
