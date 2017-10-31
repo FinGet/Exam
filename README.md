@@ -35,6 +35,7 @@ Vue.prototype.$axios=axios;
 ```
 # 面包屑导航
 > 绑定面包屑要根据实际情况来定，但是`this.$router.currentRoute.matched`是最主要的
+
 ```
 <template>
     <div class="bread">
@@ -73,6 +74,7 @@ Vue.prototype.$axios=axios;
 # elementui面包屑导航与左侧导航相对应
 > 根据实际情况来，不能套用，要看你的路由怎么写的 `this.$router.currentRoute.path`
 `:default-active="activeIndex"`
+
 ```
 //初始化列表active状态
   methods:{
