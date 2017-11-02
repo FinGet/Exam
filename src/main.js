@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import ElementUI from 'element-ui' // 加载ElementUI
 import VueLazyLoad from 'vue-lazyload'
 import 'element-ui/lib/theme-default/index.css'
@@ -22,7 +23,8 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router, // 使用路由
+  store, // 使用vuex
   template: '<App/>',
   components: { App }
 })
