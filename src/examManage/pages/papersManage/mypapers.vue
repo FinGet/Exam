@@ -242,7 +242,19 @@ export default {
       }
     }
   },
+  mounted(){
+    this.getMypapers()
+  },
   methods: {
+    /**
+     * [getMypapers 加载试卷信息]
+     * @return {[type]} [description]
+     */
+    getMypapers(){
+      this.$axios.get('https://easy-mock.com/mock/5a0906f1c645f122782971e9/exam/papers').then(response => {
+        console.log(response)
+      })
+    },
     /**
      * 将选中项赋值给this.selections
      * @param  {val} 框架自带，选中项
