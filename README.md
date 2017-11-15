@@ -91,3 +91,34 @@ Vue.prototype.$axios=axios;
       this.initActiveIndex();
     }
 ```
+# 配置代理
+```
+config/index.js
+proxyTable: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/api': {
+            target: 'http://127.0.0.1:8088/api',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': ''  // 若target中没有/api、这里又为空，则404；
+            }
+        }
+    },
+```
+# 修改api接口配置
+```
+server/api 
+var routes = require('./routes/index');
+routes(app);
+```
+
+```
+server/routes/index.js
+module.exports = function(app) {
+  app.get('/api', (req, res) => {
+    res.render('index', {title: 'Express'});
+  })
+}
+```
+
+>这里我们在 routes/index.js 中通过module.exports 导出了一个函数接口，在 app.js 中通过 require 加载了 index.js 然后通过routes(app) 调用了 index.js 导出的函数。
