@@ -24,7 +24,7 @@ app.use(logger('dev')); // 加载日志中间件
 app.use(bodyParser.json()); // 加载解析json的中间件
 app.use(bodyParser.urlencoded({ extended: false })); // 加载解析urlencoded请求体的中间件
 app.use(cookieParser()); // 加载解析cookie的中间件
-app.use(express.static(path.join(__dirname, 'public'))); // 设置public文件夹为存放静态文件的目录
+app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当前文件的绝对路径 设置public文件夹为存放静态文件的目录
 
 // 路由控制器
 // app.use('/', index);
