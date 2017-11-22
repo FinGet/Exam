@@ -4,7 +4,7 @@
         <el-col>
             <div class="pull-left search-warpper marginB10">
               <div class="pull-left search-title marginR10">试卷名称:</div>
-              <el-input class=" pull-left input150"></el-input>
+              <el-input class=" pull-left input150" v-model="name"></el-input>
               <el-button class="pull-left marginL10" type="primary" icon="search">搜索</el-button>
             </div>
             <div class="pull-right">
@@ -48,7 +48,7 @@
             </el-table-column>
             <el-table-column
               label="试卷总分"
-              prop="total"
+              prop="totalPoints"
               align="center"
               width="100">
             </el-table-column>
@@ -66,6 +66,9 @@
               align="center"
               label="考试时间"
             >
+            <template scope="scope">
+              {{scope.row.startTime}}-{{scope.row.endTime}}
+            </template>
             </el-table-column>
             <el-table-column
               label="考试人数"
@@ -90,15 +93,15 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <el-col class="marginT10" v-if="this.mypapers.length>10">
+        <el-col class="marginT10" v-if="this.mypapers.length>20">
           <div class="page-wrapper pull-right">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-size="100"
+              :page-size="pageSize"
               layout="total, prev, pager, next"
-              :total="1000">
+              :total="pageTotal">
             </el-pagination>
           </div>
         </el-col>
@@ -112,121 +115,11 @@ export default {
     return {
       selections:[],
       visible:false,
+      name: '', // 试卷名称 v-model
       currentPage: 1, // 当前页
-      mypapers: [
-        {
-          id:0,
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/05-2017/09/06',
-          examnum: '70'
-        },
-        {
-          id:1,
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/04-2017/09/04',
-          examnum: '50'
-        },
-        {
-          id:2,
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '50',
-          date: '2017/09/01-2017/09/02',
-          examnum: '20'
-        },
-        {
-          id:3,
-          name: '操作系统Windows 7基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/11-2017/09/12',
-          examnum: '0'
-        },
-        {
-          id:4,
-          name: '操作系统Windows8基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/03-2017/09/04',
-          examnum: '10'
-        },
-        {
-          id:5,
-          name: '操作系统Windows 10基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/01-2017/09/02',
-          examnum: '80'
-        },
-        {
-          id:6,
-          name: '操作系统Windows office',
-          total: '100',
-          time: '60',
-          date: '2017/09/11-2017/09/12',
-          examnum: '0'
-        },
-        {
-          id:7,
-          name: '操作系统Windows XP基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/03-2017/09/07',
-          examnum: '50'
-        },
-        {
-          id:8,
-          name: '操作系统PPT基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/01-2017/09/02',
-          examnum: '30'
-        },
-        {
-          id:9,
-          name: '操作系统execl基础测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/11-2017/09/12',
-          examnum: '0'
-        },
-        {
-          id:10,
-          name: '操作系统Windows XP基础测试',
-          total: '60',
-          time: '60',
-          date: '2017/09/03-2017/09/04',
-          examnum: '50'
-        },
-        {
-          id:11,
-          name: '操作系统Windows XP初级测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/01-2017/09/02',
-          examnum: '20'
-        },
-        {
-          id:12,
-          name: '操作系统Windows XP中级测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/01-2017/09/02',
-          examnum: '20'
-        },
-        {
-          id:13,
-          name: '操作系统Windows7高级测试',
-          total: '100',
-          time: '60',
-          date: '2017/09/11-2017/09/12',
-          examnum: '0'
-        }
-      ]
+      pageSize:100 ,
+      pageTotal: 0, // 数据总数
+      mypapers: [] // 试卷数据
     }
   },
   computed: {
@@ -251,8 +144,18 @@ export default {
      * @return {[type]} [description]
      */
     getMypapers(){
-      this.$axios.get('https://easy-mock.com/mock/5a0906f1c645f122782971e9/exam/papers').then(response => {
-        console.log(response)
+      this.$axios.get('https://easy-mock.com/mock/5a0906f1c645f122782971e9/exam/papers',{
+        params:{
+          name: this.name
+        }
+      }).then(response => {
+        let res = response.data
+        if(res.code == 1) {
+          this.mypapers = res.data
+          this.pageTotal = res.total
+        }
+      }).catch(err => {
+        this.$message.error("获取试卷数据失败!")
       })
     },
     /**
