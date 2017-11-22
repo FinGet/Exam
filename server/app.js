@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 
 // var index = require('./routes/index');
 // var users = require('./routes/users');
-var routes = require('./routes/index');
+var indexs = require('./routes/index');
+var users = require('./routes/users')
 
 var app = express(); // 生成一个express实例 app
 
@@ -29,7 +30,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当�
 // 路由控制器
 // app.use('/', index);
 // app.use('/users', users);
-routes(app);
+indexs(app);
+users(app);
 
 // catch 404 and forward to error handler 捕获404错误，并转发到错误处理器
 app.use(function(req, res, next) {
