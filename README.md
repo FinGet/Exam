@@ -92,12 +92,13 @@ Vue.prototype.$axios=axios;
     }
 ```
 # 配置代理
+配置代理之后，localhost:8088/api/* -> localhost:3000/api/*
 ```
 config/index.js
 proxyTable: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
-            target: 'http://127.0.0.1:8088/api',
+            target: 'http://127.0.0.1:3000/api',
             changeOrigin: true,
             pathRewrite: {
                 '^/api': ''  // 若target中没有/api、这里又为空，则404；
