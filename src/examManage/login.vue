@@ -31,9 +31,9 @@ export default {
       }
   },
   methods: {
-	// 登录
+	  // 登录
     submit() {
-      this.$axios.post('/api/user',{
+      this.$axios.post('/api/login',{
         userName: this.userName,
         userPwd: this.passWord
       }).then(response => {

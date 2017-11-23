@@ -24,8 +24,10 @@ var User = require('./../model/user')
 // 	})
 // }
 // insert();
+
+// 用户登录
 module.exports = function(app) {
-	app.post('/api/user', (req, res) => {
+	app.post('/api/login', (req, res) => {
 		// res.render('index', {title: 'user info'});
 		var param = {
 			userName: req.body.userName,
