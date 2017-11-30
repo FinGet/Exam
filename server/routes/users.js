@@ -153,6 +153,8 @@ module.exports = function(app) {
 			} else {
 				if (doc) {
 			        req.session.userName = doc.userName
+			        req.session.userPwd = doc.userPwd
+				    // console.log(req.session)
 					res.json({
 						status: '0',
 						msg:'success',
@@ -169,7 +171,16 @@ module.exports = function(app) {
 			}
 		})
 	})
-
+	// 登出
+	app.post("/api/logout", (req, res) => {
+	  req.session.userName = ''
+	  req.session.userPwd = ''
+	  res.json({
+	    status:'0',
+	    msg:'',
+	    result:'退出成功'
+	  })
+	})
 	// 获取试卷
 	app.get('/api/mypapers', (req, res) => {
 		var name = req.param('name'), userName = req.session.userName;

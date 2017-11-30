@@ -18,7 +18,7 @@
         </a>
       </el-dropdown-item>
       <el-dropdown-item>
-        <a>
+        <a @click="loginOut">
           退出
           <i class="fa fa-sign-out fa-lg"></i>
         </a>
@@ -41,6 +41,18 @@
     },
     data() {
       return {}
+    },
+    methods:{
+      // 退出登录
+      loginOut(){
+        this.$axios.post('/api/logout').then(response => {
+          let res = response.data
+          if (res.status == 0) {
+            this.$message.success('退出成功')
+            this.$router.push({name:'EndLogin'})
+          }
+        })
+      }
     }
   }
 </script>

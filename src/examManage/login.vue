@@ -33,6 +33,10 @@ export default {
   methods: {
 	  // 登录
     submit() {
+      if (this.userName == '' || this.passWord == '') {
+        this.$message.error('请输入用户名或密码！')
+        return
+      }
       this.$axios.post('/api/login',{
         userName: this.userName,
         userPwd: this.passWord

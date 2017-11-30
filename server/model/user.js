@@ -7,11 +7,11 @@ var UserSchema = new Schema({
 	papers: [
 		{
 			name: String,
-	        totalPoints: Number,
-	        time: String,
-	        startTime: Date,
-	        endTime: Date,
-	        examnum: Number
+        totalPoints: Number,
+        time: String,
+        startTime: Date,
+        endTime: Date,
+        examnum: Number
 		}
 	]
 })

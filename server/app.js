@@ -27,13 +27,24 @@ app.use(logger('dev')); // 加载日志中间件
 app.use(bodyParser.json()); // 加载解析json的中间件
 app.use(bodyParser.urlencoded({ extended: false })); // 加载解析urlencoded请求体的中间件
 app.use(cookieParser()); // 加载解析cookie的中间件
+
+// 加载解析session的中间件
+// session 的 store 有四个常用选项：1）内存 2）cookie 3）缓存 4）数据库
+// 数据库 session。除非你很熟悉这一块，知道自己要什么，否则还是老老实实用缓存吧 需要用到（connect-mongo插件 line 7）
+// app.use(sessionParser({ 会在数据库中新建一个session集合存储session
+// 	secret: 'express',
+// 	store: new mongoStore({
+// 		url:'mongodb://127.0.0.1:27017/examSystem',
+// 		collection:'session'
+// 	})
+// })); 
+
+// 默认使用内存来存 session，对于开发调试来说很方便
 app.use(sessionParser({
-	secret: 'express',
-	store: new mongoStore({
-		url:'mongodb://127.0.0.1:27017/examSystem',
-		collection:'session'
-	})
-})); // 加载解析session的中间件
+	secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
+  	cookie: { maxAge: 60 * 1000 }
+}));
+
 app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当前文件的绝对路径 设置public文件夹为存放静态文件的目录
 
 // 路由控制器

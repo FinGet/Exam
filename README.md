@@ -183,3 +183,49 @@ module.exports = function(app) {
 	})
 }
 ```
+# 设置session实现用户登录存储用户信息，退出时清空
+```
+app.js
+  var sessionParser = require('express-session')
+
+  // 加载解析session的中间件
+// session 的 store 有四个常用选项：1）内存 2）cookie 3）缓存 4）数据库
+// 数据库 session。除非你很熟悉这一块，知道自己要什么，否则还是老老实实用缓存吧 需要用到（connect-mongo插件 line 7）
+// app.use(sessionParser({ 会在数据库中新建一个session集合存储session
+//  secret: 'express',
+//  store: new mongoStore({
+//    url:'mongodb://127.0.0.1:27017/examSystem',
+//    collection:'session'
+//  })
+// })); 
+
+// 默认使用内存来存 session，对于开发调试来说很方便
+app.use(sessionParser({
+  secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
+    cookie: { maxAge: 60 * 1000 }
+}));
+```
+```
+user.js
+// 登录时
+if (doc) {
+  req.session.userName = doc.userName
+  req.session.userPwd = doc.userPwd
+// console.log(req.session)
+  res.json({
+    status: '0',
+    msg:'success',
+    result:{
+      userName: doc.userName
+    }
+  })
+}
+// 退出时 (退出成功路由跳转我是用vue-louter实现的，并没有用重定向)
+  req.session.userName = ''
+  req.session.userPwd = ''
+  res.json({
+    status:'0',
+    msg:'',
+    result:'退出成功'
+  })
+```
