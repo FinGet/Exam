@@ -8,117 +8,16 @@
 
 // module.exports = router;
 var User = require('./../model/user')
+var Papers = require('../model/papers')
 // 初始化一条数据 本地若无数据，第一次运行将注释去掉
-// function insert() {
+// function insertUser() {
 // 	var user = new User({
 // 		userName: 'Bios',
 // 		userPwd: '123',
 // 		type: 0,
-// 		papers: [
-// 			{
-// 		      name: '操作系统Windows XP基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,05),
-// 		      endTime: new Date(2017,09,06),
-// 		      examnum: 70
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows XP基础测试',
-// 		      totalPoints: 100,
-// 		      time: '50',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 20
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows 7基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 20
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows8基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 10
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows 10基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 80
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows office',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 30
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows XP基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 50
-// 		    },
-// 		    {
-// 		      name: '操作系统PPT基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 30
-// 		    },
-// 		    {
-// 		      name: '操作系统execl基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 50
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows XP基础测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 50
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows XP初级测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 20
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows XP中级测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 20
-// 		    },
-// 		    {
-// 		      name: '操作系统Windows7高级测试',
-// 		      totalPoints: 100,
-// 		      time: '60',
-// 		      startTime: new Date(2017,09,04),
-// 		      endTime: new Date(2017,09,04),
-// 		      examnum: 30
-// 		    }
+// 		papers: ['操作系统Windows XP基础测试','操作系统Windows 7基础测试','操作系统Windows8基础测试','操作系统Windows 10基础测试',
+// 		'操作系统Windows office','操作系统PPT基础测试','操作系统execl基础测试','操作系统Windows XP初级测试','操作系统Windows XP中级测试',
+// 		 '操作系统Windows7高级测试'
 // 		]
 // 	});
 // 	user.save((err, res) => {
@@ -129,8 +28,110 @@ var User = require('./../model/user')
 // 		}
 // 	})
 // }
-// insert();
+// insertUser();
 
+// function insertPapers() {
+// 	var paper = new Papers(
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows XP基础测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,05),
+//  //    endTime: new Date(2017,09,06),
+//  //    examnum: 20
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows 7基础测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,04),
+//  //    endTime: new Date(2017,09,06),
+//  //    examnum: 40
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows8基础测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,05),
+//  //    endTime: new Date(2017,09,05),
+//  //    examnum: 25
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows 10基础测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,05),
+//  //    endTime: new Date(2017,09,08),
+//  //    examnum: 60
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows office',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,08,05),
+//  //    endTime: new Date(2017,08,06),
+//  //    examnum: 67
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统PPT基础测试',
+//  //    totalPoints: 60,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,01),
+//  //    endTime: new Date(2017,09,06),
+//  //    examnum: 10
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统execl基础测试',
+//  //    totalPoints: 60,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,01),
+//  //    endTime: new Date(2017,09,02),
+//  //    examnum: 65
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows XP初级测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,01),
+//  //    endTime: new Date(2017,09,02),
+//  //    examnum: 79
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows XP中级测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,01),
+//  //    endTime: new Date(2017,09,02),
+//  //    examnum: 65
+// 	// },
+// 	// {
+// 	// 	teacher: 'Bios',
+// 	// 	name: '操作系统Windows7高级测试',
+//  //    totalPoints: 100,
+//  //    time: '60',
+//  //    startTime: new Date(2017,09,01),
+//  //    endTime: new Date(2017,09,04),
+//  //    examnum: 78
+// 	// }
+// 	)
+// 	paper.save((err, res) => {
+// 		if (err) {
+// 			console.log('Error:' + err);
+// 		} else {
+// 			console.log('Res'+res)
+// 		}
+// 	})
+// }
+// insertPapers();
 
 module.exports = function(app) {
 	// 用户登录
@@ -184,7 +185,7 @@ module.exports = function(app) {
 	// 获取试卷
 	app.get('/api/mypapers', (req, res) => {
 		var name = req.param('name'), userName = req.session.userName;
-		User.findOne({'userName' : userName},(err, doc) => {
+		Papers.find({},(err, doc) => {
 			if (err) {
 				res.json({
 					status:'1',
@@ -195,12 +196,12 @@ module.exports = function(app) {
 					res.json({
 						status: '0',
 						msg:'success',
-						result:doc.papers
+						result:doc
 					})
 				} else {
 					res.json({
 						status: '2',
-						msg:'没有该用户'
+						msg:'没有该试卷'
 					})
 				}
 			}
