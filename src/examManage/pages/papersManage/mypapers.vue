@@ -144,16 +144,16 @@ export default {
      * @return {[type]} [description]
      */
     getMypapers(){
-      this.$axios.get('https://easy-mock.com/mock/5a0906f1c645f122782971e9/exam/papers',{
+      this.$axios.get('/api/mypapers',{
         params:{
           name: this.name
         }
       }).then(response => {
         let res = response.data
-        if(res.code == 1) {
-          this.mypapers = res.data
-          this.pageTotal = res.total
-        }
+        // if(res.code == 1) {
+        //   this.mypapers = res.data
+        //   this.pageTotal = res.total
+        // }
       }).catch(err => {
         this.$message.error("获取试卷数据失败!")
       })

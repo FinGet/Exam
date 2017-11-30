@@ -3,6 +3,8 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var sessionParser = require('express-session')
+var mongoStore = require('connect-mongo')(sessionParser)
 var bodyParser = require('body-parser');
 
 // var index = require('./routes/index');
@@ -25,6 +27,13 @@ app.use(logger('dev')); // 加载日志中间件
 app.use(bodyParser.json()); // 加载解析json的中间件
 app.use(bodyParser.urlencoded({ extended: false })); // 加载解析urlencoded请求体的中间件
 app.use(cookieParser()); // 加载解析cookie的中间件
+app.use(sessionParser({
+	secret: 'express',
+	store: new mongoStore({
+		url:'mongodb://127.0.0.1:27017/examSystem',
+		collection:'session'
+	})
+})); // 加载解析session的中间件
 app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当前文件的绝对路径 设置public文件夹为存放静态文件的目录
 
 // 路由控制器
@@ -33,6 +42,11 @@ app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当�
 indexs(app);
 users(app);
 
+app.use(function (req,res,next) {
+	var _userName = req.session.userName;
+	app.locals.userName = _userName;
+	return next();
+})
 // catch 404 and forward to error handler 捕获404错误，并转发到错误处理器
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

@@ -13,7 +13,113 @@ var User = require('./../model/user')
 // 	var user = new User({
 // 		userName: 'Bios',
 // 		userPwd: '123',
-// 		type: 0
+// 		type: 0,
+// 		papers: [
+// 			{
+// 		      name: '操作系统Windows XP基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,05),
+// 		      endTime: new Date(2017,09,06),
+// 		      examnum: 70
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows XP基础测试',
+// 		      totalPoints: 100,
+// 		      time: '50',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 20
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows 7基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 20
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows8基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 10
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows 10基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 80
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows office',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 30
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows XP基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 50
+// 		    },
+// 		    {
+// 		      name: '操作系统PPT基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 30
+// 		    },
+// 		    {
+// 		      name: '操作系统execl基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 50
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows XP基础测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 50
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows XP初级测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 20
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows XP中级测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 20
+// 		    },
+// 		    {
+// 		      name: '操作系统Windows7高级测试',
+// 		      totalPoints: 100,
+// 		      time: '60',
+// 		      startTime: new Date(2017,09,04),
+// 		      endTime: new Date(2017,09,04),
+// 		      examnum: 30
+// 		    }
+// 		]
 // 	});
 // 	user.save((err, res) => {
 // 		if (err) {
@@ -46,12 +152,39 @@ module.exports = function(app) {
 				})
 			} else {
 				if (doc) {
+			        req.session.userName = doc.userName
 					res.json({
 						status: '0',
 						msg:'success',
 						result:{
 							userName: doc.userName
 						}
+					})
+				} else {
+					res.json({
+						status: '2',
+						msg:'没有该用户'
+					})
+				}
+			}
+		})
+	})
+
+	// 获取试卷
+	app.get('/api/mypapers', (req, res) => {
+		var name = req.param('name'), userName = req.session.userName;
+		User.findOne({'userName' : userName},(err, doc) => {
+			if (err) {
+				res.json({
+					status:'1',
+					msg: err.message
+				})
+			} else {
+				if (doc) {
+					res.json({
+						status: '0',
+						msg:'success',
+						result:doc.papers
 					})
 				} else {
 					res.json({
