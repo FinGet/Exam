@@ -229,3 +229,23 @@ if (doc) {
     result:'退出成功'
   })
 ```
+# 模糊查询+分页查询
+```
+// 获取试卷
+  app.get('/api/mypapers', (req, res) => {
+    let name = req.param('name'), 
+        // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
+        pageSize = parseInt(req.param('pageSize')),
+        pageNumber = parseInt(req.param('pageNumber')),
+        userName = req.session.userName;
+    let skip = (pageNumber-1)*pageSize; // 跳过几条
+    let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+    let params = {
+      name: reg
+    };
+    let papersModel = Papers.find(params).skip(skip).limit(pageSize);
+    papersModel.exec({},(err, doc) => {
+      ……
+    })
+  })
+```

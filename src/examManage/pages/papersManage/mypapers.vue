@@ -5,7 +5,7 @@
             <div class="pull-left search-warpper marginB10">
               <div class="pull-left search-title marginR10">试卷名称:</div>
               <el-input class=" pull-left input150" v-model="name"></el-input>
-              <el-button class="pull-left marginL10" type="primary" icon="search">搜索</el-button>
+              <el-button class="pull-left marginL10" type="primary" @click="getMypapers" icon="search">搜索</el-button>
             </div>
             <div class="pull-right">
               <el-popover
@@ -82,7 +82,6 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="150"
               align="center"
             >
               <template scope="scope">
@@ -98,7 +97,7 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page.sync="currentPage"
+              :current-page.sync="pageNumber"
               :page-size="pageSize"
               layout="total, prev, pager, next"
               :total="pageTotal">
@@ -116,8 +115,8 @@ export default {
       selections:[],
       visible:false,
       name: '', // 试卷名称 v-model
-      currentPage: 1, // 当前页
-      pageSize:100 ,
+      pageNumber: 1, // 当前页
+      pageSize:10 ,
       pageTotal: 0, // 数据总数
       mypapers: [] // 试卷数据
     }
@@ -146,14 +145,16 @@ export default {
     getMypapers(){
       this.$axios.get('/api/mypapers',{
         params:{
-          name: this.name
+          name: this.name,
+          pageSize: this.pageSize,
+          pageNumber: this.pageNumber
         }
       }).then(response => {
         let res = response.data
-        // if(res.code == 1) {
-        //   this.mypapers = res.data
-        //   this.pageTotal = res.total
-        // }
+        if(res.status == 0) {
+          this.mypapers = res.result
+          this.pageTotal = res.count
+        }
       }).catch(err => {
         this.$message.error("获取试卷数据失败!")
       })
