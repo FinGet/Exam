@@ -29,7 +29,6 @@
             ref="multipleTable"
             :data="mypapers"
             border
-            max-height="610"
             tooltip-effect="dark"
             style="width: 100%"
             :default-sort = "{prop: 'date', order: 'descending'}"

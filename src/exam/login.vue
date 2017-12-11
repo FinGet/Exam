@@ -7,7 +7,7 @@
                 <el-input v-model="password" placeholder="请输入密码" @keyup.enter="submit" class="marginT10"></el-input>
             </div>
             <div class="input-text-wrapper marginT30 text-center">
-                <el-button type="primary" @click="submit" class="loginBtn">登录</el-button>
+                <el-button type="warning" @click="submit" class="loginBtn">登录</el-button>
             </div>
             <div class="marginT20">
                 <a href="javascript:;">注册账号</a>
@@ -27,7 +27,7 @@ export default {
         return {
             userName: '',
             password: '',
-            logoSrc:require('../common/img/logo.png')
+            logoSrc:require('../common/img/logo1.png')
         }
     },
     methods: {
@@ -51,8 +51,8 @@ export default {
     mounted() {
         var bg = new CanvasBackground({
             canvasContainerID: "canvas",
-            circleColor: "rgba(49,210,142,1)",
-            lineColor: "rgba(49,210,142,1)",
+            circleColor: "rgba(255,128,0,1)",
+            lineColor: "rgba(255,159,64,1)",
             canvasOpacity: 0.3
         });
     }
@@ -61,7 +61,7 @@ export default {
 
 <style scoped>
 .note {
-    color: #20a0ff;
+    color: #f7ba2a;
     font-size: 14px;
 }
 /*必填项 * 图标*/
