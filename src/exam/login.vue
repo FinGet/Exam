@@ -4,7 +4,7 @@
             <div class="input-text-wrapper">
                 <div class="login-logo marginB10"><img width="300" v-lazy="logoSrc" alt="logo"></div>
                 <el-input v-model="userName" placeholder="请输入账号" @keyup.enter="submit"></el-input>
-                <el-input v-model="password" placeholder="请输入密码" @keyup.enter="submit" class="marginT10"></el-input>
+                <el-input v-model="password" placeholder="请输入密码" type="password" @keyup.enter="submit" class="marginT10"></el-input>
             </div>
             <div class="input-text-wrapper marginT30 text-center">
                 <el-button type="warning" @click="submit" class="loginBtn">登录</el-button>
