@@ -86,7 +86,7 @@
               <template scope="scope">
                 <el-button type="primary" size="mini" :disabled="scope.row.examnum==='0'?false:true">发布</el-button>
                 <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
-                <router-link :to="{path:'edit/' + scope.row.id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
+                <router-link :to="{path:'edit/' + scope.row._id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
             </el-table-column>
           </el-table>
