@@ -3,11 +3,13 @@
       <div class="top"></div>
       <div class="top-user">
         <ul class="user-info">
-          <li>姓名:张三</li>
-          <li>学号:1235621</li>
-          <li>性别:男</li>
+          <li>姓名: 张三</li>
+          <li>学号: 1235621</li>
+          <li>性别: 男</li>
         </ul>
         <el-button type="danger" size="mini" class="login-out">退出</el-button>
+        <router-link class="person" :to="{name:'FrontStudentInfo'}">个人中心</router-link>
+        <router-link class="index" :to="{name:'FrontIndex'}">首页</router-link>
       </div>
     </div>
 </template>
@@ -37,6 +39,15 @@
       li {
         float: left;
         margin-left: 20px;
+      }
+    }
+    .person,.index{
+      color: #c2c2c4;
+      float: right;
+      margin-right: 30px;
+      cursor: pointer;
+      &:hover{
+        color: #fff;
       }
     }
     .login-out{

@@ -8,7 +8,7 @@
         </ul>
       </div>
       <div class="text-center">
-        <el-checkbox v-model="checked"></el-checkbox>
+        <el-checkbox v-model="checked" class="agree">我同意遵守以上考试纪律</el-checkbox>
         <el-button :disabled="!checked" type="primary" @click="next">已阅读考试规则</el-button>
       </div>
     </div>
@@ -55,6 +55,9 @@ export default {
           margin-bottom: 5px;
         }
       }
+    }
+    .agree{
+      color: #b0b0b0;
     }
   }
 </style>

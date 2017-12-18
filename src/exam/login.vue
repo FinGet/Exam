@@ -39,6 +39,7 @@ export default {
                     message: '恭喜你，登录成功！',
                     type: 'success'
                 });
+                this.$router.push({name:'FrontIndex'});
             } else {
                 this.$message({
                     showClose: true,
