@@ -91,7 +91,7 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <el-col class="marginT10" v-if="this.mypapers.length>20">
+        <el-col class="marginT10" v-if="pageTotal>pageSize">
           <div class="page-wrapper pull-right">
             <el-pagination
               @size-change="handleSizeChange"
