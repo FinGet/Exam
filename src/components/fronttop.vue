@@ -7,7 +7,7 @@
           <li>学号: 1235621</li>
           <li>性别: 男</li>
         </ul>
-        <el-button type="danger" size="mini" class="login-out">退出</el-button>
+        <el-button type="danger" size="mini" class="login-out" @click="loginOut">退出</el-button>
         <router-link class="person" :to="{name:'FrontStudentInfo'}">个人中心</router-link>
         <router-link class="index" :to="{name:'FrontIndex'}">首页</router-link>
       </div>
@@ -15,7 +15,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+export default{
+  methods:{
+    // 退出登录
+    loginOut(){
+      this.$axios.post('/api/logout').then(response => {
+        let res = response.data
+        if (res.status == 0) {
+          this.$message.success('退出成功')
+          this.$router.push({name:'FrontLogin'})
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style rel="stylesheet/scss" scoped="scoped" lang="scss">
