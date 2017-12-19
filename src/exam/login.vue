@@ -4,7 +4,7 @@
             <div class="input-text-wrapper">
                 <div class="login-logo marginB10"><img width="300" v-lazy="logoSrc" alt="logo"></div>
                 <el-input v-model="userName" placeholder="请输入账号" @keyup.enter="submit"></el-input>
-                <el-input v-model="password" placeholder="请输入密码" type="password" @keyup.enter="submit" class="marginT10"></el-input>
+                <el-input v-model="passWord" placeholder="请输入密码" type="password" @keyup.enter="submit" class="marginT10"></el-input>
             </div>
             <div class="input-text-wrapper marginT30 text-center">
                 <el-button type="warning" @click="submit" class="loginBtn">登录</el-button>
@@ -26,28 +26,46 @@ export default {
     data() {
         return {
             userName: '',
-            password: '',
+            passWord: '',
             logoSrc:require('../common/img/logo1.png')
         }
     },
     methods: {
-        // 登录
-        submit() {
-            if (this.userName && this.password) {
-                this.$message({
-                    showClose: true,
-                    message: '恭喜你，登录成功！',
-                    type: 'success'
-                });
-                this.$router.push({name:'FrontIndex'});
-            } else {
-                this.$message({
-                    showClose: true,
-                    message: '请输入用户名和密码！',
-                    type: 'warning'
-                });
-            }
+      // 登录
+      submit() {
+        if (this.userName == '' || this.passWord == '') {
+          this.$message.error('请输入用户名或密码！')
+          return
         }
+        this.$axios.post('/api/login',{
+          userName: this.userName,
+          userPwd: this.passWord
+        }).then(response => {
+          let res = response.data;
+          if (res.status == '0') {
+            this.$message({
+              showClose: true,
+              message: '登录成功！',
+              type: 'success'
+            });
+            // 登录成功跳到首页
+            this.$router.push({name:'FrontIndex'});
+          } else {
+            this.$message({
+              showClose: true,
+              message: '用户名或密码错误！',
+              type: 'warning'
+            });
+            this.password = ''
+          }
+        }).catch(err => {
+          this.$message({
+            showClose: true,
+            message: '登录失败，请稍后再试！',
+            type: 'warning'
+          });
+        })
+      }
     },
     mounted() {
         var bg = new CanvasBackground({
