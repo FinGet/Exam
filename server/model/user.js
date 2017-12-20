@@ -1,4 +1,4 @@
-var mongoose = require('./../db');
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   userId: {type: String}, // 用户id

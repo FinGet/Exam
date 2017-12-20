@@ -8,7 +8,7 @@ db.connection.on('connected',function() {
 	console.log('数据库链接成功!');
 });
 db.connection.on('disconnected',function() {
-	console.log('Mongoose connection disconnected'); 
+	console.log('Mongoose connection disconnected');
 });
 
-module.exports = mongoose;
+module.exports = db;

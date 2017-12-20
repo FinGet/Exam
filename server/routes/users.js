@@ -7,6 +7,7 @@
 // });
 
 // module.exports = router;
+var db = require('./../db');
 var User = require('./../model/user')
 var Papers = require('../model/papers')
 // 初始化一条数据 本地若无数据，第一次运行将注释去掉
@@ -143,9 +144,9 @@ module.exports = function(app) {
 		}
 		console.log(param);
 		User.findOne(param, (err,doc)=>{
-			// console.log(err) When the findOne query doesn't find at least one matching document, 
+			// console.log(err) When the findOne query doesn't find at least one matching document,
 			//the second parameter of the callback (in this case user) is set to null.
-			//It's not an error, so err is also null.  
+			//It's not an error, so err is also null.
 			if (err) {
 				res.json({
 					status:'1',
@@ -184,7 +185,7 @@ module.exports = function(app) {
 	})
 	// 获取试卷
 	app.get('/api/mypapers', (req, res) => {
-		let name = req.param('name'), 
+		let name = req.param('name'),
 				// 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
 				pageSize = parseInt(req.param('pageSize')),
 				pageNumber = parseInt(req.param('pageNumber')),

@@ -1,4 +1,4 @@
-var mongoose = require('./../db');
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var PapersSchema = new Schema({
     teacher: String, // 老师
