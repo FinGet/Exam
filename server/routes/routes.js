@@ -1,4 +1,7 @@
-var Teacher = require('../controllers/teacher');
+var Teacher = require('../controllers/teacher'),
+    Student = require('../controllers/student');
+// 初始化一个学生
+// Student.init;
 module.exports = function(app) {
 
   /*----------------------教师用户----------------------*/
