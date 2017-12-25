@@ -206,7 +206,7 @@ app.use(sessionParser({
 }));
 ```
 ```
-user.js
+teacher.js
 // 登录时
 if (doc) {
   req.session.userName = doc.userName
@@ -249,3 +249,5 @@ if (doc) {
     })
   })
 ```
+12-25号，修改了数据库模型的关联关系和文档目录结构。新的模糊查询，分页查询
+![](https://i.imgur.com/gaMLMqu.png)

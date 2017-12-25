@@ -60,13 +60,12 @@
             </el-table-column>
             <el-table-column
               prop="date"
-              sortable
               width="190"
               align="center"
               label="考试时间"
             >
             <template scope="scope">
-              {{scope.row.startTime}}-{{scope.row.endTime}}
+              {{scope.row.startTime}}
             </template>
             </el-table-column>
             <el-table-column
@@ -75,8 +74,8 @@
               align="center"
             >
               <template scope="scope">
-                <p v-if="scope.row.examnum!='0'">{{scope.row.examnum}}</p>
-                <el-tag v-if="scope.row.examnum==='0'" type="danger">未考</el-tag>
+                <p v-if="scope.row.examnum!=0">{{scope.row.examnum}}</p>
+                <el-tag v-if="scope.row.examnum===0" type="danger">未考</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -84,7 +83,7 @@
               align="center"
             >
               <template scope="scope">
-                <el-button type="primary" size="mini" :disabled="scope.row.examnum==='0'?false:true">发布</el-button>
+                <el-button type="primary" size="mini" :disabled="scope.row.examnum===0?false:true">发布</el-button>
                 <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
                 <router-link :to="{path:'edit/' + scope.row._id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
@@ -151,8 +150,8 @@ export default {
       }).then(response => {
         let res = response.data
         if(res.status == 0) {
-          this.mypapers = res.result
-          this.pageTotal = res.count
+          this.mypapers = res.result._papers;
+          this.pageTotal = res.count;
         }
       }).catch(err => {
         this.$message.error("获取试卷数据失败!")
@@ -164,7 +163,7 @@ export default {
      * @return {[type]}
      */
     handleSelectionChange (val) {
-      this.selections = val
+      this.selections = val;
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -192,13 +191,13 @@ export default {
      */
     deleteAll() {
       for(var index in this.mypapers){
-        if(this.selections.indexOf(this.mypapers[index])>=0)
+        if(this.selections.indexOf(this.mypapers[index])>=0);
           // 一个个的判断mypapers中的元素是否存在于selection，如果有，正好删除当前这个值。
           // 而不是去判断selections的值存在于mypapers中的位置
           this.mypapers.splice(index,1);
       }
-      this.visible = false
-      this.$refs.multipleTable.clearSelection()
+      this.visible = false;
+      this.$refs.multipleTable.clearSelection();
     }
   }
 }
