@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var StudentSchema = new Schema({
-    userId: String, // 学号
+    userId: Number, // 学号
     userName: String, // 用户名
     passWord: String, // 密码
     grade: Number, // 年级 1~6 分别代表一年级到六年级
