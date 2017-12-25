@@ -7,15 +7,18 @@ var sessionParser = require('express-session')
 var mongoStore = require('connect-mongo')(sessionParser)
 var bodyParser = require('body-parser');
 
+// 链接数据库
+require('./db');
+
 // var index = require('./routes/index');
 // var users = require('./routes/users');
 var indexs = require('./routes/index');
-var users = require('./routes/users')
+var routes = require('./routes/routes')
 
 var app = express(); // 生成一个express实例 app
 
 // view engine setup
-// // 设置 views 文件夹为存放视图文件的目录, 
+// // 设置 views 文件夹为存放视图文件的目录,
 // 即存放模板文件的地方,__dirname 为全局变量,存储当前正在执行的脚本所在的目录
 app.set('views', path.join(__dirname, 'views'));
 // 设置视图模板引擎为jade
@@ -37,7 +40,7 @@ app.use(cookieParser()); // 加载解析cookie的中间件
 // 		url:'mongodb://127.0.0.1:27017/examSystem',
 // 		collection:'session'
 // 	})
-// })); 
+// }));
 
 // 默认使用内存来存 session，对于开发调试来说很方便
 app.use(sessionParser({
@@ -51,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当�
 // app.use('/', index);
 // app.use('/users', users);
 indexs(app);
-users(app);
+routes(app);
 
 app.use(function (req,res,next) {
 	var _userName = req.session.userName;

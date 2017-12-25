@@ -1,15 +1,4 @@
-// var express = require('express');
-// var router = express.Router();
-
-// /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
-
-// module.exports = router;
-var db = require('./../db');
-var User = require('./../model/user')
-var Papers = require('../model/papers')
+var Teacher = require('../controllers/teacher');
 // 初始化一条数据 本地若无数据，第一次运行将注释去掉
 // function insertUser() {
 // 	var user = new User({
@@ -135,88 +124,15 @@ var Papers = require('../model/papers')
 // insertPapers();
 
 module.exports = function(app) {
-	// 用户登录
-	app.post('/api/login', (req, res) => {
-		// res.render('index', {title: 'user info'});
-		var param = {
-			userName: req.body.userName,
-			userPwd: req.body.userPwd
-		}
-		console.log(param);
-		User.findOne(param, (err,doc)=>{
-			// console.log(err) When the findOne query doesn't find at least one matching document,
-			//the second parameter of the callback (in this case user) is set to null.
-			//It's not an error, so err is also null.
-			if (err) {
-				res.json({
-					status:'1',
-					msg: err.message
-				})
-			} else {
-				if (doc) {
-			        req.session.userName = doc.userName
-			        req.session.userPwd = doc.userPwd
-				    // console.log(req.session)
-					res.json({
-						status: '0',
-						msg:'success',
-						result:{
-							userName: doc.userName
-						}
-					})
-				} else {
-					res.json({
-						status: '2',
-						msg:'没有该用户'
-					})
-				}
-			}
-		})
-	})
-	// 登出
-	app.post("/api/logout", (req, res) => {
-	  req.session.userName = ''
-	  req.session.userPwd = ''
-	  res.json({
-	    status:'0',
-	    msg:'',
-	    result:'退出成功'
-	  })
-	})
-	// 获取试卷
-	app.get('/api/mypapers', (req, res) => {
-		let name = req.param('name'),
-				// 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
-				pageSize = parseInt(req.param('pageSize')),
-				pageNumber = parseInt(req.param('pageNumber')),
-				userName = req.session.userName;
-		let skip = (pageNumber-1)*pageSize; // 跳过几条
-		let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
-		let params = {
-			name: reg
-		};
-		let papersModel = Papers.find(params).skip(skip).limit(pageSize);
-		papersModel.exec({},(err, doc) => {
-			if (err) {
-				res.json({
-					status:'1',
-					msg: err.message
-				})
-			} else {
-				if (doc) {
-					res.json({
-						status: '0',
-						msg:'success',
-						result:doc,
-						count: doc.length
-					})
-				} else {
-					res.json({
-						status: '2',
-						msg:'没有该试卷'
-					})
-				}
-			}
-		})
-	})
+
+  /*----------------------教师用户----------------------*/
+  // 用户登录
+  app.post('/api/login', Teacher.signup);
+  // 登出
+  app.post("/api/logout", Teacher.signout);
+  // 获取试卷
+  app.get('/api/mypapers', Teacher.getPapers);
+
+
+  /*----------------------学生用户----------------------*/
 }
