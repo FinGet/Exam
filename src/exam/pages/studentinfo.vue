@@ -48,11 +48,11 @@
               <el-row>
                 <el-col :span="6">
                   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
-                    <el-form-item label="学号" prop="studentNumber">
-                      <el-input :disabled="true" v-model="ruleForm.studentNumber"></el-input>
+                    <el-form-item label="学号" prop="userId">
+                      <el-input :disabled="true" v-model="ruleForm.userId"></el-input>
                     </el-form-item>
                     <el-form-item label="姓名" prop="name">
-                      <el-input v-model="ruleForm.name"></el-input>
+                      <el-input v-model="ruleForm.userName"></el-input>
                     </el-form-item>
                     <el-form-item label="年级" prop="grade">
                       <el-select v-model="ruleForm.grade" :disabled="true" placeholder="请选年级">
@@ -64,11 +64,8 @@
                         <el-option label="六年级" value="6"></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="账号名称" prop="username">
-                      <el-input v-model="ruleForm.username"></el-input>
-                    </el-form-item>
-                    <el-form-item label="账号密码" prop="password">
-                      <el-input v-model="ruleForm.password"></el-input>
+                    <el-form-item label="账号密码" prop="passWord">
+                      <el-input v-model="ruleForm.passWord"></el-input>
                     </el-form-item>
                     <el-form-item>
                       <el-button type="primary" @click="submitForm('ruleForm')">立即修改</el-button>
@@ -89,25 +86,21 @@
     data(){
       return {
         ruleForm: {
-          name: '张三',
-          studentNumber:'1235621',
-          grade:'3',
-          username:'zhangsan',
-          password:'11111111'
+          userId:'',
+          grade:'',
+          class:'',
+          userName:'',
+          passWord:''
         },
         rules: {
-          name: [
+          userName: [
             {required: true, message: '请输入真实姓名', trigger: 'blur'},
             {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
           ],
           grade: [
             {required: true, message: '请输入年级', trigger: 'blur'}
           ],
-          username: [
-            {required: true, message: '请输入账号名称', trigger: 'blur'},
-            {min: 1, message: '长度不能小于1', trigger: 'blur'}
-          ],
-          password: [
+          passWord: [
             {required: true, message: '请输入账号密码', trigger: 'blur'},
             {min: 6, message: '长度不能小于6', trigger: 'blur'}
           ]
@@ -135,7 +128,22 @@
         total: 20
       }
     },
+    created(){
+      this.getUserInfo();
+    },
     methods:{
+      /**
+       * 获取个人信息
+       */
+      getUserInfo(){
+        this.$axios.get('/api/studentinfo').then(response => {
+          let res = response.data;
+          if (res.status == '0') {
+            this.ruleForm = res.result;
+//            console.log(this.ruleForm);
+          }
+        })
+      },
       /**
        * 提交表单
        * @param formName

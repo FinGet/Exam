@@ -68,3 +68,31 @@ exports.signout = function (req, res) {
     result:'退出成功'
   })
 };
+
+// 获取个人信息
+exports.getInfo = function (req, res) {
+  var userName = req.session.userName;
+  var passWord = req.session.passWord;
+
+  console.log(userName);
+
+  Student.findOne({'userName':userName,'passWord':passWord},(err, doc) => {
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else if (doc) {
+      res.json({
+        status: '0',
+        msg:'success',
+        result:doc
+      })
+    } else {
+      res.json({
+        status: '2',
+        msg:'没有该用户'
+      })
+    }
+  })
+}

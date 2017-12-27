@@ -18,4 +18,6 @@ module.exports = function(app) {
   app.post('/api/studentlogin', Student.signup);
   // 学生登出
   app.post('/api/studentlogout', Student.signout);
+  // 获取个人信息
+  app.get('/api/studentinfo', Student.getInfo);
 }
