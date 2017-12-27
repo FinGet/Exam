@@ -11,7 +11,22 @@ import axios from 'axios'
 import '../static/font-awesome/css/font-awesome.min.css' // 加载fontawesome字体
 import '@/common/css/common.css'
 
+import * as commonFun from './common/js/commonFun.js'
+
 Vue.prototype.$axios=axios
+Vue.prototype.$mySessionStorage = commonFun.mySessionStorage;
+//全局封装一个获取用户信息方法
+var getUserData=function () {
+  var sessionData = commonFun.mySessionStorage.get('currentUser', 'json')||{};
+  //console.log(sessionData)
+  return {
+    userName: sessionData.userName,
+    userId: sessionData.userId,
+    grade: sessionData.grade,
+    class: sessionData.class
+  }
+};
+Vue.prototype.$getUserData=getUserData;
 
 Vue.use(ElementUI) // 全局使用elementUI
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载

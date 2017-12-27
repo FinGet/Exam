@@ -14,4 +14,8 @@ module.exports = function(app) {
 
 
   /*----------------------学生用户----------------------*/
+  // 学生登录
+  app.post('/api/studentlogin', Student.signup);
+  // 学生登出
+  app.post('/api/studentlogout', Student.signout);
 }

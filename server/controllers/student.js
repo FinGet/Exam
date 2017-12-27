@@ -17,3 +17,54 @@ var Student = require('../model/student');
 // exports.init = student.save((err,doc) => {
 //   console.log(err);
 // });
+
+// 登录
+exports.signup = function(req, res) {
+  var param = {
+    userName: req.body.userName,
+    passWord: req.body.userPwd
+  }
+  // console.log(param);
+  Student.findOne(param, (err,doc)=>{
+    // console.log(err) When the findOne query doesn't find at least one matching document,
+    //the second parameter of the callback (in this case user) is set to null.
+    //It's not an error, so err is also null.
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        req.session.userName = doc.userName
+        req.session.passWord = doc.passWord
+        // console.log(req.session)
+        res.json({
+          status: '0',
+          msg:'success',
+          result:{
+            userName: doc.userName,
+            userId: doc.userId,
+            grade: doc.grade,
+            class: doc.class
+          }
+        })
+      } else {
+        res.json({
+          status: '2',
+          msg:'没有该用户'
+        })
+      }
+    }
+  })
+};
+// 登出
+exports.signout = function (req, res) {
+  req.session.userName = ''
+  req.session.passWord = ''
+  res.json({
+    status:'0',
+    msg:'',
+    result:'退出成功'
+  })
+};

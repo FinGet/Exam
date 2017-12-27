@@ -3,9 +3,10 @@
       <div class="top"></div>
       <div class="top-user">
         <ul class="user-info">
-          <li>姓名: 张三</li>
-          <li>学号: 1235621</li>
-          <li>性别: 男</li>
+          <li>欢迎！{{userData.userName}}同学</li>
+          <li>学号: {{userData.userId}}</li>
+          <li>年级: {{userData.grade}} 年级</li>
+          <li>班级: {{userData.class}} 班</li>
         </ul>
         <el-button type="danger" size="mini" class="login-out" @click="loginOut">退出</el-button>
         <router-link class="person" :to="{name:'FrontStudentInfo'}">个人中心</router-link>
@@ -16,10 +17,18 @@
 
 <script type="text/ecmascript-6">
 export default{
+  props:{
+    userData: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  },
   methods:{
     // 退出登录
     loginOut(){
-      this.$axios.post('/api/logout').then(response => {
+      this.$axios.post('/api/studentlogout').then(response => {
         let res = response.data
         if (res.status == 0) {
           this.$message.success('退出成功')

@@ -37,7 +37,7 @@ export default {
           this.$message.error('请输入用户名或密码！')
           return
         }
-        this.$axios.post('/api/login',{
+        this.$axios.post('/api/studentlogin',{
           userName: this.userName,
           userPwd: this.passWord
         }).then(response => {
@@ -49,6 +49,7 @@ export default {
               type: 'success'
             });
             // 登录成功跳到首页
+            this.$mySessionStorage.set('currentUser',res.result,'json');
             this.$router.push({name:'FrontIndex'});
           } else {
             this.$message({

@@ -1,6 +1,6 @@
 <template>
   <div id="fronthome">
-    <front-top></front-top>
+    <front-top :userData="userData"></front-top>
     <router-view></router-view>
   </div>
 </template>
@@ -9,6 +9,11 @@
   import FrontTop  from '@/components/fronttop'
 export default {
   name: 'fronthome',
+  computed:{
+    userData(){
+      return this.$getUserData();
+    },
+  },
   components:{
     FrontTop
   }
