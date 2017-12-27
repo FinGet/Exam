@@ -36,7 +36,7 @@ export default{
     width: 100%;
     height:110px;
     margin:0 auto;
-    background: url("../common/img/banner.png") center center;
+    background: url("../common/img/logobanner.png") center center;
   }
   .top-user{
     width: 100%;
