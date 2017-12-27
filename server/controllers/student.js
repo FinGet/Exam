@@ -71,12 +71,10 @@ exports.signout = function (req, res) {
 
 // 获取个人信息
 exports.getInfo = function (req, res) {
-  var userName = req.session.userName;
-  var passWord = req.session.passWord;
-
-  console.log(userName);
-
-  Student.findOne({'userName':userName,'passWord':passWord},(err, doc) => {
+  var userName = req.param('userName'),
+      userId   = req.param('userId');
+  // console.log(userName);
+  Student.findOne({'userName':userName,'userId':userId},(err, doc) => {
     if (err) {
       res.json({
         status:'1',

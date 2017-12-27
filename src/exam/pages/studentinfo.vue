@@ -136,7 +136,12 @@
        * 获取个人信息
        */
       getUserInfo(){
-        this.$axios.get('/api/studentinfo').then(response => {
+        this.$axios.get('/api/studentinfo',{
+          params:{
+            userName:this.$getUserData().userName,
+            userId:this.$getUserData().userId
+          }
+        }).then(response => {
           let res = response.data;
           if (res.status == '0') {
             this.ruleForm = res.result;
