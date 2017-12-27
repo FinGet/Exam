@@ -8,6 +8,7 @@ var StudentSchema = new Schema({
     class: Number, // 班级
     exams:[{ // 参加的考试
       _papers:{ type: Schema.Types.ObjectId, ref: 'Paper' },
+      date: Date,
       score:Number
     }]
 })
