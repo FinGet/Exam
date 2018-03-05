@@ -21,7 +21,7 @@
   export default {
     data() {
       return {
-        paperId:'',
+        paperId:'', // 试卷id
         title: '试卷名称'
       }
     },

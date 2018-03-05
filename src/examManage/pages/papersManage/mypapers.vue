@@ -19,7 +19,7 @@
                   <el-button type="primary" size="mini" @click="deleteAll">确定</el-button>
                 </div>
               </el-popover>
-              <router-link :to="{path:'edit/add'}"><el-button type="primary">新增试卷</el-button></router-link>
+              <router-link :to="{path:'add'}"><el-button type="primary">新增试卷</el-button></router-link>
               <el-button type="danger" :disabled="isSelected" v-popover:popover>批量删除</el-button>
             </div>
         </el-col>
