@@ -10,7 +10,7 @@
               <h3 class="news text-center">新闻公告</h3>
               <div>
                 <ul class="ul">
-                  <li v-for="item in news">
+                  <li v-for="item in news" :key="item.id">
                     <el-tooltip class="item" effect="dark" :content="item.title" placement="top-start">
                       <span class="title">{{item.title}}</span>
                     </el-tooltip>
@@ -26,7 +26,7 @@
               <h3 class="exam text-center">进行中的考试</h3>
               <div>
                 <ul class="ul">
-                  <li v-for="item in exams" class="clearfix">
+                  <li v-for="item in exams" class="clearfix" :key="item.id">
                     <el-tooltip class="item" effect="dark" :content="item.examname" placement="top-start">
                       <div class="pull-left examname">{{item.examname}}</div>
                     </el-tooltip>
