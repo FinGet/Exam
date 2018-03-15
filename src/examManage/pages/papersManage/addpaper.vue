@@ -25,16 +25,16 @@
         <h3>题目控件</h3>
         <ul >
           <li>
-            <el-button type="primary" class="button" @click="addNewFormItem('1')">单选题</el-button>
+            <el-button type="primary" class="button" @click="addNewFormItem('single')">单选题</el-button>
           </li>
           <li>
-            <el-button type="primary" class="button" @click="addNewFormItem('2')">多选题</el-button>
+            <el-button type="primary" class="button" @click="addNewFormItem('multi')">多选题</el-button>
           </li>
           <li>
-            <el-button type="primary" class="button" @click="addNewFormItem('3')">判断题</el-button>
+            <el-button type="primary" class="button" @click="addNewFormItem('judgement')">判断题</el-button>
           </li>
           <li>
-            <el-button type="primary" class="button" @click="addNewFormItem('4')">简答题</el-button>
+            <el-button type="primary" class="button" @click="addNewFormItem('Q&A')">简答题</el-button>
           </li>
         </ul>
       </div>
@@ -54,8 +54,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="选项：" v-if="dialogForm.type!=3&&dialogForm.type!=4" required>
-            <el-form-item v-for="(item,index) in dialogForm.surveyQuestionOptionList" label-width="0"  prop="optionContent">
+          <el-form-item label="选项：" v-if="dialogForm.type!='judgement'&&dialogForm.type!='Q&A'" required>
+            <el-form-item v-for="(item,index) in dialogForm.surveyQuestionOptionList" label-width="0" prop="optionContent">
               <el-input placeholder="请输入选项" class="dialog_input" v-model="item.optionContent"></el-input>
               <el-button type="text"  style="color:#ff4949" @click="deleteDlalogOption(index)">删除</el-button>
             </el-form-item>
@@ -64,7 +64,7 @@
           <el-form-item label="分值：" prop="score">
             <el-input placeholder="请输入该题的分值" v-model="dialogForm.score"></el-input>
           </el-form-item>
-          <el-form-item label="答案：" prop="answer" v-if="dialogForm.type!=4">
+          <el-form-item label="答案：" prop="answer" v-if="dialogForm.type!='Q&A'">
             <el-input placeholder="请输入该题的答案，多选题答案用逗号分开" v-model="dialogForm.answer"></el-input>
           </el-form-item>
         </el-form>
@@ -114,11 +114,10 @@ export default {
         type:[
           { required: true, message: '请选择题目类型', trigger: 'blur' },
         ],
-        optionContent:[
-          { required: true, message: '请输入选项', trigger: 'blur' },
-          {min:1,max:200,message:'选项不能超过200个字符',trigger:'change,blur'}
-        ]
-
+//        optionContent:[
+//          { required: true, message: '请输入选项', trigger: 'blur' },
+//          {min:1,max:200,message:'选项不能超过200个字符',trigger:'change,blur'}
+//        ]
       },
       // 弹窗表单
       dialogForm:{
@@ -137,19 +136,19 @@ export default {
       },
       dialogOptions:[
         {
-          value:'1',
+          value:'single',
           label:'单选题'
         },
         {
-          value:'2',
+          value:'multi',
           label:'多选题'
         },
         {
-          value:'3',
+          value:'judgement',
           label:'判断题'
         },
         {
-          value:'4',
+          value:'Q&A',
           label:'简答题'
         },
       ]
@@ -213,7 +212,18 @@ export default {
      * 确定添加题目
      */
     upLoadFormItem(){
-
+      var isSpace = this.dialogForm.surveyQuestionOptionList.some(function(item) {
+        return item.optionContent == '';
+      })
+      this.$refs.dialogForm.validate((valid)=>{
+        if (valid&&!isSpace) {
+          this.form.questions.push(this.dialogForm);
+          this.dialogVisible=false;
+//          this.$message.success('可以提交');
+        } else {
+          this.$message.error('请输入正确的内容！');
+        }
+      })
     },
     /**
      * 添加选项

@@ -7,8 +7,8 @@ var QuestionSchema = new Schema({
   content: String, // 内容
   selection: [String], // 选项
   type: {type:String,enum:[ // 类型
-    'single selection', // 单选
-    'multi selection', // 多选
+    'single', // 单选
+    'multi', // 多选
     'Q&A', // 简答
     'judgement' // 判断
   ]},
