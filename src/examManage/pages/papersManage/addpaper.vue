@@ -271,9 +271,9 @@ export default {
      * 重置表单
      * @param formName
      */
-//    resetForm(formName) {
-//      this.$refs[formName].resetFields();
-//    }
+    resetForm() {
+      this.$refs.dialogForm.resetFields();
+    },
     /**
      * 保存试卷
      */
@@ -282,18 +282,24 @@ export default {
           this.$message.error('请正确输入试卷信息!')
           return;
       }
-      this.form.questions.forEach(item => {
+      let params = Object.create(this.form);
+      params.questions.forEach(item => {
          var arr = [];
          item.selection.forEach(item1 => {
            arr.push(item1.optionContent);
          })
         item.selection = [].concat(arr);
       });
-      console.log(this.form.questions);
+//      console.log(this.form.questions);
       this.$axios.post('/api/savePaper',{
-        paperForm: this.form
+        paperForm: params
       }).then((response) => {
-
+        this.reloadDialog();
+        this.resetForm();
+        let res = response.data;
+        if (res.status == '0') {
+          this.$message.success('保存成功！');
+        }
 			})
     }
 	}
