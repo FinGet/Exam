@@ -3,6 +3,9 @@ var Teacher = require('../model/teacher'),
     Question = require('../model/question');
 
 
+// var teacher = new Teacher();
+// var paper = new Paper();
+// var question = new Question();
 // 初始化几条数据
 
 	// var teacher = new Teacher({
@@ -68,9 +71,9 @@ exports.signup = function(req, res) {
       })
     } else {
       if (doc) {
-        req.session.userName = doc.userName
-        req.session.passWord = doc.passWord
-        // console.log(req.session)
+        req.session.userName = doc.userName;
+        req.session.passWord = doc.passWord;
+        // console.log(req.session);
         res.json({
           status: '0',
           msg:'success',
@@ -100,6 +103,7 @@ exports.signout = function (req, res) {
 
 // 获取试卷
 exports.getPapers = function (req, res) {
+  // console.log(req.session.userName);
   let name = req.param('name'),
     // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
     pageSize = parseInt(req.param('pageSize')),
@@ -110,7 +114,7 @@ exports.getPapers = function (req, res) {
   let params = {
     name: reg
   };
-  Teacher.findOne({'username':userName}).populate({path:'_papers',match:{name: reg},options:{skip:skip,limit:pageSize}})
+  Teacher.findOne({'userName':userName}).populate({path:'_papers',match:{name: reg},options:{skip:skip,limit:pageSize}})
     .exec((err, doc) => {
       if (err) {
         res.json({
@@ -134,3 +138,89 @@ exports.getPapers = function (req, res) {
       }
     })
 }
+
+// 保存试卷
+exports.savePaper = function (req, res) {
+  let paperForm = req.body.paperForm;
+  let userName = req.session.userName;
+
+  console.log(paperForm);
+  console.log(userName);
+  Teacher.findOne({"userName": userName}, (err,doc)=>{
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        let paperData = {
+          name:paperForm.name,
+          totalPoints:paperForm.totalPoints,
+          time:paperForm.time,
+          _teacher: doc._id,
+          _questions: [],
+          examnum:0
+        }
+        Paper.create(paperData,function (err1,doc1) {
+          if (err1) {
+            res.json({
+              status:'1',
+              msg: err.message
+            })
+          } else {
+            if (doc1) {
+              // console.log('doc1 paper:'+doc1._id);
+              doc._papers.push(doc1._id); // 教师中添加该试卷
+              doc.save(); // 很重要 不save则没有数据
+              // console.log('doc teacher'+doc._papers);
+              paperForm.questions.forEach(item => {
+                item._papers = [];
+                item._papers.push(doc1._id);
+                item._teacher = doc._id;
+              })
+              Question.create(paperForm.questions,function (err2,doc2) {
+                if (err2) {
+                  res.json({
+                    status:'1',
+                    msg: err.message
+                  })
+                } else {
+                  if (doc2) {
+                    // console.log('doc2 ques:'+doc2)
+                    doc2.forEach(item => {
+                      doc1._questions.push(item._id);
+                    })
+                    doc1.save(); // 很重要 不save则没有数据
+                   res.json({
+                      status:'0',
+                      msg: 'success'
+                    })
+                  } else {
+                    res.json({
+                      status: '2',
+                      msg:'没找到题目'
+                    })
+                  }
+                }
+              })
+            } else {
+              res.json({
+                status: '2',
+                msg:'没找到试卷'
+              })
+            }
+          }
+        })
+      }
+      else {
+        res.json({
+          status: '2',
+          login: false,
+          msg:'请登录'
+        })
+      }
+    }
+  })
+};
+

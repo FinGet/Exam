@@ -7,7 +7,7 @@
         <el-col :span="24">
           <el-col :span="12">
             <div class="box news-box">
-              <h3 class="news text-center">新闻公告</h3>
+              <h3 class="news text-center">考试公告</h3>
               <div>
                 <ul class="ul">
                   <li v-for="item in news" :key="item.id">

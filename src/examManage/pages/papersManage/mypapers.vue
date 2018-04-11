@@ -59,13 +59,12 @@
              >
             </el-table-column>
             <el-table-column
-              prop="date"
               width="190"
-              align="center"
+              align="center"s
               label="考试时间"
             >
             <template scope="scope">
-              {{scope.row.startTime}}
+              {{scope.row.startTime?new Date(scope.row.startTime).toLocaleString():'还未开考'}}
             </template>
             </el-table-column>
             <el-table-column
@@ -74,8 +73,8 @@
               align="center"
             >
               <template scope="scope">
-                <p v-if="scope.row.examnum!=0">{{scope.row.examnum}}</p>
-                <el-tag v-if="scope.row.examnum===0" type="danger">未考</el-tag>
+                <p v-if="scope.row.startTime">{{scope.row.examnum}}</p>
+                <el-tag v-else type="danger">未考</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -148,9 +147,12 @@ export default {
           pageNumber: this.pageNumber
         }
       }).then(response => {
-        let res = response.data
+        let res = response.data;
         if(res.status == 0) {
           this.mypapers = res.result._papers;
+//          this.mypapers.map(item => {
+//              item.date = item.date.toLocaleString();
+//          })
           this.pageTotal = res.count;
         }
       }).catch(err => {

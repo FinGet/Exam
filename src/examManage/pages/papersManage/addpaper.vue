@@ -14,9 +14,12 @@
 						<el-form-item label="试卷名称" prop="name">
 							<el-input v-model="form.name" placeholder="请输入试卷名称"></el-input>
 						</el-form-item>
-						<el-form-item label="试卷总分" prop="total">
-							<el-input v-model="form.total" placeholder="请输入试卷总分"></el-input>
+						<el-form-item label="试卷总分" prop="totalPoints">
+							<el-input v-model="form.totalPoints" placeholder="请输入试卷总分"></el-input>
 						</el-form-item>
+            <el-form-item label="考试时长" prop="time">
+              <el-input v-model="form.time" placeholder="请输入考试时长"></el-input>
+            </el-form-item>
 					</el-form>
 				</el-col>
 			</el-row>
@@ -38,11 +41,13 @@
           </li>
         </ul>
       </div>
+
+
       <!-- 添加 修改弹窗 -->
-      <el-dialog  :title="isEdit?'修改问题':'新增问题'" :visible.sync="dialogVisible" size="tiny" class="form_item_dialog" @close="reloadDialog(resetForm)">
-        <el-form :model="dialogForm" ref="dialogForm"  :rules="dialogRules" label-width="70px">
-          <el-form-item label="题目：" prop="title">
-            <el-input type="textarea" :rows="2" placeholder="请输入题目" v-model="dialogForm.title"></el-input>
+      <el-dialog  :title="isEdit?'修改问题':'新增问题'" :visible.sync="dialogVisible" size="tiny" class="form_item_dialog" @close="reloadDialog">
+        <el-form :model="dialogForm" ref="dialogForm"  :rules="dialogRules" label-width="72px">
+          <el-form-item label="题目：" prop="name">
+            <el-input type="textarea" :rows="2" placeholder="请输入题目" v-model="dialogForm.name"></el-input>
           </el-form-item>
           <el-form-item label="类型：" prop="type">
             <el-select v-model="dialogForm.type" placeholder="请选择题目类型" >
@@ -54,13 +59,20 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="选项：" v-if="dialogForm.type!='judgement'&&dialogForm.type!='Q&A'" required>
-            <el-form-item v-for="(item,index) in dialogForm.surveyQuestionOptionList" label-width="0" prop="optionContent">
+          <div  v-if="dialogForm.type!='judgement'&&dialogForm.type!='Q&A'">
+            <el-form-item v-for="(item,index) in dialogForm.selection"
+            :key="item.key"
+            :label="'选项'+(index+1) +'：'"
+            :prop="'selection.' + index + '.optionContent'"
+            :rules="{
+              required:true, message:'选项不能为空', trigger:'blur'
+            }"
+            >
               <el-input placeholder="请输入选项" class="dialog_input" v-model="item.optionContent"></el-input>
-              <el-button type="text"  style="color:#ff4949" @click="deleteDlalogOption(index)">删除</el-button>
+              <i class="el-icon-delete delete-icon" @click="deleteDlalogOption(index)"></i>
             </el-form-item>
-            <el-button type="primary" size="small" @click="addDialogOption">添加选项</el-button>
-          </el-form-item>
+            <el-button type="primary" size="small" class="marginB10" @click="addDialogOption">添加选项</el-button>
+          </div>
           <el-form-item label="分值：" prop="score">
             <el-input placeholder="请输入该题的分值" v-model="dialogForm.score"></el-input>
           </el-form-item>
@@ -73,8 +85,27 @@
             <el-button type="primary" @click="upLoadFormItem">确 定</el-button>
          </span>
       </el-dialog>
+
+
       <div class="form_list">
         <h3 v-if="form.questions.length==0" class="text-center">题目为空，请在左侧选择题目添加</h3>
+        <ul>
+          <li v-for="(item,index) in form.questions" :key="item.id" class="marginB10">
+            <p class="question-title">{{index+1}}、({{item.type=='single'?'单选题'
+              :item.type=='multi'?'多选题':item.type=='judgement'?'判断题':item.type=='Q&A'?'简答题':'null'}}){{item.name}} ({{item.score}}分)
+               <span class="gray">|</span> <i class="fa fa-edit edit-icon edit-icon-edit"></i>
+              <i class="fa fa-trash edit-icon edit-icon-trash"></i></p>
+            <span class="option"
+                  v-if="item.type!='judgement'&&dialogForm.type!='Q&A'"item
+                  v-for="(item1,index1) in item.selection" :key="item1.id">
+              {{options[index1]}}、{{item1.optionContent}}
+            </span>
+          </li>
+        </ul>
+        <div class="pull-right" v-if="form.questions.length!=0" >
+          <el-button type="primary" @click="savePaper">保存</el-button>
+          <el-button type="danger">取消</el-button>
+        </div>
       </div>
 		</div>
 	</div>
@@ -87,22 +118,27 @@ export default {
 			paperId: '', // 试卷id
 			form:{ // 试卷信息
 				name: '',
-				total: '',
+        totalPoints: '',
 			  questions:[]
       },
+      options:['A','B','C','D','E','F','G','H','I','J','K',
+      'L','M','N','O','P','Q','R','S','T'],
       isEdit: false,
       // 表单规则
 			rules: {
 				name: [
 					{ required: true, message: '请输入试卷名称', trigger: 'blur' },
 				],
-				total: [
+        totalPoints: [
 					{ required: true, message: '请输入试卷总分', trigger: 'blur' },
-				]
+				],
+        time: [
+          { required: true, message: '请输入考试时长', trigger: 'blur' },
+        ]
 			},
       dialogVisible: false,
       dialogRules:{
-        title:[
+        name:[
           { required: true, message: '请输入题目', trigger: 'blur' }
         ],
         score:[
@@ -113,19 +149,15 @@ export default {
         ],
         type:[
           { required: true, message: '请选择题目类型', trigger: 'blur' },
-        ],
-//        optionContent:[
-//          { required: true, message: '请输入选项', trigger: 'blur' },
-//          {min:1,max:200,message:'选项不能超过200个字符',trigger:'change,blur'}
-//        ]
+        ]
       },
       // 弹窗表单
       dialogForm:{
-        title:'',
+        name:'',
         type:'',
         score: '',
         answer: '',
-        surveyQuestionOptionList:[
+        selection:[
           {
             optionContent:''
           },
@@ -165,11 +197,11 @@ export default {
 		 * @return {[type]}
 		 */
 		init() {
-			this.$axios.get('xxx').then((response) => {
-				params: {
-					paperId: paperId
-				}
-			})
+//			this.$axios.get('xxx').then((response) => {
+//				params: {
+//					paperId: paperId
+//				}
+//			})
 		},
 		/**
 		 * 返回上一级
@@ -193,11 +225,11 @@ export default {
      */
     reloadDialog(done){
       this.dialogForm={
-        title:'',
+        name:'',
         type:'',
         direction:'',
         sort:'',
-        surveyQuestionOptionList:[
+        selection:[
           {
             optionContent:''
           },
@@ -206,20 +238,17 @@ export default {
           },
         ]
       }
-      done('dialogForm');
+//      done('dialogForm');
     },
     /**
      * 确定添加题目
      */
     upLoadFormItem(){
-      var isSpace = this.dialogForm.surveyQuestionOptionList.some(function(item) {
-        return item.optionContent == '';
-      })
       this.$refs.dialogForm.validate((valid)=>{
-        if (valid&&!isSpace) {
+        if (valid) {
           this.form.questions.push(this.dialogForm);
+          console.log(this.form.questions)
           this.dialogVisible=false;
-//          this.$message.success('可以提交');
         } else {
           this.$message.error('请输入正确的内容！');
         }
@@ -229,22 +258,43 @@ export default {
      * 添加选项
      */
     addDialogOption(){
-//      console.log(this.dialogForm);
-      this.dialogForm.surveyQuestionOptionList.push({optionContent:''});
+      this.dialogForm.selection.push({optionContent:''});
     },
     /**
      * 删除选项
      * @param i
      */
     deleteDlalogOption(i){
-      this.dialogForm.surveyQuestionOptionList.splice(i,1);
+      this.dialogForm.selection.splice(i,1);
     },
     /**
      * 重置表单
      * @param formName
      */
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+//    resetForm(formName) {
+//      this.$refs[formName].resetFields();
+//    }
+    /**
+     * 保存试卷
+     */
+    savePaper(){
+      if(this.form.name=='' || this.form.totalPoints == '' || this.form.time == '') {
+          this.$message.error('请正确输入试卷信息!')
+          return;
+      }
+      this.form.questions.forEach(item => {
+         var arr = [];
+         item.selection.forEach(item1 => {
+           arr.push(item1.optionContent);
+         })
+        item.selection = [].concat(arr);
+      });
+      console.log(this.form.questions);
+      this.$axios.post('/api/savePaper',{
+        paperForm: this.form
+      }).then((response) => {
+
+			})
     }
 	}
 }
@@ -300,6 +350,40 @@ export default {
       min-height:500px;
       padding:0 10px;
       border-left:1px solid #a0a0a0;
+      .question-title{
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .option{
+        padding:5px;
+        font-size: 14px;
+        margin-right: 20px;
+      }
+      .edit-icon{
+        display: inline-block;
+        margin:0 5px;
+        font-size: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      .edit-icon-edit{
+        color: #20a0ff;
+      }
+      .edit-icon-trash{
+        color: #ff0000;
+      }
+    }
+    .dialog_input{
+      width:268px;
+    }
+    .delete-icon{
+      color:#ff0000;
+      cursor:pointer;
+      font-size: 20px;
+    }
+    .gray{
+      color: rgba(0, 0, 0, 0.32);
     }
 	}
 }

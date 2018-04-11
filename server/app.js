@@ -12,8 +12,7 @@ require('./db');
 
 // var index = require('./routes/index');
 // var users = require('./routes/users');
-var indexs = require('./routes/index');
-var routes = require('./routes/routes')
+
 
 var app = express(); // 生成一个express实例 app
 
@@ -44,11 +43,24 @@ app.use(cookieParser()); // 加载解析cookie的中间件
 
 // 默认使用内存来存 session，对于开发调试来说很方便
 app.use(sessionParser({
-	secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
-  	cookie: { maxAge: 60 * 1000 }
+	secret: '12345', // 建议使用 128 个字符的随机字符串
+  name: 'userInfo',
+  cookie: { maxAge: 1800000 },
+  resave:true,
+  rolling:true,
+  saveUninitialized:false
 }));
 
+app.use(function (req,res,next) {
+  var _userName = req.session.userName;
+  app.locals.userName = _userName;
+  return next();
+})
+
 app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当前文件的绝对路径 设置public文件夹为存放静态文件的目录
+
+var indexs = require('./routes/index');
+var routes = require('./routes/routes');
 
 // 路由控制器
 // app.use('/', index);
@@ -56,11 +68,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // __dirname表示当�
 indexs(app);
 routes(app);
 
-app.use(function (req,res,next) {
-	var _userName = req.session.userName;
-	app.locals.userName = _userName;
-	return next();
-})
+
 // catch 404 and forward to error handler 捕获404错误，并转发到错误处理器
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

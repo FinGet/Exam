@@ -11,6 +11,8 @@ module.exports = function(app) {
   app.post("/api/logout", Teacher.signout);
   // 获取试卷
   app.get('/api/mypapers', Teacher.getPapers);
+  // 保存试卷
+  app.post('/api/savePaper', Teacher.savePaper);
 
 
   /*----------------------学生用户----------------------*/
