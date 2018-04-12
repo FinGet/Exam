@@ -10,7 +10,7 @@
         <el-button type="primary" @click="submit" class="loginBtn">登录</el-button>
       </div>
       <div class="marginT20">
-        <a href="javascript:;">注册账号</a>
+        <router-link to="/manageregister" class="note">注册账号</router-link>
         <a href="javascript:;">忘记密码？</a>
         <router-link class="note  pull-right" to="/">学生登录</router-link>
       </div>
@@ -64,7 +64,7 @@ export default {
             message: '登录失败，请稍后再试！',
             type: 'warning'
           });
-      }) 
+      })
     }
   },
   mounted() {
