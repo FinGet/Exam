@@ -96,7 +96,7 @@
                <span class="gray">|</span> <i class="fa fa-edit edit-icon edit-icon-edit"></i>
               <i class="fa fa-trash edit-icon edit-icon-trash"></i></p>
             <span class="option"
-                  v-if="item.type!='judgement'&&dialogForm.type!='Q&A'"item
+                  v-if="item.type!='judgement'&&item.type!='Q&A'"item
                   v-for="(item1,index1) in item.selection" :key="item1.id">
               {{options[index1]}}、{{item1.optionContent}}
             </span>
@@ -223,7 +223,7 @@ export default {
      * 当关闭弹窗时
      * @param done
      */
-    reloadDialog(done){
+    reloadDialog(){
       this.dialogForm={
         name:'',
         type:'',
@@ -235,10 +235,9 @@ export default {
           },
           {
             optionContent:''
-          },
+          }
         ]
       }
-//      done('dialogForm');
     },
     /**
      * 确定添加题目
@@ -247,7 +246,7 @@ export default {
       this.$refs.dialogForm.validate((valid)=>{
         if (valid) {
           this.form.questions.push(this.dialogForm);
-          console.log(this.form.questions)
+//          console.log(this.form.questions)
           this.dialogVisible=false;
         } else {
           this.$message.error('请输入正确的内容！');
@@ -294,8 +293,7 @@ export default {
       this.$axios.post('/api/savePaper',{
         paperForm: this.form
       }).then((response) => {
-        this.reloadDialog();
-        this.resetForm();
+//        this.resetForm();
         this.form = { // 试卷信息
           name: '',
           totalPoints: '',
