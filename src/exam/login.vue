@@ -11,7 +11,7 @@
             </div>
             <div class="marginT20">
                 <router-link to="/frontregister" class="note">注册账号</router-link>
-                <a href="javascript:;">忘记密码？</a>
+                <!--<a href="javascript:;">忘记密码？</a>-->
                 <router-link class="note  pull-right" to="/managelogin">教师登录</router-link>
             </div>
         </div>
