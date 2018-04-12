@@ -283,7 +283,7 @@ export default {
           return;
       }
       let params = Object.create(this.form);
-      params.questions.forEach(item => {
+      this.form.questions.forEach(item => {
          var arr = [];
          item.selection.forEach(item1 => {
            arr.push(item1.optionContent);
@@ -292,10 +292,15 @@ export default {
       });
 //      console.log(this.form.questions);
       this.$axios.post('/api/savePaper',{
-        paperForm: params
+        paperForm: this.form
       }).then((response) => {
         this.reloadDialog();
         this.resetForm();
+        this.form = { // 试卷信息
+          name: '',
+          totalPoints: '',
+          questions:[]
+        };
         let res = response.data;
         if (res.status == '0') {
           this.$message.success('保存成功！');

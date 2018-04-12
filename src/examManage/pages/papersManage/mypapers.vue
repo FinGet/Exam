@@ -4,8 +4,8 @@
         <el-col>
             <div class="pull-left search-warpper marginB10">
               <div class="pull-left search-title marginR10">试卷名称:</div>
-              <el-input class=" pull-left input150" v-model="name"></el-input>
-              <el-button class="pull-left marginL10" type="primary" @click="getMypapers" icon="search">搜索</el-button>
+              <el-input class=" pull-left input150" v-model="name" @keyup.enter.native="getMypapers"></el-input>
+              <el-button class="pull-left marginL10" type="primary" @click="getMypapers"  icon="search">搜索</el-button>
             </div>
             <div class="pull-right">
               <el-popover
@@ -31,7 +31,6 @@
             border
             tooltip-effect="dark"
             style="width: 100%"
-            :default-sort = "{prop: 'date', order: 'descending'}"
             @selection-change="handleSelectionChange">
             <el-table-column
               type="selection"
@@ -82,7 +81,7 @@
               align="center"
             >
               <template scope="scope">
-                <el-button type="primary" size="mini" :disabled="scope.row.examnum===0?false:true">发布</el-button>
+                <el-button type="primary" size="mini" :disabled="scope.row.startTime?true:false" @click="publish(scope.row._id)">发布</el-button>
                 <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
                 <router-link :to="{path:'edit/' + scope.row._id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
@@ -150,9 +149,6 @@ export default {
         let res = response.data;
         if(res.status == 0) {
           this.mypapers = res.result._papers;
-//          this.mypapers.map(item => {
-//              item.date = item.date.toLocaleString();
-//          })
           this.pageTotal = res.count;
         }
       }).catch(err => {
@@ -181,11 +177,22 @@ export default {
     deleted(val) {
       // console.log(val)
       // 表格存在排序，所以要判断一下，当前删除行在数据中的实际位置
-      for (var i in this.mypapers) {
-        if (this.mypapers[i] === val) {
-          this.mypapers.splice(i, 1);
+//      for (var i in this.mypapers) {
+//        if (this.mypapers[i] === val) {
+//          this.mypapers.splice(i, 1);
+//        }
+//      }
+      this.$axios.post('/api/deletePaper',{
+        id: val._id
+      }).then(response => {
+        let res = response.data;
+        if (res.status == '0') {
+          this.$message.success('删除成功！');
+          this.getMypapers();
         }
-      }
+      }).catch(err => {
+        this.$message.error("获取试卷数据失败!")
+      })
     },
     /**
      * 批量删除
@@ -200,6 +207,23 @@ export default {
       }
       this.visible = false;
       this.$refs.multipleTable.clearSelection();
+    },
+    /**
+     * 发布试卷
+     * @param id 试卷id
+     */
+    publish(id){
+      this.$axios.post('/api/publishPaper',{
+        id: id
+      }).then(response => {
+        let res = response.data;
+        if (res.status == '0') {
+          this.$message.success('发布成功！');
+          this.getMypapers();
+        }
+      }).catch(err => {
+        this.$message.error("获取试卷数据失败!")
+      })
     }
   }
 }

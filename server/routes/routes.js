@@ -13,6 +13,10 @@ module.exports = function(app) {
   app.get('/api/mypapers', Teacher.getPapers);
   // 保存试卷
   app.post('/api/savePaper', Teacher.savePaper);
+  // 发布试卷
+  app.post('/api/publishPaper', Teacher.publishPaper);
+  // 删除试卷
+  app.post('/api/deletePaper', Teacher.deletePaper);
 
 
   /*----------------------学生用户----------------------*/

@@ -144,8 +144,14 @@ exports.savePaper = function (req, res) {
   let paperForm = req.body.paperForm;
   let userName = req.session.userName;
 
-  console.log(paperForm);
-  console.log(userName);
+  // console.log(paperForm);
+  // console.log(userName);
+  if(paperForm == {}){
+    res.json({
+      status:'5',
+      msg: '数据不能为空'
+    })
+  }
   Teacher.findOne({"userName": userName}, (err,doc)=>{
     if (err) {
       res.json({
@@ -166,7 +172,7 @@ exports.savePaper = function (req, res) {
           if (err1) {
             res.json({
               status:'1',
-              msg: err.message
+              msg: err1.message
             })
           } else {
             if (doc1) {
@@ -183,7 +189,7 @@ exports.savePaper = function (req, res) {
                 if (err2) {
                   res.json({
                     status:'1',
-                    msg: err.message
+                    msg: err2.message
                   })
                 } else {
                   if (doc2) {
@@ -223,4 +229,101 @@ exports.savePaper = function (req, res) {
     }
   })
 };
+
+// 发布试卷
+exports.publishPaper = function(req, res) {
+  let id = req.body.id;
+  let userName = req.session.userName;
+  // console.log(param);
+  Teacher.findOne({"userName":userName}, (err,doc)=>{
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        Paper.update({'_id':id},{$set:{"startTime": new Date}},function (err1,doc1) {
+          if (err1) {
+            res.json({
+              status:'1',
+              msg: err1.message
+            })
+          } else {
+            if (doc1) {
+              res.json({
+                status:'0',
+                msg: 'success',
+                data: doc1
+              })
+            } else {
+              res.json({
+                status:'1',
+                msg: '没找到试卷！'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status: '2',
+          msg:'没有该用户'
+        })
+      }
+    }
+  })
+};
+
+// 删除试卷
+exports.deletePaper = function (req, res) {
+  let id = req.body.id;
+  let userName = req.session.userName;
+  Teacher.update({"userName":userName},{'$pull':{'_papers':id}}, (err,doc)=>{
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        Paper.remove({"_id":id},function (err1,doc1){
+          if(err1) {
+            res.json({
+              status:'1',
+              msg: err1.message
+            })
+          } else {
+            if (doc1) {
+              Question.updateMany({'_papers':id},{'$pull':{'_papers':id}},function (err2,doc2) {
+                if(err2){
+                  res.json({
+                    status:'1',
+                    msg: err2.message
+                  })
+                } else {
+                  if (doc2){
+                    res.json({
+                      status:'0',
+                      msg: 'success'
+                    })
+                  }
+                }
+              })
+            } else {
+              res.json({
+                status:'1',
+                msg: '没有该试卷'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status: '2',
+          msg:'没有该用户'
+        })
+      }
+    }
+  })
+}
 
