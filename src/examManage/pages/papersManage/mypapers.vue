@@ -199,14 +199,29 @@ export default {
      * @return {[type]}
      */
     deleteAll() {
-      for(var index in this.mypapers){
-        if(this.selections.indexOf(this.mypapers[index])>=0);
-          // 一个个的判断mypapers中的元素是否存在于selection，如果有，正好删除当前这个值。
-          // 而不是去判断selections的值存在于mypapers中的位置
-          this.mypapers.splice(index,1);
-      }
-      this.visible = false;
-      this.$refs.multipleTable.clearSelection();
+//      for(var index in this.mypapers){
+//        if(this.selections.indexOf(this.mypapers[index])>=0);
+//          // 一个个的判断mypapers中的元素是否存在于selection，如果有，正好删除当前这个值。
+//          // 而不是去判断selections的值存在于mypapers中的位置
+//          this.mypapers.splice(index,1);
+//      }
+      let arrIds = [];
+      this.selections.forEach(item => {
+          arrIds.push(item._id);
+      })
+      this.$axios.post('/api/deletePaper',{
+        id: arrIds
+      }).then(response => {
+        let res = response.data;
+        if (res.status == '0') {
+          this.visible = false;
+          this.$refs.multipleTable.clearSelection();
+          this.$message.success('删除成功！');
+          this.getMypapers();
+        }
+      }).catch(err => {
+        this.$message.error("获取试卷数据失败!")
+      })
     },
     /**
      * 发布试卷

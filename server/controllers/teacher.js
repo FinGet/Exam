@@ -278,7 +278,7 @@ exports.publishPaper = function(req, res) {
 exports.deletePaper = function (req, res) {
   let id = req.body.id;
   let userName = req.session.userName;
-  Teacher.update({"userName":userName},{'$pull':{'_papers':id}}, (err,doc)=>{
+  Teacher.update({"userName":userName},{'$pull':{'_papers':{$in:id}}}, (err,doc)=>{
     if (err) {
       res.json({
         status:'1',
@@ -286,7 +286,7 @@ exports.deletePaper = function (req, res) {
       })
     } else {
       if (doc) {
-        Paper.remove({"_id":id},function (err1,doc1){
+        Paper.remove({"_id":{$in:id}},function (err1,doc1){
           if(err1) {
             res.json({
               status:'1',
@@ -294,7 +294,7 @@ exports.deletePaper = function (req, res) {
             })
           } else {
             if (doc1) {
-              Question.updateMany({'_papers':id},{'$pull':{'_papers':id}},function (err2,doc2) {
+              Question.updateMany({'_papers':{$in:id}},{'$pull':{'_papers':{$in:id}}},function (err2,doc2) {
                 if(err2){
                   res.json({
                     status:'1',
