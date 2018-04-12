@@ -7,7 +7,7 @@
     </div>
     <div class="nav-top">
       <div class="nav-top-user">
-        <user></user>
+        <user :userData="userData"></user>
       </div>
       <div class="breadcrumb-wrapper">
         <bread-nav></bread-nav>
@@ -29,7 +29,12 @@ export default {
     SideBar,
     User,
     BreadNav
-  }
+  },
+  computed:{
+    userData(){
+      return this.$getUserData();
+    },
+  },
 }
 </script>
 

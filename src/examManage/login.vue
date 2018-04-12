@@ -48,6 +48,7 @@ export default {
             message: '恭喜你，登录成功！',
             type: 'success'
           });
+          this.$mySessionStorage.set('currentUser',res.result,'json');
           // 登录成功跳到后台首页
           this.$router.push('/endhome/index')
         } else {

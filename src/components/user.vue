@@ -1,8 +1,8 @@
 <template>
   <el-dropdown>
       <span class="el-dropdown-link">
-          <span class="user-image"><img :src="userData.headImage" alt=""></span>
-          <span>admin</span>
+          <span class="user-image"><img :src="headImage" alt=""></span>
+          <span>{{userData.userName}}</span>
       </span>
     <el-dropdown-menu slot="dropdown" class="user-dropdown">
       <el-dropdown-item>
@@ -34,13 +34,15 @@
         type: Object,
         default: function () {
           return {
-            headImage: require('../common/img/userdefault.png')
+
           }
         }
       }
     },
     data() {
-      return {}
+      return {
+        headImage: require('../common/img/userdefault.png')
+      }
     },
     methods:{
       // 退出登录
