@@ -3,7 +3,10 @@
     <div class="login-page-inner">
       <div class="input-text-wrapper">
         <div class="login-logo marginB10"><img width="300" v-lazy="logoSrc" alt="logo"></div>
-        <el-input v-model="userName" placeholder="请输入账号" @keyup.enter="submit"></el-input>
+        <el-input v-model="userId" placeholder="请输入学号" @keyup.enter="submit"></el-input>
+        <el-input v-model="userName" placeholder="请输入姓名" @keyup.enter="submit" class="marginT10"></el-input>
+        <el-input v-model="grade" placeholder="请输入年纪" @keyup.enter="submit" class="marginT10"></el-input>
+        <el-input v-model="sclass" placeholder="请输入班级" @keyup.enter="submit" class="marginT10"></el-input>
         <el-input v-model="passWord" placeholder="请输入密码" type="password" @keyup.enter="submit" class="marginT10"></el-input>
       </div>
       <div class="input-text-wrapper marginT30 text-center">
@@ -26,6 +29,8 @@
         userName: '',
         passWord: '',
         userId: '',
+        grade:'',
+        sclass: '',
         logoSrc:require('../common/img/logo1.png')
       }
     },
