@@ -47,7 +47,7 @@
       <el-dialog  :title="isEdit?'修改问题':'新增问题'" :visible.sync="dialogVisible" size="tiny" class="form_item_dialog" @close="reloadDialog">
         <el-form :model="dialogForm" ref="dialogForm"  :rules="dialogRules" label-width="72px">
           <el-form-item label="题目：" prop="name">
-            <el-input type="textarea" :rows="2" placeholder="请输入题目" v-model="dialogForm.name"></el-input>
+            <el-input placeholder="请输入题目" v-model="dialogForm.name"></el-input>
           </el-form-item>
           <el-form-item label="类型：" prop="type">
             <el-select v-model="dialogForm.type" placeholder="请选择题目类型" >
@@ -77,7 +77,7 @@
             <el-input placeholder="请输入该题的分值" v-model="dialogForm.score"></el-input>
           </el-form-item>
           <el-form-item label="答案：" prop="answer" v-if="dialogForm.type!='Q&A'">
-            <el-input placeholder="请输入该题的答案，多选题答案用逗号分开" v-model="dialogForm.answer"></el-input>
+            <el-input placeholder="例：A 或者 A,B" v-model="dialogForm.answer"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -93,8 +93,8 @@
           <li v-for="(item,index) in form.questions" :key="item.id" class="marginB10">
             <p class="question-title">{{index+1}}、({{item.type=='single'?'单选题'
               :item.type=='multi'?'多选题':item.type=='judgement'?'判断题':item.type=='Q&A'?'简答题':'null'}}){{item.name}} ({{item.score}}分)
-               <span class="gray">|</span> <i class="fa fa-edit edit-icon edit-icon-edit"></i>
-              <i class="fa fa-trash edit-icon edit-icon-trash"></i></p>
+               <span class="gray">|</span> <i class="fa fa-edit edit-icon edit-icon-edit" @click="editQuestion(item)"></i>
+              <i class="fa fa-trash edit-icon edit-icon-trash" @click="deleteQuestion(index)"></i></p>
             <span class="option"
                   v-if="item.type!='judgement'&&item.type!='Q&A'"item
                   v-for="(item1,index1) in item.selection" :key="item1.id">
@@ -104,7 +104,7 @@
         </ul>
         <div class="pull-right" v-if="form.questions.length!=0" >
           <el-button type="primary" @click="savePaper">保存</el-button>
-          <el-button type="danger">取消</el-button>
+          <el-button type="danger" @click="cancel">取消</el-button>
         </div>
       </div>
 		</div>
@@ -118,6 +118,7 @@ export default {
 			paperId: '', // 试卷id
 			form:{ // 试卷信息
 				name: '',
+        time:'',
         totalPoints: '',
 			  questions:[]
       },
@@ -131,9 +132,11 @@ export default {
 				],
         totalPoints: [
 					{ required: true, message: '请输入试卷总分', trigger: 'blur' },
+          { pattern: /^[0-9]+$/, message: '只能输入数字' }
 				],
         time: [
           { required: true, message: '请输入考试时长', trigger: 'blur' },
+          { pattern: /^[0-9]+$/, message: '只能输入数字' }
         ]
 			},
       dialogVisible: false,
@@ -142,10 +145,12 @@ export default {
           { required: true, message: '请输入题目', trigger: 'blur' }
         ],
         score:[
-          { required: true, message: '请输入分值', trigger: 'blur' }
+          { required: true, message: '请输入分值', trigger: 'blur' },
+          { pattern: /^[0-9]+$/, message: '只能输入数字' }
         ],
         answer:[
           { required: true, message: '请输入答案', trigger: 'blur' },
+          { pattern: /(^[A-Z]|[A-Z],[A-Z])+$/, message: '请按正确格式输入答案' }
         ],
         type:[
           { required: true, message: '请选择题目类型', trigger: 'blur' },
@@ -227,8 +232,8 @@ export default {
       this.dialogForm={
         name:'',
         type:'',
-        direction:'',
-        sort:'',
+        score: '',
+        answer: '',
         selection:[
           {
             optionContent:''
@@ -245,7 +250,9 @@ export default {
     upLoadFormItem(){
       this.$refs.dialogForm.validate((valid)=>{
         if (valid) {
-          this.form.questions.push(this.dialogForm);
+          if(!this.isEdit){
+            this.form.questions.push(this.dialogForm);
+          }
 //          console.log(this.form.questions)
           this.dialogVisible=false;
         } else {
@@ -304,6 +311,34 @@ export default {
           this.$message.success('保存成功！');
         }
 			})
+    },
+    /**
+     * 删除试题，此时的试题并没存到数据库
+     * @param item
+     */
+    deleteQuestion(index){
+      this.form.questions.splice(index,1);
+    },
+    /**
+     * 取消
+     */
+    cancel(){
+      this.form = { // 试卷信息
+        name: '',
+        time:'',
+        totalPoints: '',
+        questions:[]
+      }
+    },
+    /**
+     * 编辑试题
+     * @param item
+     */
+    editQuestion(item){
+      // console.log(item);
+      this.isEdit=true;
+      this.dialogForm=item;
+      this.dialogVisible=true;
     }
 	}
 }
