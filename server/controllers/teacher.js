@@ -101,7 +101,7 @@ exports.signout = function (req, res) {
   })
 };
 
-// 获取试卷
+// 获取试卷(分页、模糊查询)
 exports.getPapers = function (req, res) {
   // console.log(req.session.userName);
   let name = req.param('name'),
@@ -325,5 +325,47 @@ exports.deletePaper = function (req, res) {
       }
     }
   })
-}
+};
 
+// 修改试卷-查找试卷
+exports.findPaper = function (req, res) {
+  let userName = req.session.userName;
+  let id = req.body.id;
+  Teacher.findOne({'userName':userName},(err,doc)=>{
+    if(err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc){
+        Paper.findOne({'_id':id}).populate({path:'_questions'}).exec((err1,doc1) => {
+          if (err1) {
+            res.json({
+              status:'1',
+              msg: err.message
+            })
+          } else {
+            if (doc1) {
+              res.json({
+                status: '0',
+                msg:'success',
+                result:doc1
+              })
+            } else {
+              res.json({
+                status: '2',
+                msg:'没有该试卷'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status: '2',
+          msg:'没有该用户'
+        })
+      }
+    }
+  })
+}

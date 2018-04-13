@@ -9,7 +9,7 @@ module.exports = function(app) {
   app.post('/api/login', Teacher.signup);
   // 登出
   app.post("/api/logout", Teacher.signout);
-  // 获取试卷
+  // 获取试卷(分页、模糊查询)
   app.get('/api/mypapers', Teacher.getPapers);
   // 保存试卷
   app.post('/api/savePaper', Teacher.savePaper);
@@ -17,6 +17,8 @@ module.exports = function(app) {
   app.post('/api/publishPaper', Teacher.publishPaper);
   // 删除试卷
   app.post('/api/deletePaper', Teacher.deletePaper);
+  // 查找试卷
+  app.post('/api/findPaper', Teacher.findPaper);
 
 
   /*----------------------学生用户----------------------*/
