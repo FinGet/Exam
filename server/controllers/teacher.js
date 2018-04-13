@@ -180,7 +180,7 @@ exports.savePaper = function (req, res) {
               doc._papers.push(doc1._id); // 教师中添加该试卷
               doc.save(); // 很重要 不save则没有数据
               // console.log('doc teacher'+doc._papers);
-              paperForm.questions.forEach(item => {
+              paperForm._questions.forEach(item => {
                 item._papers = [];
                 item._papers.push(doc1._id);
                 item._teacher = doc._id;
@@ -193,7 +193,7 @@ exports.savePaper = function (req, res) {
                   })
                 } else {
                   if (doc2) {
-                    // console.log('doc2 ques:'+doc2)
+                    console.log('doc2 ques:'+doc2)
                     doc2.forEach(item => {
                       doc1._questions.push(item._id);
                     })
@@ -425,6 +425,7 @@ exports.updatePaper = function (req,res) {
       addQuestion.push(item);
     }
   })
+  // console.log(updateQuestion,addQuestion);
   Teacher.findOne({'userName':userName},(err,doc)=>{
     if (err) {
       res.json({
@@ -433,7 +434,7 @@ exports.updatePaper = function (req,res) {
       })
     } else {
       if (doc) {
-        Paper.update({"_id":params._id},paperParams,(err1,doc1) => {
+        Paper.findOneAndUpdate({"_id":params._id},paperParams,(err1,doc1) => {
           if(err1) {
             res.json({
               status:'1',
@@ -451,35 +452,45 @@ exports.updatePaper = function (req,res) {
                   }else {
                     if(doc2){
                       if(index == (updateQuestion.length-1)){
-                        addQuestion.forEach(item => {
-                          item._papers = [];
-                          item._papers.push(doc1._id);
-                          item._teacher = doc._id;
-                        })
-                        Question.create(addQuestion,(err3,doc3) => {
-                          if(err3) {
-                            res.json({
-                              status:'1',
-                              msg: err3.message
-                            })
-                          } else {
-                            if(doc3) {
-                              doc3.forEach(item => {
-                                doc1._questions.push(item._id);
-                              })
-                              doc1.save(); // 很重要 不save则没有数据
-                              res.json({
-                                status:'0',
-                                msg: 'success'
-                              })
-                            } else {
+                        console.log('doc1'+doc1._id)
+                        if (addQuestion.length>0){
+                          // console.log('addQuestion'+addQuestion);
+                          addQuestion.forEach(item => {
+                            item._papers = [];
+                            item._papers.push(doc1._id);
+                            item._teacher = doc._id;
+                          })
+                          Question.create(addQuestion,(err3,doc3) => {
+                            if(err3) {
                               res.json({
                                 status:'1',
-                                msg: 'error'
+                                msg: err3.message
                               })
+                            } else {
+                              if(doc3) {
+                                console.log(doc3);
+                                doc3.forEach(item => {
+                                  doc1._questions.push(item._id);
+                                })
+                                doc1.save(); // 很重要 不save则没有数据
+                                res.json({
+                                  status:'0',
+                                  msg: 'success'
+                                })
+                              } else {
+                                res.json({
+                                  status:'1',
+                                  msg: 'error'
+                                })
+                              }
                             }
-                          }
-                        })
+                          })
+                        } else {
+                          res.json({
+                            status:'0',
+                            msg: 'success'
+                          })
+                        }
 
                       }
                     } else {
