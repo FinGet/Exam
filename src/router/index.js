@@ -14,8 +14,8 @@ import Index from '@/examManage/pages/index'
 // 试卷管理
 import MyPapers from '@/examManage/pages/papersManage/mypapers'
 import MarkPapers from '@/examManage/pages/papersManage/markpapers'
+// import EditPaper from '@/examManage/pages/papersManage/editpaper'
 import EditPaper from '@/examManage/pages/papersManage/editpaper'
-import AddPaper from '@/examManage/pages/papersManage/addpaper'
 // 我的信息管理
 import User from '@/examManage/pages/usermsg'
 
@@ -43,7 +43,7 @@ export default new Router({
         // 试卷管理
         { path: 'mypapers', name: 'MyPapers', component: MyPapers, meta: {breadName: '我的试卷'}},
         // { path: 'edit/:id', name: 'EditPaper', component: EditPaper, meta: {breadName: '编辑试卷'}},
-        { path: 'edit', name: 'AddPaper', component: AddPaper, meta: {breadName: '新增试卷'}},
+        { path: 'edit', name: 'EditPaper', component: EditPaper, meta: {breadName: '编辑试卷'}},
         { path: 'markpapers', name: 'MarkPapers', component: MarkPapers, meta: {breadName: '阅卷'}},
         // 我的信息
         { path: 'user', name: 'User', component: User, meta: {breadName:'我的信息'},} // 我的信息管理
