@@ -108,7 +108,7 @@ proxyTable: {
 ```
 # 修改api接口配置
 ```
-server/api 
+server/api
 var routes = require('./routes/index');
 routes(app);
 ```
@@ -155,9 +155,9 @@ module.exports = function(app) {
 		}
 		console.log(param);
 		User.findOne(param, (err,doc)=>{
-			// console.log(err) When the findOne query doesn't find at least one matching document, 
+			// console.log(err) When the findOne query doesn't find at least one matching document,
 			// the second parameter of the callback (in this case user) is set to null.
-			// It's not an error, so err is also null.  
+			// It's not an error, so err is also null.
 			if (err) {
 				res.json({
 					status:'1',
@@ -184,6 +184,9 @@ module.exports = function(app) {
 }
 ```
 # 设置session实现用户登录存储用户信息，退出时清空
+
+> session设置要放在所有路由前面
+
 ```
 app.js
   var sessionParser = require('express-session')
@@ -197,12 +200,16 @@ app.js
 //    url:'mongodb://127.0.0.1:27017/examSystem',
 //    collection:'session'
 //  })
-// })); 
+// }));
 
 // 默认使用内存来存 session，对于开发调试来说很方便
 app.use(sessionParser({
-  secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
-    cookie: { maxAge: 60 * 1000 }
+	secret: '12345', // 建议使用 128 个字符的随机字符串
+  name: 'userInfo',
+  cookie: { maxAge: 1800000 },
+  resave:true,
+  rolling:true,
+  saveUninitialized:false
 }));
 ```
 ```
@@ -233,7 +240,7 @@ if (doc) {
 ```
 // 获取试卷
   app.get('/api/mypapers', (req, res) => {
-    let name = req.param('name'), 
+    let name = req.param('name'),
         // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
         pageSize = parseInt(req.param('pageSize')),
         pageNumber = parseInt(req.param('pageNumber')),
