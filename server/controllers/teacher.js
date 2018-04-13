@@ -368,4 +368,143 @@ exports.findPaper = function (req, res) {
       }
     }
   })
+};
+
+// 修改试卷-修改试题
+exports.updateQuestion = function (req,res) {
+  let userName = req.session.userName;
+  let params = req.body.params;
+  Teacher.findOne({'userName':userName},(err,doc)=>{
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        Question.update({"_id":params._id},params,(err1,doc1)=>{
+          if(err1) {
+            res.json({
+              status:'1',
+              msg: err1.message
+            })
+          } else {
+            if(doc1){
+              res.json({
+                status:'0',
+                msg: 'success'
+              })
+            } else {
+              res.json({
+                status:'1',
+                msg: '没找到题目'
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+// 修改试卷-修改试卷
+exports.updatePaper = function (req,res) {
+  let userName = req.session.userName;
+  let params = req.body.params;
+  let paperParams = {
+    name: params.name,
+    totalPoints: params.totalPoints,
+    time: params.time
+  }
+  let updateQuestion = [];
+  let addQuestion = [];
+  params._questions.forEach(item => {
+    if(item._id) {
+      updateQuestion.push(item);
+    } else {
+      addQuestion.push(item);
+    }
+  })
+  Teacher.findOne({'userName':userName},(err,doc)=>{
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        Paper.update({"_id":params._id},paperParams,(err1,doc1) => {
+          if(err1) {
+            res.json({
+              status:'1',
+              msg: err1.message
+            })
+          }else {
+            if(doc1){
+              updateQuestion.forEach((item,index)=>{
+                Question.update({"_id":item._id},item,(err2,doc2)=>{
+                  if(err2){
+                    res.json({
+                      status:'1',
+                      msg: err2.message
+                    })
+                  }else {
+                    if(doc2){
+                      if(index == (updateQuestion.length-1)){
+                        addQuestion.forEach(item => {
+                          item._papers = [];
+                          item._papers.push(doc1._id);
+                          item._teacher = doc._id;
+                        })
+                        Question.create(addQuestion,(err3,doc3) => {
+                          if(err3) {
+                            res.json({
+                              status:'1',
+                              msg: err3.message
+                            })
+                          } else {
+                            if(doc3) {
+                              doc3.forEach(item => {
+                                doc1._questions.push(item._id);
+                              })
+                              doc1.save(); // 很重要 不save则没有数据
+                              res.json({
+                                status:'0',
+                                msg: 'success'
+                              })
+                            } else {
+                              res.json({
+                                status:'1',
+                                msg: 'error'
+                              })
+                            }
+                          }
+                        })
+
+                      }
+                    } else {
+                      res.json({
+                        status:'1',
+                        msg: '没找到题目'
+                      })
+                    }
+                  }
+                })
+              })
+            } else {
+              res.json({
+                status:'1',
+                msg: '没找到试卷'
+              })
+            }
+          }
+        })
+      }else{
+        res.json({
+          status:'1',
+          msg: '没找到该老师'
+        })
+      }
+    }
+  })
 }

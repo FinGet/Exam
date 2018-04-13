@@ -42,8 +42,8 @@ export default new Router({
         { path: 'index', name: 'Index', component: Index, meta: {breadName:'首页'},}, // 后台首页
         // 试卷管理
         { path: 'mypapers', name: 'MyPapers', component: MyPapers, meta: {breadName: '我的试卷'}},
-        { path: 'edit/:id', name: 'EditPaper', component: EditPaper, meta: {breadName: '编辑试卷'}},
-        { path: 'add', name: 'AddPaper', component: AddPaper, meta: {breadName: '新增试卷'}},
+        // { path: 'edit/:id', name: 'EditPaper', component: EditPaper, meta: {breadName: '编辑试卷'}},
+        { path: 'edit', name: 'AddPaper', component: AddPaper, meta: {breadName: '新增试卷'}},
         { path: 'markpapers', name: 'MarkPapers', component: MarkPapers, meta: {breadName: '阅卷'}},
         // 我的信息
         { path: 'user', name: 'User', component: User, meta: {breadName:'我的信息'},} // 我的信息管理

@@ -19,6 +19,10 @@ module.exports = function(app) {
   app.post('/api/deletePaper', Teacher.deletePaper);
   // 查找试卷
   app.post('/api/findPaper', Teacher.findPaper);
+  // 修改试题
+  app.post('/api/updateQuestion', Teacher.updateQuestion);
+  // 修改试卷
+  app.post('/api/updatePaper', Teacher.updatePaper);
 
 
   /*----------------------学生用户----------------------*/

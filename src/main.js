@@ -27,6 +27,25 @@ var getUserData=function () {
   }
 };
 Vue.prototype.$getUserData=getUserData;
+/**
+ * 深拷贝
+ * @param p
+ * @param c
+ * @returns {*|{}}
+ */
+var deepCopy = function(p, c) {
+  var c = c || {};
+  for (var i in p) {
+    if (typeof p[i] === 'object') {
+      c[i] = (p[i].constructor === Array) ? [] : {};
+      deepCopy(p[i], c[i]);
+    } else {
+      c[i] = p[i];
+    }
+  }
+  return c;
+}
+Vue.prototype.$deepCopy=deepCopy;
 
 Vue.use(ElementUI) // 全局使用elementUI
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载

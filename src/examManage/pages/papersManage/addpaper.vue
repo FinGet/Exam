@@ -2,11 +2,15 @@
 	<div class="add">
 		<el-row>
 			<el-col>
-				新增试卷
+				{{paperId==1?'新增试卷':'编辑试卷'}}
 				<el-button class="pull-right" type="primary" @click="back">返回</el-button>
 			</el-col>
 		</el-row>
 		<div class="main">
+      <div class="pull-right" v-if="form._questions.length!=0" >
+        <el-button type="primary" @click="savePaper">保存试卷</el-button>
+        <el-button type="danger" @click="cancel">取消</el-button>
+      </div>
 			<div class="title-tag">试卷信息</div>
 			<el-row>
 				<el-col :span="12">
@@ -88,9 +92,9 @@
 
 
       <div class="form_list">
-        <h3 v-if="form.questions.length==0" class="text-center">题目为空，请在左侧选择题目添加</h3>
+        <h3 v-if="form._questions.length==0" class="text-center">题目为空，请在左侧选择题目添加</h3>
         <ul>
-          <li v-for="(item,index) in form.questions" :key="item.id" class="marginB10">
+          <li v-for="(item,index) in form._questions" :key="item.id" class="marginB10">
             <p class="question-title">{{index+1}}、({{item.type=='single'?'单选题'
               :item.type=='multi'?'多选题':item.type=='judgement'?'判断题':item.type=='Q&A'?'简答题':'null'}}){{item.name}} ({{item.score}}分)
                <span class="gray">|</span> <i class="fa fa-edit edit-icon edit-icon-edit" @click="editQuestion(item)"></i>
@@ -102,10 +106,7 @@
             </span>
           </li>
         </ul>
-        <div class="pull-right" v-if="form.questions.length!=0" >
-          <el-button type="primary" @click="savePaper">保存</el-button>
-          <el-button type="danger" @click="cancel">取消</el-button>
-        </div>
+
       </div>
 		</div>
 	</div>
@@ -120,7 +121,7 @@ export default {
 				name: '',
         time:'',
         totalPoints: '',
-			  questions:[]
+			  _questions:[]
       },
       options:['A','B','C','D','E','F','G','H','I','J','K',
       'L','M','N','O','P','Q','R','S','T'],
@@ -192,22 +193,40 @@ export default {
 		}
 	},
 	created() {
+	  this.paperId = this.$route.query.id;
+	  // console.log(this.paperId);
 	},
 	mounted() {
 		this.init()
 	},
 	methods: {
-		/**
-		 * 初始化页面 init
-		 * @return {[type]}
-		 */
-		init() {
-//			this.$axios.get('xxx').then((response) => {
-//				params: {
-//					paperId: paperId
-//				}
-//			})
-		},
+    /**
+     * 初始化页面 init
+     * @return {[type]}
+     */
+    init() {
+      if(this.paperId != 1) {
+        this.$axios.post('/api/findPaper',{
+          id: this.paperId
+        }).then((response) => {
+          let res =response.data;
+          if (res.status == '0'){
+            this.form = res.result;
+            console.log(this.form);
+            this.form.totalPoints+='';
+            this.form.time+='';
+            this.form._questions.forEach(item => {
+              item.score+='';
+              var arr = [];
+              item.selection.forEach(item1 => {
+                arr.push({optionContent:item1});
+              })
+              item.selection=[].concat(arr);
+            })
+          }
+        })
+      }
+    },
 		/**
 		 * 返回上一级
 		 * @return {[type]}
@@ -251,7 +270,7 @@ export default {
       this.$refs.dialogForm.validate((valid)=>{
         if (valid) {
           if(!this.isEdit){
-            this.form.questions.push(this.dialogForm);
+            this.form._questions.push(this.dialogForm);
           }
 //          console.log(this.form.questions)
           this.dialogVisible=false;
@@ -288,36 +307,48 @@ export default {
           this.$message.error('请正确输入试卷信息!')
           return;
       }
-      let params = Object.create(this.form);
-      this.form.questions.forEach(item => {
+      this.form._questions.forEach(item => {
          var arr = [];
          item.selection.forEach(item1 => {
            arr.push(item1.optionContent);
          })
         item.selection = [].concat(arr);
       });
-//      console.log(this.form.questions);
-      this.$axios.post('/api/savePaper',{
-        paperForm: this.form
-      }).then((response) => {
+      if(this.paperId == 1){
+        // 新增试卷
+        this.$axios.post('/api/savePaper',{
+          paperForm: this.form
+        }).then((response) => {
 //        this.resetForm();
-        this.form = { // 试卷信息
-          name: '',
-          totalPoints: '',
-          questions:[]
-        };
-        let res = response.data;
-        if (res.status == '0') {
-          this.$message.success('保存成功！');
-        }
-			})
+          this.form = { // 试卷信息
+            name: '',
+            totalPoints: '',
+            _questions:[]
+          };
+          let res = response.data;
+          if (res.status == '0') {
+            this.$message.success('保存成功！');
+          }
+        })
+      }else {
+        // 修改试卷
+        this.$axios.post('/api/updatePaper',{
+          params: this.form
+        }).then(response => {
+          let res = response.data;
+          if(res.status == '0') {
+            // this.dialogVisible=false;
+            // this.init();
+          }
+        })
+      }
     },
     /**
      * 删除试题，此时的试题并没存到数据库
      * @param item
      */
     deleteQuestion(index){
-      this.form.questions.splice(index,1);
+      this.form._questions.splice(index,1);
     },
     /**
      * 取消
@@ -327,7 +358,7 @@ export default {
         name: '',
         time:'',
         totalPoints: '',
-        questions:[]
+        _questions:[]
       }
     },
     /**
@@ -337,7 +368,7 @@ export default {
     editQuestion(item){
       // console.log(item);
       this.isEdit=true;
-      this.dialogForm=item;
+      this.dialogForm=this.$deepCopy(item);
       this.dialogVisible=true;
     }
 	}

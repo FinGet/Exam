@@ -19,7 +19,7 @@
                   <el-button type="primary" size="mini" @click="deleteAll">确定</el-button>
                 </div>
               </el-popover>
-              <router-link :to="{path:'add'}"><el-button type="primary">新增试卷</el-button></router-link>
+              <router-link :to="{path:'edit',query:{'id':'1'}}"><el-button type="primary">新增试卷</el-button></router-link>
               <el-button type="danger" :disabled="isSelected" v-popover:popover>批量删除</el-button>
             </div>
         </el-col>
@@ -83,7 +83,7 @@
               <template scope="scope">
                 <el-button type="primary" size="mini" :disabled="scope.row.startTime?true:false" @click="publish(scope.row._id)">发布</el-button>
                 <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
-                <router-link :to="{path:'edit/' + scope.row._id}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
+                <router-link :to="{path:'edit',query:{'id':scope.row._id}}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
             </el-table-column>
           </el-table>
