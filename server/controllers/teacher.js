@@ -52,7 +52,47 @@ var Teacher = require('../model/teacher'),
   // paper._questions.push(question);
   //
 
-
+// 注册
+exports.register = function (req,res) {
+  let userInfo = req.body.userInfo;
+  Teacher.findOne(userInfo,(err,doc) => {
+    if(err) {
+      res.json({
+        status:'1',
+        msg:err.message
+      })
+    } else {
+      if(doc) {
+        res.json({
+          status:'2',
+          msg: '用户已存在'
+        })
+      } else {
+        userInfo._papers = [];
+        Teacher.create(userInfo,(err1,doc1) => {
+          if(err1) {
+            res.json({
+              status:'1',
+              msg: err1.message
+            })
+          }else {
+            if(doc1) {
+              res.json({
+                status: '0',
+                msg: 'sucess'
+              })
+            } else {
+              res.json({
+                status:'1',
+                msg:'报存失败'
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
 // 登录
 exports.signup = function(req, res) {
   var param = {

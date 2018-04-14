@@ -5,6 +5,7 @@ var Teacher = require('../controllers/teacher'),
 module.exports = function(app) {
 
   /*----------------------教师用户----------------------*/
+  app.post('/api/register',Teacher.register);
   // 用户登录
   app.post('/api/login', Teacher.signup);
   // 登出
