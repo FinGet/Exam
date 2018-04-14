@@ -324,29 +324,50 @@ export default {
       });
       if(this.paperId == 1){
         // 新增试卷
-        this.$axios.post('/api/savePaper',{
-          paperForm: this.form
-        }).then((response) => {
-          this.form = { // 试卷信息
-            name: '',
-            totalPoints: '',
-            _questions:[]
-          };
-          let res = response.data;
-          if (res.status == '0') {
-            this.$message.success('保存成功！');
-          }
+        this.$confirm('确定新增试卷吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(() => {
+          this.$axios.post('/api/savePaper',{
+            paperForm: this.form
+          }).then((response) => {
+            this.form = { // 试卷信息
+              name: '',
+              totalPoints: '',
+              _questions:[]
+            };
+            let res = response.data;
+            if (res.status == '0') {
+              this.$message.success('保存成功！');
+            }
+          })
+        }).catch(()=>{
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });
         })
+
       }else {
         // 修改试卷
-        this.$axios.post('/api/updatePaper',{
-          params: this.form
-        }).then(response => {
-          let res = response.data;
-          if(res.status == '0') {
-            this.$message.success("保存成功！");
-            this.back();
-          }
+        this.$confirm('确定修改并保存试卷吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(() => {
+          this.$axios.post('/api/updatePaper',{
+            params: this.form
+          }).then(response => {
+            let res = response.data;
+            if(res.status == '0') {
+              this.$message.success("保存成功！");
+              this.back();
+            }
+          })
+        }).catch(()=>{
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });
         })
       }
     },
