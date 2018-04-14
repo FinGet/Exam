@@ -468,10 +468,11 @@ exports.updatePaper = function (req,res) {
                               })
                             } else {
                               if(doc3) {
-                                console.log(doc3);
+                                // console.log(doc3);
                                 doc3.forEach(item => {
                                   doc1._questions.push(item._id);
                                 })
+
                                 doc1.save(); // 很重要 不save则没有数据
                                 res.json({
                                   status:'0',

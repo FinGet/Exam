@@ -264,7 +264,7 @@ export default {
       }
     },
     /**
-     * 确定添加题目
+     * 确定添加题目/修改题目
      */
     upLoadFormItem(){
       this.$refs.dialogForm.validate((valid)=>{
@@ -272,8 +272,16 @@ export default {
           if(!this.isEdit){
             this.form._questions.push(this.dialogForm);
           }
-//          console.log(this.form.questions)
+//          this.dialogVisible=false;
+//          this.form._questions.forEach(item => {
+//            if(item._id == this.dialogForm._id) {
+////                console.log(item);
+//              item = this.$deepCopy(this.dialogForm);
+//              console.log(item);
+//            }
+//          })
           this.dialogVisible=false;
+//          console.log(this.form._questions);
         } else {
           this.$message.error('请输入正确的内容！');
         }
@@ -370,7 +378,7 @@ export default {
     editQuestion(item){
       // console.log(item);
       this.isEdit=true;
-      this.dialogForm=this.$deepCopy(item);
+      this.dialogForm=item;
       this.dialogVisible=true;
     }
 	}
