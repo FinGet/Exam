@@ -9,6 +9,10 @@ module.exports = function(app) {
   app.post('/api/login', Teacher.signup);
   // 登出
   app.post("/api/logout", Teacher.signout);
+  // 获取用户信息
+  app.post('/api/getUserInfo',Teacher.getUserInfo);
+  // 修改用户信息
+  app.post('/api/updateUser', Teacher.updateUser);
   // 获取试卷(分页、模糊查询)
   app.get('/api/mypapers', Teacher.getPapers);
   // 保存试卷

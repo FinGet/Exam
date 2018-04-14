@@ -100,7 +100,56 @@ exports.signout = function (req, res) {
     result:'退出成功'
   })
 };
-
+// 获取用户信息
+exports.getUserInfo = function (req, res) {
+  let userName = req.session.userName;
+  Teacher.findOne({'userName':userName},(err,doc)=>{
+    if(err){
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if(doc){
+        res.json({
+          status:'0',
+          result:doc,
+          msg:'success'
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg:'没找到该用户'
+        })
+      }
+    }
+  })
+};
+// 修改用户信息
+exports.updateUser = function (req, res) {
+  let userName = req.session.userName;
+  let userInfo = req.body.userInfo;
+  Teacher.update({'userName':userName},userInfo,(err,doc)=>{
+    if(err) {
+      res.json({
+        status:'1',
+        msg:err.message
+      })
+    }else {
+      if(doc){
+        res.json({
+          status:'0',
+          msg:'success'
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg:'没有找到该用户'
+        })
+      }
+    }
+  })
+}
 // 获取试卷(分页、模糊查询)
 exports.getPapers = function (req, res) {
   // console.log(req.session.userName);
