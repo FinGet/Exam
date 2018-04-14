@@ -182,17 +182,25 @@ export default {
 //          this.mypapers.splice(i, 1);
 //        }
 //      }
-      this.$axios.post('/api/deletePaper',{
-        id: val._id
-      }).then(response => {
-        let res = response.data;
-        if (res.status == '0') {
-          this.$message.success('删除成功！');
-          this.getMypapers();
-        }
-      }).catch(err => {
-        this.$message.error("获取试卷数据失败!")
+      this.$confirm('确定删除该试卷吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(() => {
+        this.$axios.post('/api/deletePaper',{
+          id: val._id
+        }).then(response => {
+          let res = response.data;
+          if (res.status == '0') {
+            this.$message.success('删除成功！');
+            this.getMypapers();
+          }
+        }).catch(err => {
+          this.$message.error("获取试卷数据失败!")
+        })
+      }).catch(()=>{
+
       })
+
     },
     /**
      * 批量删除
@@ -228,17 +236,28 @@ export default {
      * @param id 试卷id
      */
     publish(id){
-      this.$axios.post('/api/publishPaper',{
-        id: id
-      }).then(response => {
-        let res = response.data;
-        if (res.status == '0') {
-          this.$message.success('发布成功！');
-          this.getMypapers();
-        }
-      }).catch(err => {
-        this.$message.error("获取试卷数据失败!")
+      this.$confirm('确定发布该试卷吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(() => {
+        this.$axios.post('/api/publishPaper',{
+          id: id
+        }).then(response => {
+          let res = response.data;
+          if (res.status == '0') {
+            this.$message.success('发布成功！');
+            this.getMypapers();
+          }
+        }).catch(err => {
+          this.$message.error("获取试卷数据失败!")
+        })
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消发布!'
+        });
       })
+
     }
   }
 }
