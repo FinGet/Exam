@@ -1,6 +1,6 @@
-var Teacher = require('../model/teacher'),
-    Paper   = require('../model/papers'),
-    Question = require('../model/question');
+const Teacher = require('../model/teacher');
+const Paper   = require('../model/papers');
+const Question = require('../model/question');
 
 
 // var teacher = new Teacher();
