@@ -8,19 +8,8 @@
               <el-button class="pull-left marginL10" type="primary" @click="getMypapers"  icon="search">搜索</el-button>
             </div>
             <div class="pull-right">
-              <el-popover
-                ref="popover"
-                placement="top"
-                width="160"
-                v-model="visible">
-                <p>确定删除选中的试卷嘛吗？</p>
-                <div style="text-align: right; margin: 0">
-                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="deleteAll">确定</el-button>
-                </div>
-              </el-popover>
               <router-link :to="{path:'edit',query:{'id':'1'}}"><el-button type="primary">新增试卷</el-button></router-link>
-              <el-button type="danger" :disabled="isSelected" v-popover:popover>批量删除</el-button>
+              <el-button type="danger" :disabled="isSelected" @click="deletePaper">批量删除</el-button>
             </div>
         </el-col>
         <el-col>
@@ -82,7 +71,7 @@
             >
               <template scope="scope">
                 <el-button type="primary" size="mini" :disabled="scope.row.startTime?true:false" @click="publish(scope.row._id)">发布</el-button>
-                <el-button type="danger" size="mini" icon="delete" @click="deleted(scope.row)"></el-button>
+                <el-button type="danger" size="mini" icon="delete" @click="deletePaper(scope.row)"></el-button>
                 <router-link :to="{path:'edit',query:{'id':scope.row._id}}"><el-button type="info" size="mini" icon="edit"></el-button></router-link>
               </template>
             </el-table-column>
@@ -170,27 +159,28 @@ export default {
       console.log(`当前页: ${val}`);
     },
     /**
-     * 删除当前行
-     * @param  {[val]}，当前删除项
+     * 删除试卷
      * @return {[type]}
      */
-    deleted(val) {
-      // console.log(val)
-      // 表格存在排序，所以要判断一下，当前删除行在数据中的实际位置
-//      for (var i in this.mypapers) {
-//        if (this.mypapers[i] === val) {
-//          this.mypapers.splice(i, 1);
-//        }
-//      }
-      this.$confirm('确定删除该试卷吗？', '提示', {
+    deletePaper(val) {
+      let arrIds = [];
+      if(this.selections.length>0){
+        this.selections.forEach(item => {
+          arrIds.push(item._id);
+        })
+      } else if(val) {
+        arrIds.push(val._id);
+      }
+      this.$confirm('确定删除选中的试卷吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(() => {
         this.$axios.post('/api/deletePaper',{
-          id: val._id
+          id: arrIds
         }).then(response => {
           let res = response.data;
           if (res.status == '0') {
+            this.$refs.multipleTable.clearSelection();
             this.$message.success('删除成功！');
             this.getMypapers();
           }
@@ -199,36 +189,6 @@ export default {
         })
       }).catch(()=>{
 
-      })
-
-    },
-    /**
-     * 批量删除
-     * @return {[type]}
-     */
-    deleteAll() {
-//      for(var index in this.mypapers){
-//        if(this.selections.indexOf(this.mypapers[index])>=0);
-//          // 一个个的判断mypapers中的元素是否存在于selection，如果有，正好删除当前这个值。
-//          // 而不是去判断selections的值存在于mypapers中的位置
-//          this.mypapers.splice(index,1);
-//      }
-      let arrIds = [];
-      this.selections.forEach(item => {
-          arrIds.push(item._id);
-      })
-      this.$axios.post('/api/deletePaper',{
-        id: arrIds
-      }).then(response => {
-        let res = response.data;
-        if (res.status == '0') {
-          this.visible = false;
-          this.$refs.multipleTable.clearSelection();
-          this.$message.success('删除成功！');
-          this.getMypapers();
-        }
-      }).catch(err => {
-        this.$message.error("获取试卷数据失败!")
       })
     },
     /**
