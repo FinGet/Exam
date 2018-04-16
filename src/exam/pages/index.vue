@@ -28,12 +28,24 @@ export default {
         '不得以任何方式将考题内容带出考场',
         '凡有违反上述规定中的任何一条者，考场管理员有权提出警告直至终止其考试、取消考试成绩',
         '任何人都有权利和义务维护认证考试的公平性和公正性，举报一切违反考场规则的行为'
-      ]
+      ],
+      isRead: false
     }
+  },
+  mounted(){
+    this.isRead = this.$mySessionStorage.get('read');
+    this.readGo();
   },
   methods:{
     next(){
-      this.$router.push({path:'forntexamindex'})
+      this.$mySessionStorage.set('read',true);
+      this.$router.push({path:'forntexamindex'});
+    },
+    readGo(){
+      if(this.isRead) {
+        this.$router.push({path:'forntexamindex'});
+        this.$message.success('已阅读考试规则并遵守！');
+      }
     }
   }
 }
