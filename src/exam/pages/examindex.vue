@@ -21,7 +21,7 @@
                 <p>总分: {{item.totalPoints}} 分</p>
                 <!--<p>{{(nowTime - new Date(item.startTime))/(1000*60)}}</p>-->
                 <!--<p v-if="(nowTime - new Date(item.startTime))/(1000*60) > 60" class="over">考试时间已过</p>-->
-                <el-button type="text" class="pull-right" :disabled="(nowTime - new Date(item.startTime))/(1000*60) > 60||item._questions.length == 0">参加考试</el-button>
+                <el-button type="text" @click="goToExam(item._id)" class="pull-right" :disabled="item._questions.length == 0">参加考试</el-button>
               </div>
             </el-card>
           </el-col>
@@ -100,6 +100,13 @@
           console.log(`当前页: ${val}`);
           this.pageNumber = val;
           this.init();
+        },
+        /**
+         * 参加考试
+         * @param id
+         */
+        goToExam(id){
+          this.$router.push({name:'ForntExam',params:{id:id}});
         }
       }
     }

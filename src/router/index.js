@@ -7,6 +7,7 @@ import FrontHome from '@/exam/home'
 import FrontIndex from '@/exam/pages/index' // 学生端首页
 import FrontStudentInfo from '@/exam/pages/studentinfo'  // 学生端个人信息
 import ForntExamIndex from '@/exam/pages/examindex'
+import ForntExam from '@/exam/pages/exam'
 //------------ 后台管理----------------//
 import EndLogin from '@/examManage/login'
 import EndRegister from '@/examManage/register'
@@ -33,7 +34,8 @@ export default new Router({
       children: [
         { path: 'frontindex', name: 'FrontIndex', component: FrontIndex},
         { path: 'frontstudentinfo', name: 'FrontStudentInfo', component: FrontStudentInfo},
-        { path: 'forntexamindex', name: 'ForntExamIndex', component: ForntExamIndex}
+        { path: 'forntexamindex', name: 'ForntExamIndex', component: ForntExamIndex},
+        { path: 'forntexam', name: 'ForntExam', component: ForntExam}
       ]
     },
     // 后台管理
