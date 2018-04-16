@@ -33,7 +33,7 @@ export default {
   },
   methods:{
     next(){
-      this.$router.push()
+      this.$router.push({path:'forntexamindex'})
     }
   }
 }

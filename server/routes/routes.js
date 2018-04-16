@@ -37,4 +37,6 @@ module.exports = function(app) {
   app.post('/api/studentlogout', Student.signout);
   // 获取个人信息
   app.get('/api/studentinfo', Student.getInfo);
+  // 获取考试信息
+  app.get('/api/getExams',Student.getExams);
 }

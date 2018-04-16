@@ -1,4 +1,5 @@
-var Student = require('../model/student');
+const Student = require('../model/student');
+const Paper   = require('../model/papers');
 // var mongoose = require('mongoose');
 // var Schema = mongoose.Schema;
 //
@@ -93,4 +94,54 @@ exports.getInfo = function (req, res) {
       })
     }
   })
+};
+
+// 获取考试信息
+exports.getExams = function (req,res) {
+  let userName =req.session.userName;
+  let name = req.param('name');
+    // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
+  let  pageSize = parseInt(req.param('pageSize'));
+  let  pageNumber = parseInt(req.param('pageNumber'));
+  let skip = (pageNumber-1)*pageSize; // 跳过几条
+  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+  Student.findOne({"userName":userName},(err,doc)=>{
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+    } else {
+      if(doc) {
+        Paper.find({startTime:{$exists:true},name:reg}).skip(skip).limit(pageSize).populate({path:'_questions'}).exec((err1,doc1)=>{
+          if(err1) {
+            res.json({
+              status: '1',
+              msg: err1.message
+            })
+          } else {
+            if(doc1){
+              res.json({
+                status: '0',
+                result: doc1,
+                total: doc1.length,
+                msg: 'success'
+              })
+            } else {
+              res.json({
+                status: '1',
+                msg: '没有可以参加的考试'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg:'请登录'
+        })
+      }
+    }
+  })
 }
+
