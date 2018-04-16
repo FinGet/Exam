@@ -54,6 +54,27 @@ Vue.use(VueLazyLoad, { // 全局使用图片懒加载
 })
 Vue.config.productionTip = false
 
+// 登录判断
+router.beforeEach((to, from, next) => {
+  var userdata = getUserData();
+  if (to.path != '/managelogin'&&to.name!='404'&&to.path != '/') {  // 判断是否登录
+    if(!userdata.userName){
+      // ElementUI.$message.danger('请登陆!');
+      ElementUI.Message.error('抱歉，您还没有登录！');
+      if(to.path.indexOf('front')>0){
+        router.push({path:'/'});
+      } else {
+        router.push({path:'/managelogin'});
+      }
+    } else {
+      next();
+    }
+  }
+  else {
+    next();
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
