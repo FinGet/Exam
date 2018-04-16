@@ -11,16 +11,21 @@
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
           </el-col>
         </el-row>
-        <el-col :span="7" v-for="item in exams" :key="item.id" class="box-item marginB20">
-          <el-card :body-style="{ padding: '0px',cursor:'pointer'}">
-            <div style="padding: 14px;">
-              <p>{{item.name}}</p>
-              <p class="time">考试时间: {{ new Date(item.startTime).toLocaleString() }}</p>
-              <p>总分: {{item.totalPoints}} 分</p>
-              <el-button type="text" class="pull-right">参加考试</el-button>
-            </div>
-          </el-card>
-        </el-col>
+        <el-row>
+          <el-col :span="7" v-for="item in exams" :key="item.id" class="box-item marginB20">
+            <el-card :body-style="{ padding: '0px',cursor:'pointer'}">
+              <div style="padding: 14px;">
+                <p>{{item.name}}</p>
+                <p class="time">考试时间: {{ new Date(item.startTime).toLocaleString()}}</p>
+                <p>考试时长: {{item.time}} 分钟</p>
+                <p>总分: {{item.totalPoints}} 分</p>
+                <!--<p>{{(nowTime - new Date(item.startTime))/(1000*60)}}</p>-->
+                <!--<p v-if="(nowTime - new Date(item.startTime))/(1000*60) > 60" class="over">考试时间已过</p>-->
+                <el-button type="text" class="pull-right" :disabled="(nowTime - new Date(item.startTime))/(1000*60) > 60||item._questions.length == 0">参加考试</el-button>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col>
             <el-pagination
@@ -102,6 +107,7 @@
 
 <style scoped rel="stylesheet/scss" lang="scss">
   .examindexindex{
+    padding: 20px 0;
     .box{
       border: 1px solid #b7b7b7;
       padding: 20px 0;
@@ -112,6 +118,11 @@
       }
       .search,.box-item{
         margin-left: 37px;
+        .over{
+          float: right;
+          color: #ff0000;
+          margin-bottom: 10px;
+        }
       }
     }
   }
