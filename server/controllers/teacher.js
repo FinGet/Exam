@@ -274,7 +274,7 @@ exports.savePaper = function (req, res) {
                 item._papers.push(doc1._id);
                 item._teacher = doc._id;
               })
-              Question.create(paperForm.questions,function (err2,doc2) {
+              Question.create(paperForm._questions,function (err2,doc2) {
                 if (err2) {
                   res.json({
                     status:'1',
@@ -282,7 +282,7 @@ exports.savePaper = function (req, res) {
                   })
                 } else {
                   if (doc2) {
-                    console.log('doc2 ques:'+doc2)
+                    console.log('doc2 ques:'+doc2);
                     doc2.forEach(item => {
                       doc1._questions.push(item._id);
                     })
