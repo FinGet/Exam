@@ -50,13 +50,13 @@
                 <el-col :span="6">
                   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
                     <el-form-item label="学号" prop="userId">
-                      <el-input :disabled="true" v-model="ruleForm.userId"></el-input>
+                      <el-input v-model="ruleForm.userId"></el-input>
                     </el-form-item>
-                    <el-form-item label="姓名" prop="name">
+                    <el-form-item label="姓名" prop="userName">
                       <el-input v-model="ruleForm.userName"></el-input>
                     </el-form-item>
                     <el-form-item label="年级" prop="grade">
-                      <el-select v-model="ruleForm.grade" :disabled="true" placeholder="请选年级">
+                      <el-select v-model="ruleForm.grade"  placeholder="请选年级">
                         <el-option label="一年级" value="1"></el-option>
                         <el-option label="二年级" value="2"></el-option>
                         <el-option label="三年级" value="3"></el-option>
@@ -64,6 +64,9 @@
                         <el-option label="五年级" value="5"></el-option>
                         <el-option label="六年级" value="6"></el-option>
                       </el-select>
+                    </el-form-item>
+                    <el-form-item label="班级" prop="class">
+                      <el-input v-model="ruleForm.class"></el-input>
                     </el-form-item>
                     <el-form-item label="账号密码" prop="passWord">
                       <el-input v-model="ruleForm.passWord"></el-input>
@@ -94,6 +97,10 @@
           passWord:''
         },
         rules: {
+          userId: [
+            {required: true, message: '请输入真实姓名', trigger: 'blur'},
+            {pattern: /^[0-9]+$/, message: '只能输入数字'}
+          ],
           userName: [
             {required: true, message: '请输入真实姓名', trigger: 'blur'},
             {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
@@ -101,9 +108,13 @@
           grade: [
             {required: true, message: '请输入年级', trigger: 'blur'}
           ],
+          class: [
+            {required: true, message: '请输入班级', trigger: 'blur'}
+          ],
           passWord: [
             {required: true, message: '请输入账号密码', trigger: 'blur'},
-            {min: 6, message: '长度不能小于6', trigger: 'blur'}
+            {min: 6, message: '长度不能小于6', trigger: 'blur'},
+            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
           ]
         },
         tableData:[],
@@ -131,6 +142,7 @@
           let res = response.data;
           if (res.status == '0') {
             this.ruleForm = res.result;
+            this.ruleForm.class+='';
 //            console.log(this.ruleForm);
           }
         })

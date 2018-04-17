@@ -51,7 +51,8 @@
             { pattern: /^[0-9]+$/, message: '只能输入数字' }
           ],
           userName: [
-            { required: true, message: '请输入姓名', trigger: 'blur' }
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
           ],
           grade: [
             { required: true, message: '请输入年级', trigger: 'blur' },
