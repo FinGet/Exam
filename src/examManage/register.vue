@@ -3,12 +3,17 @@
     <div class="login-page-inner">
       <div class="input-text-wrapper">
         <div class="login-logo marginB10"><img width="300"  v-lazy="logoSrc" alt="logo"></div>
-        <el-input v-model="userId" placeholder="请输入教师工号" @keyup.native.enter="submit" @change="checkType('userId')"></el-input>
-        <span class="error" v-if="error && userId!=''">*只能输入数字</span>
-        <el-input v-model="userName" placeholder="请输入用户名" @keyup.native.enter="submit" class="marginT10"></el-input>
-        <el-input type="password" v-model="passWord" placeholder="请输入密码不少于6位" @change="checkType('passWord')"  @keyup.native.enter="submit" class="marginT10"></el-input>
-        <span class="error" v-if="passError && passWord!=''">*只能输入数字和字母</span>
-        <span class="error" v-if="passErrorLen && passWord!=''">*密码不能少于6位</span>
+        <el-form :model="userForm" :rules="rules" ref="ruleForm"  class="demo-ruleForm">
+          <el-form-item label="" prop="userId">
+            <el-input v-model="userForm.userId" placeholder="请输入教师工号"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="userName">
+            <el-input v-model="userForm.userName" placeholder="请输入教师姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="passWord">
+            <el-input type="password" v-model="userForm.passWord" placeholder="请输入账号密码"></el-input>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="input-text-wrapper marginT30 text-center">
         <el-button type="primary" @click="submit" class="loginBtn">注册</el-button>
@@ -27,86 +32,61 @@
   export default {
     data() {
       return {
-        userName: '',
-        passWord: '',
-        userId: '',
+        userForm:{
+          userName: '',
+          passWord: '',
+          userId: ''
+        },
         logoSrc:require('../common/img/logo.png'),
-        error: false,
-        passError:false,
-        passErrorLen: false
+        rules:{
+          userId: [
+            { required: true, message: '请输入教师工号', trigger: 'blur' },
+            { pattern: /^[0-9]+$/, message: '只能输入数字' }
+          ],
+          userName: [
+            { required: true, message: '请输入教师姓名', trigger: 'blur' }
+          ],
+          passWord: [
+            { required: true, message: '请输入账号密码', trigger: 'blur' },
+            { min: 6, max: 20, message: '密码不能小于6位', trigger: 'change' },
+            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
+          ]
+        }
       }
     },
     methods: {
-      checkType(type){
-        if(type == 'userId'){
-          let reg = /^(\s|[0-9])+$/;
-          if(!reg.test(this.userId)){
-//          this.$message.error('只能输入数字！')
-            this.error = true;
-          }else {
-            this.error = false;
-          }
-        } else if(type == 'passWord') {
-          let reg = /^(\s|[0-9A-Za-z])+$/;
-          if(!reg.test(this.passWord)){
-            this.passError = true;
-          }else {
-            this.passError = false;
-            if(this.passWord.length < 6) {
-              this.passErrorLen = true;
-            } else if (this.passWord.length >= 6){
-              this.passErrorLen = false;
-            }
-          }
-
-        }
-
-      },
       // 登录
       submit() {
-        if (this.userId == '') {
-          this.$message.error('请输入教师工号！');
-          return
-        } else if (this.userName == ''){
-          this.$message.error('请输入用户名！');
-          return
-        } else if (this.passWord == ''){
-          this.$message.error('请输入密码！');
-          return
-        } else if(this.passWord.length <6) {
-          this.$message.error('密码不能少于6位！');
-          return
-        }
-        this.$axios.post('/api/register',{
-          userInfo:{
-            userName: this.userName,
-            passWord: this.passWord,
-            userId: this.userId
+        this.$refs.ruleForm.validate((valid)=> {
+          if (valid) {
+            this.$axios.post('/api/register',{
+              userInfo:this.userForm
+            }).then(response => {
+              let res = response.data;
+              if (res.status == '0') {
+                this.$message({
+                  showClose: true,
+                  message: '恭喜你，注册成功！',
+                  type: 'success'
+                });
+                // 注册成功跳到登录
+                this.$router.push('/managelogin')
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: '用户名或密码错误！',
+                  type: 'warning'
+                });
+                this.password = ''
+              }
+            }).catch(err => {
+              this.$message({
+                showClose: true,
+                message: '注册失败，请稍后再试！',
+                type: 'warning'
+              });
+            })
           }
-        }).then(response => {
-          let res = response.data;
-          if (res.status == '0') {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，注册成功！',
-              type: 'success'
-            });
-            // 注册成功跳到登录
-            this.$router.push('/managelogin')
-          } else {
-            this.$message({
-              showClose: true,
-              message: '用户名或密码错误！',
-              type: 'warning'
-            });
-            this.password = ''
-          }
-        }).catch(err => {
-          this.$message({
-            showClose: true,
-            message: '注册失败，请稍后再试！',
-            type: 'warning'
-          });
         })
       }
     },
