@@ -7,7 +7,7 @@ var StudentSchema = new Schema({
     grade: Number, // 年级 1~6 分别代表一年级到六年级
     class: Number, // 班级
     exams:[{ // 参加的考试
-      _papers:{ type: Schema.Types.ObjectId, ref: 'Paper' },
+      _paper:{ type: Schema.Types.ObjectId, ref: 'Paper' },
       date: Date,
       score:Number,
       answers: [{

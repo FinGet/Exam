@@ -5,8 +5,8 @@
           <div class="main">
             <div class="pull-left search-warpper marginB10">
               <div class="pull-left search-title marginR10">试卷名称:</div>
-              <el-input class=" pull-left input150" v-model="name"></el-input>
-              <el-button class="pull-left marginL10" type="primary" icon="search">搜索</el-button>
+              <el-input class=" pull-left input150" v-model="name" @keyup.enter="search"></el-input>
+              <el-button class="pull-left marginL10" type="primary" icon="search" @click="search">搜索</el-button>
             </div>
             <el-table
               :data="tableData"
@@ -21,7 +21,7 @@
               <el-table-column
                 prop="date"
                 label="考试时间"
-                width="180">
+                width="300">
               </el-table-column>
               <el-table-column
                 prop="score"
@@ -30,13 +30,14 @@
             </el-table>
             <el-pagination
               class="pull-right marginT10"
+              v-if="total > pageSize"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="pageNumber"
               :page-sizes="[10, 20, 30, 40]"
               :page-size="pageSize"
               layout="sizes, prev, pager, next"
-              :total="200">
+              :total="total">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -105,31 +106,16 @@
             {min: 6, message: '长度不能小于6', trigger: 'blur'}
           ]
         },
-        tableData:[{
-          date: '2016-05-02',
-          name: '操作系统Windows XP基础测试',
-          score: '90'
-        }, {
-          date: '2016-05-04',
-          name: '操作系统Windows 7基础测试',
-          score: '78'
-        }, {
-          date: '2016-05-01',
-          name: '操作系统Windows8基础测试',
-          score: '56'
-        }, {
-          date: '2016-05-03',
-          name: '操作系统Windows 10基础测试',
-          score: '60'
-        }],
+        tableData:[],
         name:'',
         pageNumber: 1,
         pageSize: 10,
-        total: 20
+        total: 0
       }
     },
     created(){
       this.getUserInfo();
+      this.getExamLogs();
     },
     methods:{
       /**
@@ -171,11 +157,20 @@
         this.$refs[formName].resetFields();
       },
       /**
+       * 搜索
+       */
+      search(){
+        this.pageNumber = 1;
+        this.getExamLogs();
+      },
+      /**
        * 每页多少条
        * @param val
        */
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        this.pageSize = val;
+        this.getExamLogs();
       },
       /**
        * 第几页
@@ -183,6 +178,34 @@
        */
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.pageNumber = val;
+        this.getExamLogs();
+      },
+      /**
+       * 获取考试记录
+       */
+      getExamLogs(){
+        this.tableData = [];
+        this.$axios.get('/api/getexamlogs',{
+          params:{
+            name: this.name,
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize,
+          }
+        }).then(response => {
+          let res = response.data;
+          let exams = res.result.exams;
+          this.total = res.total;
+          exams.forEach(item => {
+            if(item._paper) {
+              this.tableData.push({
+                name: item._paper.name,
+                score: item.score,
+                date: new Date(item.date).toLocaleString()
+              })
+            }
+          })
+        })
       }
     }
   }
