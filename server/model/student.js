@@ -9,7 +9,11 @@ var StudentSchema = new Schema({
     exams:[{ // 参加的考试
       _papers:{ type: Schema.Types.ObjectId, ref: 'Paper' },
       date: Date,
-      score:Number
+      score:Number,
+      answers: [{
+        _question: {type: Schema.Types.ObjectId, ref: 'Question'},
+        answer: String
+      }]
     }]
 })
 module.exports = mongoose.model('Student', StudentSchema);
