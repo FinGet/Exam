@@ -31,6 +31,8 @@ module.exports = function(app) {
 
 
   /*----------------------学生用户----------------------*/
+  // 学生注册
+  app.post('/api/studentregister',Student.register);
   // 学生登录
   app.post('/api/studentlogin', Student.signup);
   // 学生登出
