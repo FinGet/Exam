@@ -43,4 +43,6 @@ module.exports = function(app) {
   app.get('/api/getExams',Student.getExams);
   //获取考试信息
   app.get('/api/getexamlogs',Student.getExamLogs);
+  // 修改用户信息
+  app.post('/api/updateStudent', Student.updateUser);
 }

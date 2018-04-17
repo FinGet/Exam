@@ -64,7 +64,7 @@
           ],
           passWord: [
             { required: true, message: '请输入账号密码', trigger: 'blur' },
-            { min: 6, max: 20, message: '密码不能小于6位', trigger: 'change' },
+            { min: 6, max: 20, message: '密码长度6~20', trigger: 'change' },
             { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
           ]
         },

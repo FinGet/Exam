@@ -136,7 +136,31 @@ exports.getInfo = function (req, res) {
     }
   })
 };
-
+// 修改用户信息
+exports.updateUser = function (req, res) {
+  let userName = req.session.userName;
+  let userInfo = req.body.userInfo;
+  Student.update({'userName':userName},userInfo,(err,doc)=>{
+    if(err) {
+      res.json({
+        status:'1',
+        msg:err.message
+      })
+    }else {
+      if(doc){
+        res.json({
+          status:'0',
+          msg:'success'
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg:'没有找到该用户'
+        })
+      }
+    }
+  })
+}
 // 获取考试信息
 exports.getExams = function (req,res) {
   let userName =req.session.userName;

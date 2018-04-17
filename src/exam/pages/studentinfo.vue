@@ -109,11 +109,12 @@
             {required: true, message: '请输入年级', trigger: 'blur'}
           ],
           class: [
-            {required: true, message: '请输入班级', trigger: 'blur'}
+            {required: true, message: '请输入班级', trigger: 'blur'},
+            {pattern: /^[0-9]+$/, message: '只能输入数字'}
           ],
           passWord: [
             {required: true, message: '请输入账号密码', trigger: 'blur'},
-            {min: 6, message: '长度不能小于6', trigger: 'blur'},
+            { min: 6, max: 20, message: '密码长度6~20', trigger: 'change' },
             { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
           ]
         },
@@ -141,8 +142,12 @@
         }).then(response => {
           let res = response.data;
           if (res.status == '0') {
-            this.ruleForm = res.result;
+            for(var key in this.ruleForm) {
+              this.ruleForm[key] = res.result[key];
+            }
             this.ruleForm.class+='';
+            this.ruleForm.grade+='';
+            this.ruleForm.userId+='';
 //            console.log(this.ruleForm);
           }
         })
@@ -154,7 +159,23 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.$confirm('确定修改用户信息吗？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(() => {
+              this.$axios.post('/api/updateStudent',{
+                userInfo: this.ruleForm
+              }).then(response => {
+                let res =response.data;
+                if(res.status == '0') {
+                  this.$message.success('修改成功!');
+                  this.getUserInfo();
+                }
+              })
+            }).catch(err => {
+
+            })
+
           } else {
             console.log('error submit!!');
             return false;
@@ -166,7 +187,8 @@
        * @param formName
        */
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        // this.$refs[formName].resetFields();
+        this.getUserInfo();
       },
       /**
        * 搜索
