@@ -84,7 +84,7 @@ exports.register = function (req,res) {
             } else {
               res.json({
                 status:'1',
-                msg:'报存失败'
+                msg:'注册失败'
               })
             }
           }
