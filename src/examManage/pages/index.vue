@@ -11,11 +11,13 @@
               <div>
                 <ul class="ul">
                   <li v-for="item in news" :key="item.id">
-                    <el-tooltip class="item" effect="dark" :content="item.title" placement="top-start">
-                      <span class="title">{{item.title}}</span>
-                    </el-tooltip>
-                    <span class="data marginL10">{{item.data}}</span>
-                    <span class="time">{{item.time}}</span>
+                    <router-link :to="{path:'edit',query:{'id':item._id}}">
+                      <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
+                        <span class="title">{{item.name}}</span>
+                      </el-tooltip>
+                      <span class="data marginL10">{{ new Date(item.startTime).toLocaleString()}}</span>
+                      <span class="time">{{item.time}} 分钟</span>
+                    </router-link>
                   </li>
                 </ul>
               </div>
@@ -27,18 +29,18 @@
               <div>
                 <ul class="ul">
                   <li v-for="item in exams" class="clearfix" :key="item.id">
-                    <el-tooltip class="item" effect="dark" :content="item.examname" placement="top-start">
-                      <div class="pull-left examname">{{item.examname}}</div>
+                    <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
+                      <div class="pull-left examname">{{item.name}}</div>
                     </el-tooltip>
                     <div class="pull-left">
-                      <span>考试分值:{{item.total}}</span>
+                      <span>考试分值:{{item.totalPoints}}</span>
                       <br>
-                      <span>考试日期:{{item.datarang}}</span>
+                      <span>考试时间:{{new Date(item.startTime).toLocaleString()}}</span>
                     </div>
                     <div class="pull-left">
                       <span><span class="examnum">{{item.examnum}}人</span> 正在考试</span>
                       <br>
-                      <span>考试时长: <span class="examduration">{{item.examduration}}分钟</span> </span>
+                      <span>考试时长: <span class="examduration">{{item.time}}分钟</span> </span>
                     </div>
                   </li>
                 </ul>
@@ -85,71 +87,30 @@
             time: '16:30'
           }
         ],
-        exams: [
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
-          },
-          {
-            examname:'计算机基础',
-            total:'100',
-            datarang:'2017/09/01-2017/09/02',
-            examnum:'20',
-            examduration:'50'
+        exams: []
+      }
+    },
+    computed:{
+      nowTime(){
+        return new Date();
+      }
+    },
+    mounted(){
+      this.getPublishExams();
+    },
+    methods:{
+      getPublishExams(){
+        this.$axios.get('/api/getPublishExams').then(response => {
+          let res = response.data;
+          if(res.status == '0') {
+            this.news = res.result;
+            res.result.forEach(item => {
+              if(item.startTime&&(this.nowTime - new Date(item.startTime))/(1000*60) < 60) {
+                this.exams.push(item);
+              }
+            })
           }
-        ]
+        })
       }
     }
   }

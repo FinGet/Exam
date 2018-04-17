@@ -189,7 +189,50 @@ exports.updateUser = function (req, res) {
       }
     }
   })
-}
+};
+// 获取所有试卷的考试
+exports.getPublishExams = function (req,res) {
+  let userName =req.session.userName;
+  Teacher.findOne({"userName":userName}).populate({path:'_papers'})
+    .exec((err,doc)=>{
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+    } else {
+      if(doc) {
+        Paper.find({},(err1,doc1)=>{
+          if(err1) {
+            res.json({
+              status: '1',
+              msg: err1.message
+            })
+          } else {
+            if(doc1){
+              res.json({
+                status: '0',
+                result: doc1,
+                total: doc1.length,
+                msg: 'success'
+              })
+            } else {
+              res.json({
+                status: '1',
+                msg: '没有可以参加的考试'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg:'请登录'
+        })
+      }
+    }
+  })
+};
 // 获取试卷(分页、模糊查询)
 exports.getPapers = function (req, res) {
   // console.log(req.session.userName);
@@ -226,7 +269,7 @@ exports.getPapers = function (req, res) {
         }
       }
     })
-}
+};
 
 // 保存试卷
 exports.savePaper = function (req, res) {

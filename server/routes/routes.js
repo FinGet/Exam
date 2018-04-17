@@ -16,6 +16,8 @@ module.exports = function(app) {
   app.post('/api/updateUser', Teacher.updateUser);
   // 获取试卷(分页、模糊查询)
   app.get('/api/mypapers', Teacher.getPapers);
+  // 获取已发布的考试
+  app.get('/api/getPublishExams',Teacher.getPublishExams);
   // 保存试卷
   app.post('/api/savePaper', Teacher.savePaper);
   // 发布试卷
