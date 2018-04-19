@@ -37,11 +37,13 @@
             {pattern: /^[0-9]+$/, message: '只能输入数字'}
           ],
           userName: [
-            {required: true, message: '请输入用户名', trigger: 'blur' }
+            {required: true, message: '请输入用户名', trigger: 'blur' },
+            {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
           ],
           passWord: [
             {required: true, message: '请输入密码', trigger: 'blur' },
-            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入英文和数字' }
+            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入英文和数字' },
+            { min: 6, max: 20, message: '密码长度6~20', trigger: 'change' },
           ],
         }
       }

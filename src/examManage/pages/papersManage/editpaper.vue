@@ -211,6 +211,11 @@ export default {
         }).then((response) => {
           let res =response.data;
           if (res.status == '0'){
+            let now = new Date();
+            if(res.result.startTime&&(now - new Date(res.result.startTime))/(1000*60) < 60){
+              this.$router.go(-1);
+              this.$message.warning('正在考试，不能修改!');
+            }
             this.form = res.result;
             console.log(this.form);
             this.form.totalPoints+='';

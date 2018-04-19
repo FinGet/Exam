@@ -5,8 +5,8 @@
           <div class="main">
             <div class="pull-left search-warpper marginB10">
               <div class="pull-left search-title marginR10">试卷名称:</div>
-              <el-input class=" pull-left input150" v-model="name"></el-input>
-              <el-button class="pull-left marginL10" type="primary" icon="search">搜索</el-button>
+              <el-input class=" pull-left input150" v-model="name" @keyup.enter="search"></el-input>
+              <el-button class="pull-left marginL10" type="primary" icon="search" @click="search">搜索</el-button>
             </div>
             <el-table
               :data="tableData"
@@ -21,7 +21,7 @@
               <el-table-column
                 prop="date"
                 label="考试时间"
-                width="180">
+                width="300">
               </el-table-column>
               <el-table-column
                 prop="score"
@@ -30,13 +30,14 @@
             </el-table>
             <el-pagination
               class="pull-right marginT10"
+              v-if="total > pageSize"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="pageNumber"
               :page-sizes="[10, 20, 30, 40]"
               :page-size="pageSize"
               layout="sizes, prev, pager, next"
-              :total="200">
+              :total="total">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -49,13 +50,13 @@
                 <el-col :span="6">
                   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
                     <el-form-item label="学号" prop="userId">
-                      <el-input :disabled="true" v-model="ruleForm.userId"></el-input>
+                      <el-input v-model="ruleForm.userId"></el-input>
                     </el-form-item>
-                    <el-form-item label="姓名" prop="name">
+                    <el-form-item label="姓名" prop="userName">
                       <el-input v-model="ruleForm.userName"></el-input>
                     </el-form-item>
                     <el-form-item label="年级" prop="grade">
-                      <el-select v-model="ruleForm.grade" :disabled="true" placeholder="请选年级">
+                      <el-select v-model="ruleForm.grade"  placeholder="请选年级">
                         <el-option label="一年级" value="1"></el-option>
                         <el-option label="二年级" value="2"></el-option>
                         <el-option label="三年级" value="3"></el-option>
@@ -63,6 +64,9 @@
                         <el-option label="五年级" value="5"></el-option>
                         <el-option label="六年级" value="6"></el-option>
                       </el-select>
+                    </el-form-item>
+                    <el-form-item label="班级" prop="class">
+                      <el-input v-model="ruleForm.class"></el-input>
                     </el-form-item>
                     <el-form-item label="账号密码" prop="passWord">
                       <el-input v-model="ruleForm.passWord"></el-input>
@@ -93,6 +97,10 @@
           passWord:''
         },
         rules: {
+          userId: [
+            {required: true, message: '请输入真实姓名', trigger: 'blur'},
+            {pattern: /^[0-9]+$/, message: '只能输入数字'}
+          ],
           userName: [
             {required: true, message: '请输入真实姓名', trigger: 'blur'},
             {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
@@ -100,36 +108,26 @@
           grade: [
             {required: true, message: '请输入年级', trigger: 'blur'}
           ],
+          class: [
+            {required: true, message: '请输入班级', trigger: 'blur'},
+            {pattern: /^[0-9]+$/, message: '只能输入数字'}
+          ],
           passWord: [
             {required: true, message: '请输入账号密码', trigger: 'blur'},
-            {min: 6, message: '长度不能小于6', trigger: 'blur'}
+            { min: 6, max: 20, message: '密码长度6~20', trigger: 'change' },
+            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
           ]
         },
-        tableData:[{
-          date: '2016-05-02',
-          name: '操作系统Windows XP基础测试',
-          score: '90'
-        }, {
-          date: '2016-05-04',
-          name: '操作系统Windows 7基础测试',
-          score: '78'
-        }, {
-          date: '2016-05-01',
-          name: '操作系统Windows8基础测试',
-          score: '56'
-        }, {
-          date: '2016-05-03',
-          name: '操作系统Windows 10基础测试',
-          score: '60'
-        }],
+        tableData:[],
         name:'',
         pageNumber: 1,
         pageSize: 10,
-        total: 20
+        total: 0
       }
     },
     created(){
       this.getUserInfo();
+      this.getExamLogs();
     },
     methods:{
       /**
@@ -144,7 +142,12 @@
         }).then(response => {
           let res = response.data;
           if (res.status == '0') {
-            this.ruleForm = res.result;
+            for(var key in this.ruleForm) {
+              this.ruleForm[key] = res.result[key];
+            }
+            this.ruleForm.class+='';
+            this.ruleForm.grade+='';
+            this.ruleForm.userId+='';
 //            console.log(this.ruleForm);
           }
         })
@@ -156,7 +159,23 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.$confirm('确定修改用户信息吗？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(() => {
+              this.$axios.post('/api/updateStudent',{
+                userInfo: this.ruleForm
+              }).then(response => {
+                let res =response.data;
+                if(res.status == '0') {
+                  this.$message.success('修改成功!');
+                  this.getUserInfo();
+                }
+              })
+            }).catch(err => {
+
+            })
+
           } else {
             console.log('error submit!!');
             return false;
@@ -168,7 +187,15 @@
        * @param formName
        */
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        // this.$refs[formName].resetFields();
+        this.getUserInfo();
+      },
+      /**
+       * 搜索
+       */
+      search(){
+        this.pageNumber = 1;
+        this.getExamLogs();
       },
       /**
        * 每页多少条
@@ -176,6 +203,8 @@
        */
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        this.pageSize = val;
+        this.getExamLogs();
       },
       /**
        * 第几页
@@ -183,6 +212,34 @@
        */
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.pageNumber = val;
+        this.getExamLogs();
+      },
+      /**
+       * 获取考试记录
+       */
+      getExamLogs(){
+        this.tableData = [];
+        this.$axios.get('/api/getexamlogs',{
+          params:{
+            name: this.name,
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize,
+          }
+        }).then(response => {
+          let res = response.data;
+          let exams = res.result.exams;
+          this.total = res.total;
+          exams.forEach(item => {
+            if(item._paper) {
+              this.tableData.push({
+                name: item._paper.name,
+                score: item.score,
+                date: new Date(item.date).toLocaleString()
+              })
+            }
+          })
+        })
       }
     }
   }
@@ -190,8 +247,6 @@
 
 <style rel="stylesheet/scss" scoped="scoped" lang="scss">
 .main{
-  max-width: 1200px;
-  margin:30px auto;
   .title{
     font-size: 16px;
     color: #000;

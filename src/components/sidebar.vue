@@ -12,11 +12,7 @@
                 <el-menu-item index="/endhome/mypapers">我的试卷</el-menu-item>
                 <el-menu-item index="/endhome/markpapers">阅卷</el-menu-item>
             </el-submenu>
-            <el-submenu index="3">
-              <template slot="title"><i class="fa-icon fa fa-group"></i>学生成绩管理</template>
-              <el-menu-item index="3-1">全部学生成绩</el-menu-item>
-              <el-menu-item index="3-2">班级成绩</el-menu-item>
-            </el-submenu>
+            <el-menu-item index="/endhome/studentmanage"><i class="fa-icon fa fa-group"></i>学生成绩管理</el-menu-item>
             <el-menu-item index="/endhome/user"><i class="fa-icon fa fa-user"></i>我的信息管理</el-menu-item>
           </el-menu>
         </el-col>

@@ -143,42 +143,5 @@ exports.getExams = function (req,res) {
       }
     }
   })
-};
-// 获取试卷内容
-exports.getExamInfo = function (req,res) {
-  let userName = req.session.userName;
-  let id = req.param('id');
-  Student.findOne({"userName":userName},(err,doc)=>{
-    if(err) {
-      res.json({
-        status: '1',
-        msg: err.message
-      })
-    } else {
-      if(doc) {
-        Paper.findOne({'_id':id}).populate({path:'_questions'}).exec((err1,doc1) => {
-          if (err1) {
-            res.json({
-              status:'1',
-              msg: err.message
-            })
-          } else {
-            if (doc1) {
-              res.json({
-                status: '0',
-                msg:'success',
-                result:doc1
-              })
-            } else {
-              res.json({
-                status: '2',
-                msg:'没有该试卷'
-              })
-            }
-          }
-        })
-      }
-    }
-  })
 }
 

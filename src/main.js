@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
+// import store from './store'
 import ElementUI from 'element-ui' // 加载ElementUI
 import VueLazyLoad from 'vue-lazyload'
 import 'element-ui/lib/theme-default/index.css'
@@ -57,7 +57,7 @@ Vue.config.productionTip = false
 // 登录判断
 router.beforeEach((to, from, next) => {
   var userdata = getUserData();
-  if (to.path != '/managelogin'&&to.name!='404'&&to.path != '/') {  // 判断是否登录
+  if (to.path != '/managelogin'&&to.name!='404'&&to.path != '/'&&to.path != "/frontregister"&&to.path!='/manageregister') {  // 判断是否登录
     if(!userdata.userName){
       // ElementUI.$message.danger('请登陆!');
       ElementUI.Message.error('抱歉，您还没有登录！');
@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router, // 使用路由
-  store, // 使用vuex
+  // store, // 使用vuex
   template: '<App/>',
   components: { App }
 })

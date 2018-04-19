@@ -9,10 +9,10 @@
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">Hello 404!</div>
-        <div class="bullshit__info">&copy;版权所有<a class='link-type' href='https://wallstreetcn.com' target='_blank'>Bios</a></div>
+        <div class="bullshit__info">&copy;版权所有<a class='link-type' href='http://finget.github.io' target='_blank'>FinGet</a></div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页或者发送错误报告</div>
-        <router-link :to="{name:'Index'}" class="bullshit__return-home">返回首页</router-link>
+        <a href="javascript:;" class="bullshit__return-home" @click="goBack">返回上一页</a>
       </div>
     </div>
   </div>
@@ -26,12 +26,18 @@
     data() {
       return {
         img_404,
-        img_404_cloud
+        img_404_cloud,
+        routerName:''
+      }
+    },
+    methods:{
+      goBack(){
+        this.$router.go(-1);
       }
     },
     computed: {
       message() {
-        return 'Bios说这个页面你不能进......'
+        return 'FinGet说这个页面你不能进......'
       }
     }
   }

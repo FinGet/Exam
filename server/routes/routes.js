@@ -39,6 +39,4 @@ module.exports = function(app) {
   app.get('/api/studentinfo', Student.getInfo);
   // 获取考试信息
   app.get('/api/getExams',Student.getExams);
-  // 获取试卷信息
-  app.get('/api/getExamInfo',Student.getExamInfo);
 }

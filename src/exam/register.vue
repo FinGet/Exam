@@ -3,11 +3,23 @@
     <div class="login-page-inner">
       <div class="input-text-wrapper">
         <div class="login-logo marginB10"><img width="300" v-lazy="logoSrc" alt="logo"></div>
-        <el-input v-model="userId" placeholder="请输入学号" @keyup.enter="submit"></el-input>
-        <el-input v-model="userName" placeholder="请输入姓名" @keyup.enter="submit" class="marginT10"></el-input>
-        <el-input v-model="grade" placeholder="请输入年纪" @keyup.enter="submit" class="marginT10"></el-input>
-        <el-input v-model="sclass" placeholder="请输入班级" @keyup.enter="submit" class="marginT10"></el-input>
-        <el-input v-model="passWord" placeholder="请输入密码" type="password" @keyup.enter="submit" class="marginT10"></el-input>
+        <el-form :model="userForm" :rules="rules" ref="ruleForm"  class="demo-ruleForm">
+          <el-form-item label="" prop="userId">
+            <el-input v-model="userForm.userId" placeholder="请输入学号"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="userName">
+            <el-input v-model="userForm.userName" placeholder="请输入姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="grade">
+            <el-input v-model="userForm.grade" placeholder="请输入年级"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="class">
+            <el-input v-model="userForm.class" placeholder="请输入班级"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="passWord">
+            <el-input type="password" v-model="userForm.passWord" placeholder="请输入密码"></el-input>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="input-text-wrapper marginT30 text-center">
         <el-button type="warning" @click="submit" class="loginBtn">注册</el-button>
@@ -26,25 +38,44 @@
   export default {
     data() {
       return {
-        userName: '',
-        passWord: '',
-        userId: '',
-        grade:'',
-        sclass: '',
+        userForm:{
+          userName: '',
+          passWord: '',
+          userId: '',
+          grade:'',
+          class: ''
+        },
+        rules:{
+          userId: [
+            { required: true, message: '请输入学号', trigger: 'blur' },
+            { pattern: /^[0-9]+$/, message: '只能输入数字' }
+          ],
+          userName: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            {min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur'}
+          ],
+          grade: [
+            { required: true, message: '请输入年级', trigger: 'blur' },
+            { pattern: /^[0-9]+$/, message: '只能输入数字' }
+          ],
+          class: [
+            { required: true, message: '请输入班级', trigger: 'blur' },
+            { pattern: /^[0-9]+$/, message: '只能输入数字' }
+          ],
+          passWord: [
+            { required: true, message: '请输入账号密码', trigger: 'blur' },
+            { min: 6, max: 20, message: '密码长度6~20', trigger: 'change' },
+            { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字或字母' }
+          ]
+        },
         logoSrc:require('../common/img/logo1.png')
       }
     },
     methods: {
       // 登录
       submit() {
-        if (this.userName == '' || this.passWord == '') {
-          this.$message.error('请输入用户名或密码！')
-          return
-        }
         this.$axios.post('/api/studentregister',{
-          userName: this.userName,
-          userPwd: this.passWord,
-          userId: this.userId
+          userInfo:this.userForm
         }).then(response => {
           let res = response.data;
           if (res.status == '0') {
@@ -53,20 +84,12 @@
               message: '恭喜你，注册成功！',
               type: 'success'
             });
-            // 登录成功跳到后台首页
-            this.$router.push('/endhome/index')
-          } else {
-            this.$message({
-              showClose: true,
-              message: '用户名或密码错误！',
-              type: 'warning'
-            });
-            this.password = ''
+            this.$router.push('/')
           }
         }).catch(err => {
           this.$message({
             showClose: true,
-            message: '登录失败，请稍后再试！',
+            message: '注册失败，请稍后再试！',
             type: 'warning'
           });
         })
