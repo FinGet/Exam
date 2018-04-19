@@ -57,7 +57,7 @@ Vue.config.productionTip = false
 // 登录判断
 router.beforeEach((to, from, next) => {
   var userdata = getUserData();
-  if (to.path != '/managelogin'&&to.name!='404'&&to.path != '/') {  // 判断是否登录
+  if (to.path != '/managelogin'&&to.name!='404'&&to.path != '/'&&to.path != "/frontregister"&&to.path!='/manageregister') {  // 判断是否登录
     if(!userdata.userName){
       // ElementUI.$message.danger('请登陆!');
       ElementUI.Message.error('抱歉，您还没有登录！');
