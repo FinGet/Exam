@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
+// import store from './store'
 import ElementUI from 'element-ui' // 加载ElementUI
 import VueLazyLoad from 'vue-lazyload'
 import 'element-ui/lib/theme-default/index.css'
@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router, // 使用路由
-  store, // 使用vuex
+  // store, // 使用vuex
   template: '<App/>',
   components: { App }
 })
