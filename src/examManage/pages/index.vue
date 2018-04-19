@@ -103,8 +103,8 @@
         this.$axios.get('/api/getPublishExams').then(response => {
           let res = response.data;
           if(res.status == '0') {
-            this.news = res.result;
-            res.result.forEach(item => {
+            this.news = res.result._papers;
+            res.result._papers.forEach(item => {
               if(item.startTime&&(this.nowTime - new Date(item.startTime))/(1000*60) < 60) {
                 this.exams.push(item);
               }

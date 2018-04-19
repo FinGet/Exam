@@ -22,6 +22,7 @@ import EditPaper from '@/examManage/pages/papersManage/editpaper'
 import User from '@/examManage/pages/usermsg'
 // 学生成绩管理
 import StudentManage from '@/examManage/pages/studentManage'
+import StudentResult from '@/examManage/pages/studentResult'
 // 404
 import NoFind from '@/errpages/404'
 Vue.use(Router)
@@ -51,6 +52,7 @@ export default new Router({
         { path: 'edit', name: 'EditPaper', component: EditPaper, meta: {breadName: '编辑试卷'}},
         { path: 'markpapers', name: 'MarkPapers', component: MarkPapers, meta: {breadName: '阅卷'}},
         { path: 'studentmanage', name: 'StudentManage', component: StudentManage, meta: {breadName: '学生成绩管理'}},
+        { path: 'studentresult', name: 'StudentResult', component: StudentResult, meta: {breadName: '学生考试成绩'}},
         // 我的信息
         { path: 'user', name: 'User', component: User, meta: {breadName:'我的信息'},} // 我的信息管理
       ]
