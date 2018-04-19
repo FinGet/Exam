@@ -247,8 +247,6 @@
 
 <style rel="stylesheet/scss" scoped="scoped" lang="scss">
 .main{
-  max-width: 1200px;
-  margin:30px auto;
   .title{
     font-size: 16px;
     color: #000;
