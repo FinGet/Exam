@@ -42,7 +42,7 @@ export default {
       this.$router.push({path:'forntexamindex'});
     },
     readGo(){
-      if(this.isRead) {
+      if(this.isRead == 'true') {
         this.$router.push({path:'forntexamindex'});
         this.$message.success('已阅读考试规则并遵守！');
       }

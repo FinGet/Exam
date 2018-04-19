@@ -31,8 +31,9 @@ export default{
       this.$axios.post('/api/studentlogout').then(response => {
         let res = response.data
         if (res.status == 0) {
-          this.$message.success('退出成功')
-          this.$router.push({name:'FrontLogin'})
+          this.$message.success('退出成功');
+          this.$router.push({name:'FrontLogin'});
+          this.$mySessionStorage.set('read',false);
         }
       })
     }

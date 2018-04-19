@@ -3,6 +3,20 @@
     <h3 class="text-center marginT10">{{paperData.name}}</h3>
     <div class="text-center marginT10">考试时长：{{paperData.time}}分钟  总分：{{paperData.totalPoints}}分</div>
     <hr>
+    <div class="main">
+      <div class="single">
+        <h4>单选题（只有一个正确答案）</h4>
+        <ul>
+          <li class="marginB10" v-for="(item,index) in singleQuestions" :key="item.id">
+            <p class="question-title">{{index+1}} 、{{item.name}} ()</p>
+            <span class="option"
+                  v-if="item.type!='judgement'&&item.type!='Q&A'"item
+                  v-for="(item1,index1) in item.selection" :key="item1.id">
+              {{options[index1]}}、{{item1}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -10,7 +24,17 @@
     data(){
       return {
         id: '',
-        paperData:''
+        paperData:{
+          name:'',
+          time:'',
+          totalPoints:''
+        },
+        singleQuestions:[],
+        multiQuestions:[],
+        QAQuestions:[],
+        judgeQuestions:[],
+        options:['A','B','C','D','E','F','G','H','I','J','K',
+          'L','M','N','O','P','Q','R','S','T'],
       }
     },
     mounted(){
@@ -33,7 +57,20 @@
           }).then(response => {
             let res = response.data;
             if(res.status == '0') {
-              this.paperData = res.result;
+              for(let key in this.paperData) {
+                  this.paperData[key] = res.result[key];
+              }
+              res.result._questions.forEach(item => {
+                if(item.type=='single'){
+                  this.singleQuestions.push(item);
+                } else if(item.type == 'multi'){
+                  this.multiQuestions.push(item);
+                } else if(item.type == 'Q&A') {
+                  this.QAQuestions.push(item);
+                } else if(item.type == 'judgement'){
+                  this.judgeQuestions.push(item);
+                }
+              })
             }
           }).catch(err => {
             this.$message.error(err);
@@ -46,5 +83,12 @@
 <style scoped rel="stylesheet/scss" lang="scss">
   .exam{
     padding: 20px 0;
+    .main{
+      padding: 20px;
+    }
+    .question-title{
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
   }
 </style>
