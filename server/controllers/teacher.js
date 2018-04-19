@@ -202,27 +202,11 @@ exports.getPublishExams = function (req,res) {
       })
     } else {
       if(doc) {
-        Paper.find({},(err1,doc1)=>{
-          if(err1) {
-            res.json({
-              status: '1',
-              msg: err1.message
-            })
-          } else {
-            if(doc1){
-              res.json({
-                status: '0',
-                result: doc1,
-                total: doc1.length,
-                msg: 'success'
-              })
-            } else {
-              res.json({
-                status: '1',
-                msg: '没有可以参加的考试'
-              })
-            }
-          }
+        res.json({
+          status: '0',
+          result: doc,
+          total: doc.length,
+          msg: 'success'
         })
       } else {
         res.json({
@@ -537,7 +521,7 @@ exports.updateQuestion = function (req,res) {
       }
     }
   })
-}
+};
 
 // 修改试卷-修改试卷
 exports.updatePaper = function (req,res) {
@@ -651,4 +635,4 @@ exports.updatePaper = function (req,res) {
       }
     }
   })
-}
+};
