@@ -18,7 +18,47 @@ const Paper   = require('../model/papers');
 // exports.init = student.save((err,doc) => {
 //   console.log(err);
 // });
-
+//注册
+exports.register = function (req,res) {
+    let userInfo = req.body.userInfo;
+    Student.findOne(userInfo,(err,doc) => {
+      if(err) {
+        res.json({
+          status:'1',
+          msg:err.message
+        })
+        } else {
+          if(doc) {
+            res.json({
+              status:'2',
+              msg: '用户已存在'
+            })
+            } else {
+              userInfo.exams = [];
+              Student.create(userInfo,(err1,doc1) => {
+                if(err1) {
+                  res.json({
+                    status:'1',
+                    msg: err1.message
+                  })
+                  }else {
+                    if(doc1) {
+                      res.json({
+                        status: '0',
+                        msg: 'sucess'
+                      })
+                      } else {
+                        res.json({
+                          status:'1',
+                          msg:'注册失败'
+                        })
+                      }
+                  }
+              })
+            }
+        }
+    })
+  };
 // 登录
 exports.signup = function(req, res) {
   var param = {
@@ -143,5 +183,42 @@ exports.getExams = function (req,res) {
       }
     }
   })
+};
+// 获取试卷内容
+  exports.getExamInfo = function (req,res) {
+    let userName = req.session.userName;
+    let id = req.param('id');
+    Student.findOne({"userName":userName},(err,doc)=>{
+        if(err) {
+          res.json({
+            status: '1',
+            msg: err.message
+          })
+          } else {
+            if(doc) {
+              Paper.findOne({'_id':id}).populate({path:'_questions'}).exec((err1,doc1) => {
+                if (err1) {
+                    res.json({
+                        status:'1',
+                        msg: err.message
+                    })
+                  } else {
+                    if (doc1) {
+                        res.json({
+                            status: '0',
+                            msg:'success',
+                            result:doc1
+                        })
+                      } else {
+                        res.json({
+                            status: '2',
+                            msg:'没有该试卷'
+                        })
+                      }
+                  }
+                })
+              }
+          }
+      })
 }
 

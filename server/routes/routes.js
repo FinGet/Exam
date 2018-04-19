@@ -28,9 +28,13 @@ module.exports = function(app) {
   app.post('/api/updateQuestion', Teacher.updateQuestion);
   // 修改试卷
   app.post('/api/updatePaper', Teacher.updatePaper);
+  // 获取已发布的考试
+  app.get('/api/getPublishExams',Teacher.getPublishExams);
 
 
   /*----------------------学生用户----------------------*/
+  // 学生注册
+  app.post('/api/studentregister',Student.register);
   // 学生登录
   app.post('/api/studentlogin', Student.signup);
   // 学生登出
@@ -39,4 +43,7 @@ module.exports = function(app) {
   app.get('/api/studentinfo', Student.getInfo);
   // 获取考试信息
   app.get('/api/getExams',Student.getExams);
+  // 获取试卷信息
+  app.get('/api/getExamInfo',Student.getExamInfo);
+
 }
