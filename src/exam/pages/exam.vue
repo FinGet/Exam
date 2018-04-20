@@ -8,11 +8,15 @@
         <h4>单选题（只有一个正确答案）</h4>
         <ul>
           <li class="marginB10" v-for="(item,index) in singleQuestions" :key="item.id">
-            <p class="question-title">{{index+1}} 、{{item.name}} ()</p>
+            <p class="question-title">{{index+1}} 、{{item.name}}（）</p>
+
             <span class="option"
                   v-if="item.type!='judgement'&&item.type!='Q&A'"item
                   v-for="(item1,index1) in item.selection" :key="item1.id">
-              {{options[index1]}}、{{item1}}</span>
+              <!--<el-radio-group v-model="select">-->
+              <el-radio v-model="item.sanswer" :label="options[index1]" :key="index1">{{options[index1]}}、{{item1}}</el-radio>
+              <!--</el-radio-group>-->
+              </span>
           </li>
         </ul>
       </div>
@@ -29,6 +33,7 @@
           time:'',
           totalPoints:''
         },
+        select:'',
         singleQuestions:[],
         multiQuestions:[],
         QAQuestions:[],
@@ -62,6 +67,7 @@
               }
               res.result._questions.forEach(item => {
                 if(item.type=='single'){
+                  item.sanswer = '';
                   this.singleQuestions.push(item);
                 } else if(item.type == 'multi'){
                   this.multiQuestions.push(item);
@@ -85,10 +91,14 @@
     padding: 20px 0;
     .main{
       padding: 20px;
-    }
-    .question-title{
-      font-size: 16px;
-      margin-bottom: 5px;
+      .question-title{
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .option{
+        display: block;
+        margin:5px 0 0 10px;
+      }
     }
   }
 </style>
