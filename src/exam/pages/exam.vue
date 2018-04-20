@@ -13,13 +13,16 @@
             <span class="option"
                   v-if="item.type!='judgement'&&item.type!='Q&A'"item
                   v-for="(item1,index1) in item.selection" :key="item1.id">
-              <!--<el-radio-group v-model="select">-->
-              <el-radio v-model="item.sanswer" :label="options[index1]" :key="index1">{{options[index1]}}、{{item1}}</el-radio>
-              <!--</el-radio-group>-->
+              <el-radio v-model="item.sanswer" :label="options[index1]" :key="index1">
+              {{options[index1]}}、{{item1}}
+              </el-radio>
               </span>
           </li>
         </ul>
       </div>
+    </div>
+    <div class="scroll_top" @click="scrollTop" v-if="scroll>500">
+      <i class="el-icon-caret-top"></i>
     </div>
   </div>
 </template>
@@ -33,18 +36,21 @@
           time:'',
           totalPoints:''
         },
-        select:'',
         singleQuestions:[],
         multiQuestions:[],
         QAQuestions:[],
         judgeQuestions:[],
         options:['A','B','C','D','E','F','G','H','I','J','K',
           'L','M','N','O','P','Q','R','S','T'],
+        scroll: document.body.scrollTop
       }
     },
     mounted(){
       this.id = this.$route.params.id;
       this.init();
+      window.onscroll=() => {
+        this.scroll = document.body.scrollTop;
+      }
     },
     methods:{
       /**
@@ -82,6 +88,20 @@
             this.$message.error(err);
           })
         }
+      },
+      /**
+       * 回到顶部
+       * @return {[type]} [description]
+       */
+      scrollTop(){
+        let timer = setInterval(() => {
+          let top = document.body.scrollTop || document.documentElement.scrollTop;
+          let speed = Math.ceil(top / 5);
+          document.body.scrollTop = top - speed;
+          if (top === 0) {
+            clearInterval(timer);
+          }
+        }, 20)
       }
     }
   }
@@ -90,7 +110,7 @@
   .exam{
     padding: 20px 0;
     .main{
-      padding: 20px;
+      padding: 20px 40px;
       .question-title{
         font-size: 16px;
         margin-bottom: 5px;
@@ -98,6 +118,26 @@
       .option{
         display: block;
         margin:5px 0 0 10px;
+      }
+    }
+    .scroll_top{
+      background-color: #fff;
+      position: fixed;
+      right: 100px;
+      bottom: 150px;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: .3s;
+      box-shadow: 0 0 6px rgba(0,0,0,.12);
+      z-index: 5;
+      i{
+        color: #409eff;
+        display: block;
+        line-height: 40px;
+        text-align: center;
+        font-size: 18px;
       }
     }
   }
