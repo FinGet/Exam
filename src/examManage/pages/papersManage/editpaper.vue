@@ -80,9 +80,11 @@
           <el-form-item label="分值：" prop="score">
             <el-input placeholder="请输入该题的分值" v-model="dialogForm.score"></el-input>
           </el-form-item>
+          <p class="tip" v-if="dialogForm.type=='judgement'">判断题A(正确) 、 B(错误)</p>
           <el-form-item label="答案：" prop="answer" v-if="dialogForm.type!='Q&A'">
             <el-input placeholder="例：A 或者 A,B" v-model="dialogForm.answer"></el-input>
           </el-form-item>
+          
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -487,6 +489,11 @@ export default {
     }
     .dialog_input{
       width:268px;
+    }
+    .tip{
+      margin-left: 72px;
+      color: #9a9a9a;
+      font-size: 12px;
     }
     .delete-icon{
       color:#ff0000;
