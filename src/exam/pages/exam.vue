@@ -72,6 +72,18 @@
     <div class="scroll_top" @click="scrollTop" v-if="scroll>500">
       <i class="el-icon-caret-top"></i>
     </div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      >
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -79,6 +91,7 @@
     data(){
       return {
         id: '',
+        dialogVisible: false,
         paperData:{
           name:'',
           time:'',
@@ -111,14 +124,20 @@
       this.id = this.$route.params.id;
       // this.startTime = new Date();
       this.init();
-      window.onscroll=() => {
-        this.scroll = document.body.scrollTop;
-        if(this.scroll>250) {
-          this.$refs.submitBox.style.top=10+'px';
-        } else {
-          this.$refs.submitBox.style.top=250+'px';
+      if(this.$refs.submitBox){
+        window.onscroll=() => {
+          this.scroll = document.body.scrollTop;
+          if(this.scroll>250) {
+            this.$refs.submitBox.style.top=10+'px';
+          } else {
+            this.$refs.submitBox.style.top=250+'px';
+          }
         }
       }
+    },
+    beforeDestroy(){
+      // alert(1);
+      // this.dialogVisible = true;
     },
     methods:{
       /**
