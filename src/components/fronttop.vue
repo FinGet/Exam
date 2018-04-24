@@ -50,23 +50,25 @@ export default{
   }
   .top-user{
     width: 100%;
-    height: 30px;
-    line-height: 30px;
+    height: 50px;
+    line-height: 50px;
     margin:0 auto;
     font-size: 16px;
     background: #08829f;
     .user-info{
       float: left;
       color: #fff;
-      line-height:30px;
+      font-size: 14px;
+      line-height:50px;
       li {
         float: left;
         margin-left: 20px;
       }
     }
     .person,.index{
-      color: #c2c2c4;
+      color: #ececec;
       float: right;
+      font-size: 14px;
       margin-right: 30px;
       cursor: pointer;
       &:hover{
@@ -76,7 +78,7 @@ export default{
     .login-out{
       float: right;
       margin-right: 50px;
-      margin-top: 4px;
+      margin-top: 14px;
     }
   }
 </style>

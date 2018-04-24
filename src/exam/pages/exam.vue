@@ -8,7 +8,7 @@
         <h4>单选题（只有一个正确答案）</h4>
         <ul>
           <li class="marginB10" v-for="(item,index) in singleQuestions" :key="item.id">
-            <p class="question-title">{{index+1}} 、{{item.name}}（）</p>
+            <p class="question-title">{{index+1}} 、{{item.name}}</p>
 
             <span class="option"
                   v-if="item.type!='judgement'&&item.type!='Q&A'"item
@@ -16,6 +16,22 @@
               <el-radio v-model="item.sanswer" :label="options[index1]" :key="index1">
               {{options[index1]}}、{{item1}}
               </el-radio>
+              </span>
+          </li>
+        </ul>
+      </div>
+      <div class="multi">
+        <h4>多选题（有多个正确答案）</h4>
+        <ul>
+          <li class="marginB10" v-for="(item,index) in multiQuestions" :key="item.id">
+            <p class="question-title">{{index+1}} 、{{item.name}}</p>
+
+            <span class="option"
+                  v-if="item.type!='judgement'&&item.type!='Q&A'"item
+                  v-for="(item1,index1) in item.selection" :key="item1.id">
+              <el-checkbox v-model="item.sanswer" :label="options[index1]" :key="index1">
+              {{options[index1]}}、{{item1}}
+              </el-checkbox>
               </span>
           </li>
         </ul>
@@ -76,6 +92,7 @@
                   item.sanswer = '';
                   this.singleQuestions.push(item);
                 } else if(item.type == 'multi'){
+                  item.sanswer = [];
                   this.multiQuestions.push(item);
                 } else if(item.type == 'Q&A') {
                   this.QAQuestions.push(item);
@@ -117,7 +134,7 @@
       }
       .option{
         display: block;
-        margin:5px 0 0 10px;
+        margin:5px 0 0 15px;
       }
     }
     .scroll_top{

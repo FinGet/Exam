@@ -120,9 +120,9 @@ p{word-wrap:break-word}
   position: relative;
   transition: all .28s ease-out;
   margin-left: 200px;
-  padding: 10px;
+  padding: 20px;
   box-sizing: border-box;
-  padding-top: 48px;
+  padding-top: 68px;
   transition: all .3s;
   overflow: hidden;
 }
