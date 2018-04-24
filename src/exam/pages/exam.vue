@@ -2,11 +2,18 @@
   <div class="exam">
     <h3 class="text-center marginT10">{{paperData.name}}</h3>
     <div class="text-center marginT10">考试时长：{{paperData.time}}分钟  总分：{{paperData.totalPoints}}分</div>
-    <hr>
+    <hr>  
+    <div class="submit-box">
+      <el-button @click="submit" type="primary" class="submit-btn">提交试卷</el-button>
+      <div class="timeout">
+        <p>距离考试结束</p>
+        <p>{{time}}</p>
+      </div>
+    </div>
     <div class="main">
       <div class="single">
-        <h4>单选题（只有一个正确答案）</h4>
-        <ul>
+        <h3>一、单选题（只有一个正确答案）</h3>
+        <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in singleQuestions" :key="item.id">
             <p class="question-title">{{index+1}} 、{{item.name}}</p>
 
@@ -21,8 +28,8 @@
         </ul>
       </div>
       <div class="multi">
-        <h4>多选题（有多个正确答案）</h4>
-        <ul>
+        <h3>二、多选题（有多个正确答案）</h3>
+        <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in multiQuestions" :key="item.id">
             <p class="question-title">{{index+1}} 、{{item.name}}</p>
 
@@ -33,6 +40,31 @@
               {{options[index1]}}、{{item1}}
               </el-checkbox>
               </span>
+          </li>
+        </ul>
+      </div>
+      <div class="judge">
+        <h3>三、判断题</h3>
+        <ul class="question-item">
+          <li class="marginB10" v-for="(item,index) in judgeQuestions" :key="item.id">
+            <p class="question-title">{{index+1}} 、{{item.name}}</p>
+            <el-radio v-model="item.sanswer" label="A" :key="index">正确</el-radio>
+            <el-radio v-model="item.sanswer" label="B" :key="index">错误</el-radio>
+          </li>
+        </ul>
+      </div>
+      <div class="judge">
+        <h3>四、简答题</h3>
+        <ul class="question-item">
+          <li class="marginB10" v-for="(item,index) in QAQuestions" :key="item.id">
+            <p class="question-title">{{index+1}} 、{{item.name}}</p>
+            <el-input
+             class="textarea"
+              type="textarea"
+              :rows="3"
+              placeholder="请输入内容"
+              v-model="item.sanswer">
+            </el-input>
           </li>
         </ul>
       </div>
@@ -52,6 +84,8 @@
           time:'',
           totalPoints:''
         },
+        examTime: '',
+        timer: null,
         singleQuestions:[],
         multiQuestions:[],
         QAQuestions:[],
@@ -61,8 +95,21 @@
         scroll: document.body.scrollTop
       }
     },
+    computed:{
+      time:function(){
+        let time = this.examTime;
+        let hour = 0;
+        let mm = 0;
+        let ss = 0;
+        hour = Math.floor(time / 3600);
+        mm = Math.floor((time / 60 % 60));
+        ss = Math.floor((time % 60));
+        return  `${hour}小时${mm}分钟${ss}秒`;
+      }
+    },
     mounted(){
       this.id = this.$route.params.id;
+      // this.startTime = new Date();
       this.init();
       window.onscroll=() => {
         this.scroll = document.body.scrollTop;
@@ -87,6 +134,9 @@
               for(let key in this.paperData) {
                   this.paperData[key] = res.result[key];
               }
+              this.examTime = this.paperData.time*60 ;
+              this.getCode();
+              // this.timeOut();
               res.result._questions.forEach(item => {
                 if(item.type=='single'){
                   item.sanswer = '';
@@ -95,8 +145,10 @@
                   item.sanswer = [];
                   this.multiQuestions.push(item);
                 } else if(item.type == 'Q&A') {
+                  item.sanswer = '';
                   this.QAQuestions.push(item);
                 } else if(item.type == 'judgement'){
+                  item.sanswer = '';
                   this.judgeQuestions.push(item);
                 }
               })
@@ -119,6 +171,42 @@
             clearInterval(timer);
           }
         }, 20)
+      },
+      /**
+       * 计时器
+       * @return {[type]} [description]
+       */
+      timeOut(){
+        let timer = setInterval(function(){
+          // if(this.examTime == 0) {
+          //   clearInterval(timer);
+          //   return;
+          // }
+          this.examTime--;
+        },1000)
+      },
+      getCode(){
+        const TIME_COUNT = this.examTime;
+        if (!this.timer) {
+          this.timer = setInterval(() => {
+            if (this.examTime > 0 && this.examTime <= TIME_COUNT) {
+              this.examTime--;
+            } else {
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000)
+        }
+      },
+      /**
+       * 提交试卷
+       * @return {[type]} [description]
+       */
+      submit(){
+        console.log(this.singleQuestions)
+        console.log(this.multiQuestions)
+        console.log(this.QAQuestions)
+        console.log(this.judgeQuestions)
       }
     }
   }
@@ -135,6 +223,12 @@
       .option{
         display: block;
         margin:5px 0 0 15px;
+      }
+      .question-item{
+        margin-left: 15px;
+      }
+      .textarea{
+        width: 500px;
       }
     }
     .scroll_top{
@@ -155,6 +249,20 @@
         line-height: 40px;
         text-align: center;
         font-size: 18px;
+      }
+    }
+    .submit-box{
+      position: fixed;
+      right: 30px;
+      padding: 30px;
+      text-align: center;
+      border: 1px solid #ffffff;
+      box-shadow: 1px 1px 1px #c5c5c5;
+      background: rgba(193, 193, 193, 0.1);
+      border-radius: 20px;
+      .timeout{
+        margin-top: 10px;
+        text-align: center;
       }
     }
   }
