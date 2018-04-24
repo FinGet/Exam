@@ -3,7 +3,7 @@
     <h3 class="text-center marginT10">{{paperData.name}}</h3>
     <div class="text-center marginT10">考试时长：{{paperData.time}}分钟  总分：{{paperData.totalPoints}}分</div>
     <hr>  
-    <div class="submit-box">
+    <div class="submit-box" ref="submitBox">
       <el-button @click="submit" type="primary" class="submit-btn">提交试卷</el-button>
       <div class="timeout">
         <p>距离考试结束</p>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="main">
-      <div class="single">
+      <div class="single" v-if="singleQuestions.length>0">
         <h3>一、单选题（只有一个正确答案）</h3>
         <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in singleQuestions" :key="item.id">
@@ -27,7 +27,7 @@
           </li>
         </ul>
       </div>
-      <div class="multi">
+      <div class="multi" v-if="multiQuestions.length>0">
         <h3>二、多选题（有多个正确答案）</h3>
         <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in multiQuestions" :key="item.id">
@@ -43,7 +43,7 @@
           </li>
         </ul>
       </div>
-      <div class="judge">
+      <div class="judge" v-if="judgeQuestions.length>0">
         <h3>三、判断题</h3>
         <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in judgeQuestions" :key="item.id">
@@ -53,7 +53,7 @@
           </li>
         </ul>
       </div>
-      <div class="judge">
+      <div class="judge" v-if="QAQuestions.length>0">
         <h3>四、简答题</h3>
         <ul class="question-item">
           <li class="marginB10" v-for="(item,index) in QAQuestions" :key="item.id">
@@ -113,6 +113,11 @@
       this.init();
       window.onscroll=() => {
         this.scroll = document.body.scrollTop;
+        if(this.scroll>250) {
+          this.$refs.submitBox.style.top=10+'px';
+        } else {
+          this.$refs.submitBox.style.top=250+'px';
+        }
       }
     },
     methods:{
@@ -255,6 +260,7 @@
       position: fixed;
       right: 30px;
       padding: 30px;
+      transition: 1s;
       text-align: center;
       border: 1px solid #ffffff;
       box-shadow: 1px 1px 1px #c5c5c5;
