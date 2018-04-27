@@ -124,20 +124,10 @@
       this.id = this.$route.params.id;
       // this.startTime = new Date();
       this.init();
-      if(this.$refs.submitBox){
-        window.onscroll=() => {
-          this.scroll = document.body.scrollTop;
-          if(this.scroll>250) {
-            this.$refs.submitBox.style.top=10+'px';
-          } else {
-            this.$refs.submitBox.style.top=250+'px';
-          }
-        }
-      }
+      window.addEventListener('scroll', this.handleScroll);
     },
     beforeDestroy(){
-      // alert(1);
-      // this.dialogVisible = true;
+      window.removeEventListener('scroll', this.handleScroll);
     },
     methods:{
       /**
@@ -220,6 +210,14 @@
               this.timer = null;
             }
           }, 1000)
+        }
+      },
+      handleScroll(){
+        this.scroll = document.body.scrollTop;
+        if(this.scroll>250) {
+          this.$refs.submitBox.style.top=10+'px';
+        } else {
+          this.$refs.submitBox.style.top=250+'px';
         }
       },
       /**
