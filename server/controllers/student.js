@@ -1,25 +1,25 @@
 const Student = require('../model/student');
 const Paper   = require('../model/papers');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+// var mongoose = require('mongoose');
+// var Schema = mongoose.Schema;
 
-var student = new Student({
-    userId: 12001, // 学号
-    userName: '张三', // 用户名
-    passWord: '123321', // 密码
-    grade: 3, // 年级 1~6 分别代表一年级到六年级
-    class: 3, // 班级
-    exams:[{ // 参加的考试
-      _paper:Schema.Types.ObjectId("5a40a4ef485a584d44764ff1"),
-      score:100,
-      date: new Date(),
-      answers: []
-    }]
-})
+// var student = new Student({
+//     userId: 12001, // 学号
+//     userName: '张三', // 用户名
+//     passWord: '123321', // 密码
+//     grade: 3, // 年级 1~6 分别代表一年级到六年级
+//     class: 3, // 班级
+//     exams:[{ // 参加的考试
+//       _paper:Schema.Types.ObjectId("5a40a4ef485a584d44764ff1"),
+//       score:100,
+//       date: new Date(),
+//       answers: []
+//     }]
+// })
 
-exports.init = student.save((err,doc) => {
-  console.log(err);
-});
+// exports.init = student.save((err,doc) => {
+//   console.log(err);
+// });
 //注册
 exports.register = function (req,res) {
     let userInfo = req.body.userInfo;
@@ -285,10 +285,29 @@ exports.submitExam = function (req, res) {
             answers: answers
           })
           doc.save();
-          res.json({
-            status: '0',
-            msg: 'success'
+          Paper.findOne({'_id':id},(err1,doc1) => {
+            if(err1) {
+              res.json({
+                status:'1',
+                msg: err1.message
+              })
+            } else{
+              if(doc1) {
+                doc1.examnum += 1;
+                doc1.save();
+                res.json({
+                  status: '0',
+                  msg: 'success'
+                })
+              } else {
+                res.json({
+                  status: '1',
+                  msg: '没有找到该试卷'
+                })
+              }
+            }
           })
+          
         } else {
           res.json({
             status: '1',

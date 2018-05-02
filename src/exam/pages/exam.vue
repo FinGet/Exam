@@ -212,10 +212,6 @@
        * @return {[type]} [description]
        */
       submit(){
-        console.log(this.singleQuestions)
-        console.log(this.multiQuestions)
-        console.log(this.QAQuestions)
-        console.log(this.judgeQuestions)
         let isAllAnswer = true;
         this.singleQuestions.some((item) => {
           isAllAnswer = !item.sanswer == '';
@@ -250,7 +246,6 @@
               score += item.score;
             }
           })
-          console.log(score);
           if(this.QAQuestions.length > 0) {
             this.QAQuestions.forEach(item => {
               answers.push({
@@ -259,7 +254,6 @@
               })
             })
           }
-          console.log(answers);
           this.$axios.post('/api/submitExam',{
             id: this.id,
             score: score,
@@ -267,7 +261,8 @@
           }).then(response => {
             let res = response.data;
             if(res.status == '0') {
-
+              this.$message.success('提交成功!');
+              this.$router.push({path:'frontstudentinfo'});
             }
           }).catch(err => {
             this.$message.error('提交失败，请联系老师!');
