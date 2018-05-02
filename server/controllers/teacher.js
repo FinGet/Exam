@@ -638,7 +638,7 @@ exports.updatePaper = function (req,res) {
   })
 };
 
-// 阅卷
+// 获取有人考试的试卷
 exports.getExams = function (req, res) {
   // console.log(req.session.userName);
   let name = req.param('name'),
@@ -736,6 +736,37 @@ exports.getScores = function (req, res) {
       } else {
         res.json({
           status:'1',
+          msg: '请登录'
+        })
+      }
+    }
+  })
+};
+
+// 获取需要阅卷的试卷
+exports.getCheckPapers = function (req, res) {
+  let name = req.param('name'),
+    // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
+    pageSize = parseInt(req.param('pageSize')),
+    pageNumber = parseInt(req.param('pageNumber')),
+    userName = req.session.userName;
+  let skip = (pageNumber-1)*pageSize; // 跳过几条
+  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+  let params = {
+    name: reg
+  };
+  Teacher.findOne({'userName':userName}).populate({path:'_papers',match:{name: reg,examnum:{"$gt":0}},options:{skip:skip,limit:pageSize}}).exec(err, doc) => {
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+    } else {
+      if(doc) {
+        
+      } else {
+        res.json({
+          status: '1',
           msg: '请登录'
         })
       }

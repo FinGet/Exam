@@ -62,7 +62,7 @@
           >
             <template scope="scope">
               <el-button type="info" size="mini" :disabled="!scope.row.examnum>0" @click="seeDetail(scope.row._id)">
-                {{scope.row.examnum>0?'查看考试情况':'没学生参加考试'}}
+                阅卷
               </el-button>
             </template>
           </el-table-column>
@@ -98,34 +98,33 @@
       }
     },
     mounted(){
-      this.getMypapers()
+      this.getCheckPapers()
     },
     methods: {
       /**
        * [getMypapers 加载试卷信息]
        * @return {[type]} [description]
        */
-      getMypapers(){
-        // this.mypapers = [];
-        // this.$axios.get('/api/getExams',{
-        //   params:{
-        //     name: this.name,
-        //     pageSize: this.pageSize,
-        //     pageNumber: this.pageNumber
-        //   }
-        // }).then(response => {
-        //   let res = response.data;
-        //   if(res.status == 0) {
-        //     res.result._papers.forEach(item => {
-        //       if(item.startTime) {
-        //         this.mypapers.push(item);
-        //       }
-        //     })
-        //     this.pageTotal = this.mypapers.length;
-        //   }
-        // }).catch(err => {
-        //   this.$message.error("获取试卷数据失败!")
-        // })
+      getCheckPapers(){
+        this.$axios.get('/api/getExams',{
+          params:{
+            name: this.name,
+            pageSize: this.pageSize,
+            pageNumber: this.pageNumber
+          }
+        }).then(response => {
+          let res = response.data;
+          if(res.status == 0) {
+            res.result._papers.forEach(item => {
+              if(item.startTime) {
+                this.mypapers.push(item);
+              }
+            })
+            this.pageTotal = this.mypapers.length;
+          }
+        }).catch(err => {
+          this.$message.error("获取试卷数据失败!")
+        })
       },
       /**
        * 将选中项赋值给this.selections
