@@ -1,6 +1,7 @@
 const Teacher = require('../model/teacher');
 const Paper   = require('../model/papers');
 const Question = require('../model/question');
+const Student = require('../model/student');
 
 
 // var teacher = new Teacher();
@@ -191,7 +192,7 @@ exports.updateUser = function (req, res) {
   })
 };
 // 获取所有试卷的考试
-exports.getPublishExams = function (req,res) {
+exports.getAllExams = function (req,res) {
   let userName =req.session.userName;
   Teacher.findOne({"userName":userName}).populate({path:'_papers'})
     .exec((err,doc)=>{
@@ -636,3 +637,108 @@ exports.updatePaper = function (req,res) {
     }
   })
 };
+
+// 阅卷
+exports.getExams = function (req, res) {
+  // console.log(req.session.userName);
+  let name = req.param('name'),
+    // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
+    pageSize = parseInt(req.param('pageSize')),
+    pageNumber = parseInt(req.param('pageNumber')),
+    userName = req.session.userName;
+  let skip = (pageNumber-1)*pageSize; // 跳过几条
+  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+  let params = {
+    name: reg
+  };
+  Teacher.findOne({'userName':userName}).populate({path:'_papers',match:{name: reg,examnum:{"$gt":0}},options:{skip:skip,limit:pageSize}})
+  .exec((err, doc) => {
+    if (err) {
+      res.json({
+        status:'1',
+        msg: err.message
+      })
+    } else {
+      if (doc) {
+        res.json({
+          status: '0',
+          msg:'success',
+          result:doc,
+          count: doc._papers.length
+        })
+      } else {
+        res.json({
+          status: '2',
+          msg:'没有该试卷'
+        })
+      }
+    }
+  })
+};
+
+// 获取考试成绩
+exports.getScores = function (req, res) {
+  let id = req.param('id'), 
+    name = req.param('name'),
+    // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
+    pageSize = parseInt(req.param('pageSize')),
+    pageNumber = parseInt(req.param('pageNumber')),
+    userName = req.session.userName;
+  let skip = (pageNumber-1)*pageSize; // 跳过几条
+  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+  let params = {
+    name: reg
+  };
+  Teacher.findOne({'userName':userName},(err, doc) => {
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+    } else {
+      if(doc) {
+        console.log(id);
+        Student.find({"userName": reg}).skip(skip).limit(pageSize)
+        .exec((err,doc) => {
+          if (err) {
+            res.json({
+              status:'1',
+              msg: err.message
+            })
+          } else {
+            if (doc) {
+              let result = [];
+              doc.forEach(item => {
+                item.exams.forEach(item1=> {
+                  if(item1._paper == id){
+                    result.push({
+                      name: item.userName,
+                      score: item1.score,
+                      date: new Date(item1.date).toLocaleString()
+                    })
+                  }
+                }) 
+              })
+              res.json({
+                status: '0',
+                msg:'success',
+                result:result,
+                count: result.length
+              })
+            } else {
+              res.json({
+                status: '2',
+                msg:'没有该试卷'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status:'1',
+          msg: '请登录'
+        })
+      }
+    }
+  })
+}

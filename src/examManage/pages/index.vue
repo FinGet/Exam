@@ -63,28 +63,7 @@
     data() {
       return {
         banner:require('../../common/img/banner.jpg'),
-        news:[
-          {
-            title: '关于2017最新考试通知关于2017最新考试通知关于2017最新考试通知关于2017最新考试通知',
-            data: '2017/09/01',
-            time: '16:30'
-          },
-          {
-            title: '关于2017最新考试通知',
-            data: '2017/09/01',
-            time: '16:30'
-          },
-          {
-            title: '关于2017最新考试通知',
-            data: '2017/09/01',
-            time: '16:30'
-          },
-          {
-            title: '关于2017最新考试通知',
-            data: '2017/09/01',
-            time: '16:30'
-          }
-        ],
+        news:[],
         exams: []
       }
     },
@@ -94,11 +73,11 @@
       }
     },
     mounted(){
-      this.getPublishExams();
+      this.getAllExams();
     },
     methods:{
-      getPublishExams(){
-        this.$axios.get('/api/getPublishExams').then(response => {
+      getAllExams(){
+        this.$axios.get('/api/getAllExams').then(response => {
           let res = response.data;
           if(res.status == '0') {
             this.news = res.result._papers;

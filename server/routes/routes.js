@@ -28,8 +28,12 @@ module.exports = function(app) {
   app.post('/api/updateQuestion', Teacher.updateQuestion);
   // 修改试卷
   app.post('/api/updatePaper', Teacher.updatePaper);
-  // 获取已发布的考试
-  app.get('/api/getPublishExams',Teacher.getPublishExams);
+  // 获取所有的考试
+  app.get('/api/getAllExams',Teacher.getAllExams);
+  // 获取已考试的试卷
+  app.get('/api/getExams',Teacher.getExams);
+  // 获取学生考试成绩
+  app.get('/api/getScores', Teacher.getScores);
 
 
   /*----------------------学生用户----------------------*/

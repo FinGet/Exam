@@ -61,7 +61,7 @@
             align="center"
           >
             <template scope="scope">
-              <el-button type="info" size="mini" :disabled="!scope.row.examnum>0" @click="seeDetail(scope.row._id)">
+              <el-button type="info" size="mini" :disabled="!scope.row.examnum>0" @click="seeDetail(scope.row._id,scope.row.name)">
                 {{scope.row.examnum>0?'查看考试情况':'没学生参加考试'}}
               </el-button>
             </template>
@@ -106,7 +106,7 @@
        * @return {[type]} [description]
        */
       getMypapers(){
-        this.$axios.get('/api/mypapers',{
+        this.$axios.get('/api/getExams',{
           params:{
             name: this.name,
             pageSize: this.pageSize,
@@ -115,11 +115,7 @@
         }).then(response => {
           let res = response.data;
           if(res.status == 0) {
-            res.result._papers.forEach(item => {
-              if(item.startTime) {
-                this.mypapers.push(item);
-              }
-            })
+            this.mypapers = res.result._papers;
             this.pageTotal = this.mypapers.length;
           }
         }).catch(err => {
@@ -140,8 +136,8 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      seeDetail(id){
-        this.$router.push({path:'/endhome/studentresult',query:{'id':id}})
+      seeDetail(id,name){
+        this.$router.push({path:'/endhome/studentresult',query:{'id':id,'name':name}})
       }
     }
   }

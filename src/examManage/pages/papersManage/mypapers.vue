@@ -56,16 +56,6 @@
             </template>
             </el-table-column>
             <el-table-column
-              label="考试人数"
-              width="100"
-              align="center"
-            >
-              <template scope="scope">
-                <p v-if="scope.row.startTime">{{scope.row.examnum}}</p>
-                <el-tag v-else type="danger">未考</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column
               label="操作"
               align="center"
             >
