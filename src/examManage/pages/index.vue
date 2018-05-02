@@ -38,8 +38,6 @@
                       <span>考试时间:{{new Date(item.startTime).toLocaleString()}}</span>
                     </div>
                     <div class="pull-left">
-                      <span><span class="examnum">{{item.examnum}}人</span> 正在考试</span>
-                      <br>
                       <span>考试时长: <span class="examduration">{{item.time}}分钟</span> </span>
                     </div>
                   </li>
