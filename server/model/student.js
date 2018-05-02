@@ -9,6 +9,7 @@ var StudentSchema = new Schema({
     exams:[{ // 参加的考试
       _paper:{ type: Schema.Types.ObjectId, ref: 'Paper' },
       date: Date,
+      isSure: Boolean,
       score:Number,
       answers: [{
         _question: {type: Schema.Types.ObjectId, ref: 'Question'},

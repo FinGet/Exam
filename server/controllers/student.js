@@ -1,25 +1,25 @@
 const Student = require('../model/student');
 const Paper   = require('../model/papers');
-// var mongoose = require('mongoose');
-// var Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-// var student = new Student({
-//     userId: 12001, // 学号
-//     userName: '张三', // 用户名
-//     passWord: '123321', // 密码
-//     grade: 3, // 年级 1~6 分别代表一年级到六年级
-//     class: 3, // 班级
-//     exams:[{ // 参加的考试
-//       _paper:Schema.Types.ObjectId("5a40a4ef485a584d44764ff1"),
-//       score:100,
-//       date: new Date(),
-//       answers: []
-//     }]
-// })
+var student = new Student({
+    userId: 12001, // 学号
+    userName: '张三', // 用户名
+    passWord: '123321', // 密码
+    grade: 3, // 年级 1~6 分别代表一年级到六年级
+    class: 3, // 班级
+    exams:[{ // 参加的考试
+      _paper:Schema.Types.ObjectId("5a40a4ef485a584d44764ff1"),
+      score:100,
+      date: new Date(),
+      answers: []
+    }]
+})
 
-// exports.init = student.save((err,doc) => {
-//   console.log(err);
-// });
+exports.init = student.save((err,doc) => {
+  console.log(err);
+});
 //注册
 exports.register = function (req,res) {
     let userInfo = req.body.userInfo;
@@ -219,40 +219,83 @@ exports.getExams = function (req,res) {
   })
 };
 // 获取试卷内容
-  exports.getExamInfo = function (req,res) {
-    let userName = req.session.userName;
-    let id = req.param('id');
-    Student.findOne({"userName":userName},(err,doc)=>{
-        if(err) {
-          res.json({
-            status: '1',
-            msg: err.message
-          })
-          } else {
-            if(doc) {
-              Paper.findOne({'_id':id}).populate({path:'_questions'}).exec((err1,doc1) => {
-                if (err1) {
+exports.getExamInfo = function (req,res) {
+  let userName = req.session.userName;
+  let id = req.param('id');
+  Student.findOne({"userName":userName},(err,doc)=>{
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+      } else {
+        if(doc) {
+          Paper.findOne({'_id':id}).populate({path:'_questions'}).exec((err1,doc1) => {
+            if (err1) {
+                res.json({
+                    status:'1',
+                    msg: err.message
+                })
+              } else {
+                if (doc1) {
                     res.json({
-                        status:'1',
-                        msg: err.message
+                        status: '0',
+                        msg:'success',
+                        result:doc1
                     })
                   } else {
-                    if (doc1) {
-                        res.json({
-                            status: '0',
-                            msg:'success',
-                            result:doc1
-                        })
-                      } else {
-                        res.json({
-                            status: '2',
-                            msg:'没有该试卷'
-                        })
-                      }
+                    res.json({
+                        status: '2',
+                        msg:'没有该试卷'
+                    })
                   }
-                })
               }
+            })
           }
-      })
+      }
+  })
 };
+
+// 提交考试
+exports.submitExam = function (req, res) {
+  let userName = req.session.userName;
+  let id = req.body.id;
+  let score = req.body.score;
+  let answers = req.body.answers;
+  Student.findOne({"userName":userName},(err,doc)=>{
+    if(err) {
+        res.json({
+          status: '1',
+          msg: err.message
+        })
+      } else {
+        if(doc) {
+          if(id === ''|| score === ''){
+            res.json({
+              status: '2',
+              msg: '参数错误'
+            })
+            return
+          }
+          doc.exams.push({
+            _paper:id,
+            date: new Date(),
+            isSure: !answers.length > 0,
+            score:score,
+            answers: answers
+          })
+          doc.save();
+          res.json({
+            status: '0',
+            msg: 'success'
+          })
+        } else {
+          res.json({
+            status: '1',
+            msg: '没找到当前用户!'
+          })
+        }
+      }
+  })
+}
 

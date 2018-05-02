@@ -186,19 +186,6 @@
           }
         }, 20)
       },
-      /**
-       * 计时器
-       * @return {[type]} [description]
-       */
-      timeOut(){
-        let timer = setInterval(function(){
-          // if(this.examTime == 0) {
-          //   clearInterval(timer);
-          //   return;
-          // }
-          this.examTime--;
-        },1000)
-      },
       getCode(){
         const TIME_COUNT = this.examTime;
         if (!this.timer) {
@@ -229,6 +216,63 @@
         console.log(this.multiQuestions)
         console.log(this.QAQuestions)
         console.log(this.judgeQuestions)
+        let isAllAnswer = true;
+        this.singleQuestions.some((item) => {
+          isAllAnswer = !item.sanswer == '';
+        })
+        this.multiQuestions.some((item) => {
+          isAllAnswer = !item.sanswer.length == 0;
+        })
+        this.judgeQuestions.some((item) => {
+          isAllAnswer = !item.sanswer == '';
+        })
+        this.QAQuestions.some((item) => {
+          isAllAnswer = !item.sanswer == '';
+        })
+        if(!isAllAnswer){
+          this.$message.warning('考试时间未到，请完成所有题目!');
+        } else {
+          let score = 0; // 得分
+          let answers = [];
+          this.singleQuestions.forEach(item => {
+            if(item.sanswer === item.answer){
+              score += item.score;
+            }
+          });
+          this.multiQuestions.forEach(item => {
+            let answer = item.answer.split(',');
+            if(answer.equals(item.sanswer)){
+              score += item.score;
+            }
+          });
+          this.judgeQuestions.forEach((item) => {
+            if(item.sanswer === item.answer){
+              score += item.score;
+            }
+          })
+          console.log(score);
+          if(this.QAQuestions.length > 0) {
+            this.QAQuestions.forEach(item => {
+              answers.push({
+                _question: item._id,
+                answer: item.sanswer
+              })
+            })
+          }
+          console.log(answers);
+          this.$axios.post('/api/submitExam',{
+            id: this.id,
+            score: score,
+            answers: answers
+          }).then(response => {
+            let res = response.data;
+            if(res.status == '0') {
+
+            }
+          }).catch(err => {
+            this.$message.error('提交失败，请联系老师!');
+          })
+        } 
       }
     }
   }

@@ -47,5 +47,7 @@ module.exports = function(app) {
   app.get('/api/getExams',Student.getExams);
   // 获取试卷信息
   app.get('/api/getExamInfo',Student.getExamInfo);
+  // 提交考试信息
+  app.post('/api/submitExam',Student.submitExam);
 
 }

@@ -26,6 +26,10 @@
               <el-table-column
                 prop="score"
                 label="考试成绩">
+                <template scope="scope">
+                  <el-tag type="warning" v-if="scope.row.score==='等待老师阅卷'">{{scope.row.score}}</el-tag>
+                  <span v-else>{{scope.row.score}}</span>
+                </template>
               </el-table-column>
             </el-table>
             <el-pagination
@@ -234,8 +238,8 @@
             if(item._paper) {
               this.tableData.push({
                 name: item._paper.name,
-                score: item.score,
-                date: new Date(item._paper.startTime).toLocaleString()
+                score: item.isSure?item.score:'等待老师阅卷',
+                date: new Date(item.date).toLocaleString()
               })
             }
           })
