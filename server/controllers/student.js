@@ -146,7 +146,7 @@ exports.getExamLogs = function (req, res){
   let  pageNumber = parseInt(req.param('pageNumber'));
   let skip = (pageNumber-1)*pageSize; // 跳过几条
   let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
-   Student.findOne({"userName":userName}).populate({path:'exams._paper',match:{name: reg},options:{skip:skip,limit:pageSize}})
+  Student.findOne({"userName":userName}).populate({path:'exams._paper',match:{name: reg},options:{skip:skip,limit:pageSize}})
     .exec((err,doc) => {
       if (err) {
         res.json({

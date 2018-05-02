@@ -235,7 +235,7 @@
               this.tableData.push({
                 name: item._paper.name,
                 score: item.score,
-                date: new Date(item.date).toLocaleString()
+                date: new Date(item._paper.startTime).toLocaleString()
               })
             }
           })
