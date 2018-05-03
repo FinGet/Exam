@@ -4,8 +4,8 @@
       <el-col>
         <div class="pull-left search-warpper marginB10">
           <div class="pull-left search-title marginR10">试卷名称:</div>
-          <el-input class=" pull-left input150" v-model="name" @keyup.enter.native="getMypapers"></el-input>
-          <el-button class="pull-left marginL10" type="primary" @click="getMypapers"  icon="search">搜索</el-button>
+          <el-input class=" pull-left input150" v-model="name" @keyup.enter.native="getExams"></el-input>
+          <el-button class="pull-left marginL10" type="primary" @click="getExams"  icon="search">搜索</el-button>
         </div>
       </el-col>
       <el-col>
@@ -59,9 +59,10 @@
           <el-table-column
             label="操作"
             align="center"
+            width="100"
           >
             <template scope="scope">
-              <el-button type="info" size="mini" :disabled="!scope.row.examnum>0" @click="seeDetail(scope.row._id)">
+              <el-button type="info" size="mini" :disabled="!scope.row.examnum>0" @click="seeDetail(scope.row._id,scope.row.name)">
                 阅卷
               </el-button>
             </template>
@@ -98,14 +99,14 @@
       }
     },
     mounted(){
-      this.getCheckPapers()
+      this.getExams()
     },
     methods: {
       /**
        * [getMypapers 加载试卷信息]
        * @return {[type]} [description]
        */
-      getCheckPapers(){
+      getExams(){
         this.$axios.get('/api/getExams',{
           params:{
             name: this.name,
@@ -115,11 +116,7 @@
         }).then(response => {
           let res = response.data;
           if(res.status == 0) {
-            res.result._papers.forEach(item => {
-              if(item.startTime) {
-                this.mypapers.push(item);
-              }
-            })
+            this.mypapers = res.result._papers;
             this.pageTotal = this.mypapers.length;
           }
         }).catch(err => {
@@ -140,8 +137,8 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      seeDetail(id){
-        // this.$router.push({path:'/endhome/studentresult',query:{'id':id}})
+      seeDetail(id,name){
+        this.$router.push({path:'/endhome/checkpaper',query:{'id':id,'name':name}})
       }
     }
   }

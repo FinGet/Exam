@@ -34,6 +34,10 @@ module.exports = function(app) {
   app.get('/api/getExams',Teacher.getExams);
   // 获取学生考试成绩
   app.get('/api/getScores', Teacher.getScores);
+  // 批阅试卷
+  app.get('/api/getCheckPapers', Teacher.getCheckPapers);
+  // 打分提交
+  app.get('/api/submitScore', Teacher.submitScore);
 
 
   /*----------------------学生用户----------------------*/

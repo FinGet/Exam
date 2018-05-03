@@ -745,17 +745,10 @@ exports.getScores = function (req, res) {
 
 // 获取需要阅卷的试卷
 exports.getCheckPapers = function (req, res) {
-  let name = req.param('name'),
-    // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
-    pageSize = parseInt(req.param('pageSize')),
-    pageNumber = parseInt(req.param('pageNumber')),
+  let name = req.param('userName'),
+    date = req.param('date'),
     userName = req.session.userName;
-  let skip = (pageNumber-1)*pageSize; // 跳过几条
-  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
-  let params = {
-    name: reg
-  };
-  Teacher.findOne({'userName':userName}).populate({path:'_papers',match:{name: reg,examnum:{"$gt":0}},options:{skip:skip,limit:pageSize}}).exec(err, doc) => {
+  Teacher.findOne({'userName':userName},(err,doc) => {
     if(err) {
       res.json({
         status: '1',
@@ -763,7 +756,27 @@ exports.getCheckPapers = function (req, res) {
       })
     } else {
       if(doc) {
-        
+        Student.find({"userName": name},{"exams":{$elemMatch:{"date":date}}}).populate({path:'exams.answers._question'}).exec((err1, doc1) => {
+          if(err1) {
+            res.json({
+              status: '1',
+              msg: err1.message
+            })
+          } else {
+            if(doc1) {
+              res.json({
+                status: '0',
+                result: doc1,
+                msg: 'success'
+              })
+            } else {
+              res.json({
+                status: '1',
+                msg: '没找到'
+              })
+            }
+          }
+        })
       } else {
         res.json({
           status: '1',
@@ -772,4 +785,48 @@ exports.getCheckPapers = function (req, res) {
       }
     }
   })
-}
+};
+
+// 打分提交
+exports.submitScore = function (req, res) {
+  let name = req.param('userName'),
+    date = req.param('date'),
+    score = req.param('score'),
+    userName = req.session.userName;
+  Teacher.findOne({'userName':userName},(err,doc) => {
+    if(err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      })
+    } else {
+      if(doc) {
+        Student.updateOne({"userName":userName,"exams.date":date},{$set:{"exams.$":{"score":score}}},(err1, doc1) => {
+          if(err1) {
+            res.json({
+              status: '1',
+              msg: err1.message
+            })
+          } else {
+            if(doc1) {
+              res.json({
+                status: '0',
+                msg: 'success'
+              })
+            } else {
+              res.json({
+                status: '1',
+                msg: '没找到'
+              })
+            }
+          }
+        })
+      } else {
+        res.json({
+          status: '1',
+          msg: '请登录'
+        })
+      }
+    }
+  })
+};
