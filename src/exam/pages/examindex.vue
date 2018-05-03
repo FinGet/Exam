@@ -70,7 +70,7 @@
          * 初始化页面
          */
         init(){
-          this.$axios.get('/api/getExams',{
+          this.$axios.get('/api/getExamsPaper',{
             params:{
               name : this.name,
               pageNumber: this.pageNumber,

@@ -34,6 +34,9 @@
             align="center"
             label="考试时间"
           >
+            <template scope="scope">
+              {{new Date(scope.row.date).toLocaleString()}}
+            </template>
           </el-table-column>
           <el-table-column
             align="center"
@@ -47,7 +50,7 @@
             width="100"
           >
             <template scope="scope">
-              <el-button type="info" size="mini" @click="checkPaper(scope.row.name,scope.row.date)">
+              <el-button type="info" :disabled="scope.row.isSure" size="mini" @click="checkPaper(scope.row.name,scope.row.date,scope.row.score)">
                 批阅
               </el-button>
             </template>
@@ -103,7 +106,8 @@ export default {
       isNumber: false,
       isMore: false,
       date: '',
-      userName: ''
+      userName: '',
+      curryScore: 0
     }
   },
   mounted(){
@@ -151,13 +155,14 @@ export default {
      * 批阅
      * @return {[type]} [description]
      */
-    checkPaper(name,date){
+    checkPaper(name,date,score){
       this.questions=[];
       this.date = date;
       this.userName = name;
+      this.curryScore = score;
       this.$axios.get('/api/getCheckPapers',{
         params: {
-          date: new Date(date),
+          date: date,
           userName : name 
         }
       }).then(response => {
@@ -178,7 +183,7 @@ export default {
      * 提交
      */
     submit(){
-      console.log(this.questions);
+      // console.log(this.questions);
       let score = 0;
       this.questions.forEach(item => {
         if(!item.score) {
@@ -192,12 +197,22 @@ export default {
         this.$message.error('请输入正确的分数!')
         return;
       }
-      console.log(score);
+      // console.log(score);
       this.$axios.get('/api/submitScore',{
         params:{
           userName: this.userName,
-          date: new Date(this.date),
-          score: score
+          date: this.date,
+          score: score + this.curryScore
+        }
+      }).then(response => {
+        let res = response.data;
+        if(res.status == '0') {
+          this.dialogVisible = false;
+          this.date = '';
+          this.userName = '';
+          this.curryScore = 0;
+          this.$message.success('提交成功!');
+          this.getScores();
         }
       })
     },

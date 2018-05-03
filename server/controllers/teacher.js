@@ -697,7 +697,6 @@ exports.getScores = function (req, res) {
       })
     } else {
       if(doc) {
-        console.log(id);
         Student.find({"userName": reg}).skip(skip).limit(pageSize)
         .exec((err,doc) => {
           if (err) {
@@ -714,7 +713,8 @@ exports.getScores = function (req, res) {
                     result.push({
                       name: item.userName,
                       score: item1.score,
-                      date: new Date(item1.date).toLocaleString()
+                      isSure: item1.isSure,
+                      date: item1.date
                     })
                   }
                 }) 
@@ -791,7 +791,7 @@ exports.getCheckPapers = function (req, res) {
 exports.submitScore = function (req, res) {
   let name = req.param('userName'),
     date = req.param('date'),
-    score = req.param('score'),
+    score = req.param('score') - 0,
     userName = req.session.userName;
   Teacher.findOne({'userName':userName},(err,doc) => {
     if(err) {
@@ -801,22 +801,22 @@ exports.submitScore = function (req, res) {
       })
     } else {
       if(doc) {
-        Student.updateOne({"userName":userName,"exams.date":date},{$set:{"exams.$":{"score":score}}},(err1, doc1) => {
+        Student.update({"userName":name,"exams.date":date},{$set:{"exams.$.score":score,"exams.$.isSure":true}},(err1, doc1) => {
           if(err1) {
             res.json({
-              status: '1',
+              status:'1',
               msg: err1.message
             })
           } else {
             if(doc1) {
               res.json({
-                status: '0',
+                status:'0',
                 msg: 'success'
               })
             } else {
               res.json({
-                status: '1',
-                msg: '没找到'
+                status:'1',
+                msg: '报存失败'
               })
             }
           }

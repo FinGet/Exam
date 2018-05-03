@@ -30,10 +30,12 @@
             align="center">
           </el-table-column>
           <el-table-column
-            prop="date"
             align="center"
             label="考试时间"
           >
+            <template scope="scope">
+              {{new Date(scope.row.date).toLocaleString()}}
+            </template>
           </el-table-column>
           <el-table-column
             align="center"

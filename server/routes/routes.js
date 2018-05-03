@@ -52,7 +52,7 @@ module.exports = function(app) {
   // 获取个人信息
   app.get('/api/studentinfo', Student.getInfo);
   // 获取考试信息
-  app.get('/api/getExams',Student.getExams);
+  app.get('/api/getExamsPaper',Student.getExams);
   // 获取试卷信息
   app.get('/api/getExamInfo',Student.getExamInfo);
   // 提交考试信息
