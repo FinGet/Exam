@@ -5,7 +5,7 @@
       <el-col :span="20" :offset="2" class="box">
         <el-row>
           <el-col :span="7" class="search">
-            <el-input v-model="name" placeholder="请输入试卷名"></el-input>
+            <el-input v-model="name" placeholder="请输入试卷名" @keyup.enter.native="search"></el-input>
           </el-col>
           <el-col :span="3" class="search">
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
@@ -13,14 +13,14 @@
         </el-row>
         <el-row>
           <el-col :span="7" v-for="item in exams" :key="item.id" class="box-item marginB20">
-            <el-card :body-style="{ padding: '0px',cursor:'pointer'}">
+            <el-card :body-style="{ padding: '0px',cursor:'pointer'}" v-if="(nowTime - new Date(item.startTime))/(1000*60) < item.time">
               <div style="padding: 14px;">
                 <p>{{item.name}}</p>
                 <p class="time">考试时间: {{ new Date(item.startTime).toLocaleString()}}</p>
                 <p>考试时长: {{item.time}} 分钟</p>
                 <p>总分: {{item.totalPoints}} 分</p>
                 <!--<p>{{(nowTime - new Date(item.startTime))/(1000*60)}}</p>-->
-                <!--<p v-if="(nowTime - new Date(item.startTime))/(1000*60) > 60" class="over">考试时间已过</p>-->
+                <!-- <p v-if="(nowTime - new Date(item.startTime))/(1000*60) > 60" class="over">考试时间已过</p> -->
                 <el-button type="text" @click="goToExam(item._id)" class="pull-right" :disabled="item._questions.length == 0">参加考试</el-button>
               </div>
             </el-card>

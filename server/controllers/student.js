@@ -195,10 +195,18 @@ exports.getExams = function (req,res) {
             })
           } else {
             if(doc1){
+              let nowTime = new Date();
+              let result = [];
+              // 查找还在考试时间内的考试
+              doc1.forEach(item => {
+                if((nowTime - new Date(item.startTime))/(1000*60) < item.time){
+                  result.push(item);
+                }
+              })
               res.json({
                 status: '0',
-                result: doc1,
-                total: doc1.length,
+                result: result,
+                total: result.length,
                 msg: 'success'
               })
             } else {
