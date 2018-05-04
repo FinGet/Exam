@@ -274,7 +274,8 @@
           this.$axios.post('/api/submitExam',{
             id: this.id,
             score: score,
-            answers: answers
+            answers: answers,
+            startTime: this.startTime
           }).then(response => {
             let res = response.data;
             if(res.status == '0') {

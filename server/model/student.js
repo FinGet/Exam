@@ -11,6 +11,7 @@ var StudentSchema = new Schema({
       date: Date,
       isSure: Boolean,
       score:Number,
+      startTime: Date,
       answers: [{
         _question: {type: Schema.Types.ObjectId, ref: 'Question'},
         answer: String

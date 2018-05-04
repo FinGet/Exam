@@ -294,6 +294,7 @@ exports.submitExam = function (req, res) {
   let userName = req.session.userName;
   let id = req.body.id;
   let score = req.body.score;
+  let startTime = req.body.startTime;
   let answers = req.body.answers;
   Student.findOne({"userName":userName},(err,doc)=>{
     if(err) {
@@ -315,7 +316,8 @@ exports.submitExam = function (req, res) {
             date: new Date(),
             isSure: !answers.length > 0,
             score:score,
-            answers: answers
+            answers: answers,
+            startTime: startTime
           })
           doc.save();
           Paper.findOne({'_id':id},(err1,doc1) => {
