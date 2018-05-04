@@ -47,6 +47,8 @@ module.exports = function(app) {
   app.post('/api/studentlogin', Student.signup);
   // 学生登出
   app.post('/api/studentlogout', Student.signout);
+  // 修改信息
+  app.post('/api/updateStudent', Student.updateStudent);
   // 获取考试记录
   app.get('/api/getexamlogs', Student.getExamLogs);
   // 获取个人信息
