@@ -21,7 +21,7 @@
                 <p>总分: {{item.totalPoints}} 分</p>
                 <!--<p>{{(nowTime - new Date(item.startTime))/(1000*60)}}</p>-->
                 <!-- <p v-if="(nowTime - new Date(item.startTime))/(1000*60) > 60" class="over">考试时间已过</p> -->
-                <el-button type="text" @click="goToExam(item._id)" class="pull-right" :disabled="item._questions.length == 0">参加考试</el-button>
+                <el-button type="text" @click="goToExam(item._id)" class="pull-right" :disabled="item._questions.length == 0 || judgeTime(item)">参加考试</el-button>
               </div>
             </el-card>
           </el-col>
@@ -54,7 +54,8 @@
           name: '',
           pageNumber: 1,
           pageSize:12,
-          total: 0
+          total: 0,
+          examLogs: []
         }
       },
       computed:{
@@ -64,6 +65,7 @@
       },
       mounted(){
         this.init();
+        this.getExamLogs();
       },
       methods: {
         /**
@@ -107,8 +109,35 @@
          */
         goToExam(id){
           this.$router.push({name:'ForntExam',params:{id:id}});
+        },
+        /**
+       * 获取考试记录
+       */
+        getExamLogs(){
+          this.$axios.get('/api/getexamlogs',{
+            params:{
+              name: '',
+              pageNumber: 1,
+              pageSize: 10000,
+            }
+          }).then(response => {
+            let res = response.data;
+            this.examLogs = res.result.exams || [];
+          })
+        },
+        judgeTime(paper){
+          if(this.examLogs.length > 0){
+            this.examLogs.forEach(item => {
+              if(item._paper._id == paper._id && item._paper.startTime == paper.startTime){
+                console.log(1);
+                return true;
+              }
+            })
+          }
+          
         }
       }
+      
     }
 </script>
 
