@@ -25,10 +25,10 @@ exports.register = function (req,res) {
     let userInfo = req.body.userInfo;
     Student.findOne(userInfo,(err,doc) => {
       if(err) {
-        res.json({
-          status:'1',
-          msg:err.message
-        })
+          res.json({
+            status:'1',
+            msg:err.message
+          })
         } else {
           if(doc) {
             res.json({
@@ -144,9 +144,9 @@ exports.getExamLogs = function (req, res){
     // 通过req.param()取到的值都是字符串，而limit()需要一个数字作为参数
   let  pageSize = parseInt(req.param('pageSize'));
   let  pageNumber = parseInt(req.param('pageNumber'));
-  let skip = (pageNumber-1)*pageSize; // 跳过几条
-  let reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
-  Student.findOne({"userName":userName}).populate({path:'exams._paper',match:{name: reg},options:{skip:skip,limit:pageSize}})
+  let  skip = (pageNumber-1)*pageSize; // 跳过几条
+  let  reg = new RegExp(name,'i'); // 在nodejs中，必须要使用RegExp，来构建正则表达式对象。
+  Student.findOne({"userName":userName},{"exams":{$slice:[skip,pageSize]}}).populate({path:'exams._paper',match:{name: reg}})
     .exec((err,doc) => {
       if (err) {
         res.json({
@@ -159,7 +159,7 @@ exports.getExamLogs = function (req, res){
             status: '0',
             msg:'success',
             result:doc,
-            // count: doc._papers.length
+            count: doc.exams.length?doc.exams.length:0
           })
         } else {
           res.json({

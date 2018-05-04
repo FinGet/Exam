@@ -232,17 +232,20 @@
           }
         }).then(response => {
           let res = response.data;
-          let exams = res.result.exams;
-          this.total = res.total;
-          exams.forEach(item => {
-            if(item._paper) {
-              this.tableData.push({
-                name: item._paper.name,
-                score: item.isSure?item.score:'等待老师阅卷',
-                date: new Date(item.date).toLocaleString()
-              })
-            }
-          })
+          let exams = res.result.exams || [];
+          this.total = res.count;
+          console.log(exams);
+          if(exams&&exams.length>0){
+            exams.forEach(item => {
+              if(item._paper) {
+                this.tableData.push({
+                  name: item._paper.name,
+                  score: item.isSure?item.score:'等待老师阅卷',
+                  date: new Date(item.date).toLocaleString()
+                })
+              }
+            })
+          }
         })
       }
     }
