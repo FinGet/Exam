@@ -97,6 +97,8 @@
           time:'',
           totalPoints:''
         },
+        startTime:'',
+        nowTime: '',
         examTime: '',
         timer: null,
         singleQuestions:[],
@@ -120,7 +122,17 @@
         return  `${hour}小时${mm}分钟${ss}秒`;
       }
     },
+    watch: {
+      time(curVal, oldVal) {
+        if(curVal == "小时分钟秒"){
+          this.$message.error('考试时间到，强制提交!');
+          let timeout = true;
+          this.submit(timeout);
+        }
+      }
+    },
     mounted(){
+      this.nowTime = new Date();
       this.id = this.$route.params.id;
       // this.startTime = new Date();
       this.init();
@@ -148,7 +160,12 @@
               for(let key in this.paperData) {
                   this.paperData[key] = res.result[key];
               }
-              this.examTime = this.paperData.time*60 ;
+              this.startTime = res.result.startTime;
+              this.examTime = this.paperData.time*60 - ((this.nowTime - new Date(this.startTime))/1000);
+              if(this.examTime <= 0){
+                this.$message.error('考试时间已过!');
+                this.$router.go(-1);
+              }
               this.getCode();
               // this.timeOut();
               res.result._questions.forEach(item => {
@@ -211,7 +228,7 @@
        * 提交试卷
        * @return {[type]} [description]
        */
-      submit(){
+      submit(timeout){
         let isAllAnswer = true;
         this.singleQuestions.some((item) => {
           isAllAnswer = !item.sanswer == '';
@@ -225,7 +242,7 @@
         this.QAQuestions.some((item) => {
           isAllAnswer = !item.sanswer == '';
         })
-        if(!isAllAnswer){
+        if(!isAllAnswer && !timeout){
           this.$message.warning('考试时间未到，请完成所有题目!');
         } else {
           let score = 0; // 得分
