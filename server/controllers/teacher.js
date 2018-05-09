@@ -2,7 +2,13 @@ const Teacher = require('../model/teacher');
 const Paper   = require('../model/papers');
 const Question = require('../model/question');
 const Student = require('../model/student');
+const crypto = require('crypto');
 
+
+let mdHash = function(data){
+  const hash = crypto.createHash('md5');
+  return hash.update(data).digest('hex');
+}
 
 // var teacher = new Teacher();
 // var paper = new Paper();
@@ -56,6 +62,7 @@ const Student = require('../model/student');
 // 注册
 exports.register = function (req,res) {
   let userInfo = req.body.userInfo;
+  userInfo.passWord = mdHash(userInfo.passWord);
   Teacher.findOne(userInfo,(err,doc) => {
     if(err) {
       res.json({
@@ -98,7 +105,7 @@ exports.register = function (req,res) {
 exports.signup = function(req, res) {
   var param = {
     userName: req.body.userName,
-    passWord: req.body.userPwd
+    passWord: mdHash(req.body.userPwd)
   }
   // console.log(param);
   Teacher.findOne(param, (err,doc)=>{

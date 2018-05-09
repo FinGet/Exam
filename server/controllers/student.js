@@ -1,5 +1,12 @@
 const Student = require('../model/student');
 const Paper   = require('../model/papers');
+const crypto = require('crypto');
+
+let mdHash = function(data){
+  const hash = crypto.createHash('md5');
+  return hash.update(data).digest('hex');
+}
+
 // var mongoose = require('mongoose');
 // var Schema = mongoose.Schema;
 
@@ -23,6 +30,7 @@ const Paper   = require('../model/papers');
 //注册
 exports.register = function (req,res) {
     let userInfo = req.body.userInfo;
+    userInfo.passWord = mdHash(userInfo.passWord);
     Student.findOne(userInfo,(err,doc) => {
       if(err) {
           res.json({
@@ -65,8 +73,9 @@ exports.register = function (req,res) {
 exports.signup = function(req, res) {
   var param = {
     userName: req.body.userName,
-    passWord: req.body.userPwd
+    passWord: mdHash(req.body.userPwd)
   }
+  // console.log(param.passWord);
   // console.log(param);
   Student.findOne(param, (err,doc)=>{
     // console.log(err) When the findOne query doesn't find at least one matching document,
