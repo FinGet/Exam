@@ -137,11 +137,16 @@ export default {
         let res = response.data;
         if(res.status == '0') {
           // console.log(res.result);
+          if(res.result.length <=0) {
+            this.$router.go(-1);
+            this.$message.info('没有问答题，不需要阅卷！');
+          }
           this.studentScore = res.result;
           this.studentScore.forEach(item => {
             item.examName = this.examName;
           })
           this.pageTotal = res.count;
+          
         }
       })
     },
@@ -216,6 +221,9 @@ export default {
         }
       })
     },
+    /**
+     * 输入判断
+     */
     checkType(value,score){
       let reg = /^[0-9]+$/ig;
       // console.log(reg.test(value));
