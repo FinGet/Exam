@@ -15,7 +15,7 @@
                       <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
                         <span class="title">{{item.name}}</span>
                       </el-tooltip>
-                      <span class="data marginL10">{{ new Date(item.startTime).toLocaleString()}}</span>
+                      <span class="data marginL10">{{ item.startTime?new Date(item.startTime).toLocaleString():'还未开考'}}</span>
                       <span class="time">{{item.time}} 分钟</span>
                     </router-link>
                   </li>
