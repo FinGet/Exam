@@ -322,7 +322,8 @@ export default {
           this.$message.error('请正确输入试卷信息!')
           return;
       }
-      this.form._questions.forEach(item => {
+      var paperForm = JSON.parse(JSON.stringify(this.form));
+      paperForm._questions.forEach(item => {
          var arr = [];
          item.selection.forEach(item1 => {
            arr.push(item1.optionContent);
@@ -336,7 +337,7 @@ export default {
           cancelButtonText: '取消',
         }).then(() => {
           this.$axios.post('/api/savePaper',{
-            paperForm: this.form
+            paperForm: paperForm
           }).then((response) => {
             this.form = { // 试卷信息
               name: '',
@@ -362,7 +363,7 @@ export default {
           cancelButtonText: '取消',
         }).then(() => {
           this.$axios.post('/api/updatePaper',{
-            params: this.form
+            params: paperForm
           }).then(response => {
             let res = response.data;
             if(res.status == '0') {
