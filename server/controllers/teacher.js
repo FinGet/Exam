@@ -161,7 +161,10 @@ exports.getUserInfo = function (req, res) {
       if(doc){
         res.json({
           status:'0',
-          result:doc,
+          result:{
+            userName: doc.userName,
+            userId: doc.userId
+          },
           msg:'success'
         })
       } else {
@@ -177,6 +180,7 @@ exports.getUserInfo = function (req, res) {
 exports.updateUser = function (req, res) {
   let userName = req.session.userName;
   let userInfo = req.body.userInfo;
+  userInfo.passWord = mdHash(userInfo.passWord);
   Teacher.update({'userName':userName},userInfo,(err,doc)=>{
     if(err) {
       res.json({

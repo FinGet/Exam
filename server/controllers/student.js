@@ -136,7 +136,12 @@ exports.getInfo = function (req, res) {
       res.json({
         status: '0',
         msg:'success',
-        result:doc
+        result:{
+          userName: doc.userName,
+          userId: doc.userId,
+          grade: doc.grade,
+          class: doc.class
+        }
       })
     } else {
       res.json({
@@ -150,6 +155,7 @@ exports.getInfo = function (req, res) {
 exports.updateStudent = function (req, res) {
   let userName = req.session.userName;
   let userInfo = req.body.userInfo;
+  userInfo.passWord = mdHash(userInfo.passWord);
   Student.update({'userName':userName},userInfo,(err,doc)=>{
     if(err) {
       res.json({

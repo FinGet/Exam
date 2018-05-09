@@ -9,7 +9,7 @@
           <el-form-item label="教师姓名" prop="userName">
             <el-input v-model="userInfo.userName"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="passWord">
+          <el-form-item label="新密码" prop="passWord">
             <el-input v-model="userInfo.passWord"></el-input>
           </el-form-item>
           <el-form-item>
@@ -61,6 +61,7 @@
           if(res.status == '0') {
             this.userInfo = res.result;
             this.userInfo.userId += '';
+            this.userInfo.passWord = '';
           }
         })
       },

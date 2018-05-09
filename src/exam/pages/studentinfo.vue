@@ -72,7 +72,7 @@
                     <el-form-item label="班级" prop="class">
                       <el-input v-model="ruleForm.class"></el-input>
                     </el-form-item>
-                    <el-form-item label="账号密码" prop="passWord">
+                    <el-form-item label="新密码" prop="passWord">
                       <el-input v-model="ruleForm.passWord"></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -152,6 +152,7 @@
             this.ruleForm.class+='';
             this.ruleForm.grade+='';
             this.ruleForm.userId+='';
+            this.ruleForm.passWord = '';
 //            console.log(this.ruleForm);
           }
         })
