@@ -126,8 +126,8 @@
       time(curVal, oldVal) {
         if(curVal == "小时分钟秒"){
           this.$message.error('考试时间到，强制提交!');
-          let timeout = true;
-          this.submit(timeout);
+          let isTimeout = true;
+          this.submit(isTimeout);
         }
       }
     },
@@ -228,7 +228,7 @@
        * 提交试卷
        * @return {[type]} [description]
        */
-      submit(timeout){
+      submit(isTimeout){
         let isAllAnswer = true;
         this.singleQuestions.some((item) => {
           isAllAnswer = !item.sanswer == '';
@@ -242,7 +242,7 @@
         this.QAQuestions.some((item) => {
           isAllAnswer = !item.sanswer == '';
         })
-        if(!isAllAnswer && !timeout){
+        if(!isAllAnswer && !isTimeout){
           this.$message.warning('考试时间未到，请完成所有题目!');
         } else {
           let score = 0; // 得分
@@ -271,21 +271,41 @@
               })
             })
           }
-          this.$axios.post('/api/submitExam',{
-            id: this.id,
-            score: score,
-            answers: answers,
-            startTime: this.startTime
-          }).then(response => {
-            let res = response.data;
-            if(res.status == '0') {
-              this.$message.success('提交成功!');
-              this.$router.push({path:'frontstudentinfo'});
-            }
-          }).catch(err => {
-            this.$message.error('提交失败，请联系老师!');
-          })
+          if(isTimeout === true){
+            this.submitApi(score,answers);
+          } else {
+            this.$confirm('是否提前交卷？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(() => {
+              this.submitApi(score,answers);
+            }).catch(()=>{
+              this.$message({
+                type: 'info',
+                message: '已取消操作'
+              });
+            })
+          } 
         } 
+      },
+      /**@argument score answers
+       * 提交试卷api请求
+       */
+      submitApi(score,answers){
+        this.$axios.post('/api/submitExam',{
+          id: this.id,
+          score: score,
+          answers: answers,
+          startTime: this.startTime
+        }).then(response => {
+          let res = response.data;
+          if(res.status == '0') {
+            this.$message.success('提交成功!');
+            this.$router.push({path:'frontstudentinfo'});
+          }
+        }).catch(err => {
+          this.$message.error('提交失败，请联系老师!');
+        })
       }
     }
   }
