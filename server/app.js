@@ -45,7 +45,7 @@ app.use(cookieParser()); // 加载解析cookie的中间件
 app.use(sessionParser({
 	secret: '12345', // 建议使用 128 个字符的随机字符串
   name: 'userInfo',
-  cookie: { maxAge: 1800000 },
+  cookie: { maxAge: 3600000 },
   resave:true,
   rolling:true,
   saveUninitialized:false
