@@ -13,7 +13,7 @@
           class="table"
           ref="multipleTable"
           :data="mypapers"
-          border
+          border 
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange">
