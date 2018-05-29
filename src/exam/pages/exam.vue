@@ -126,8 +126,8 @@
       time(curVal, oldVal) {
         if(curVal == "小时分钟秒"){
           this.$message.error('考试时间到，强制提交!');
-          let isTimeout = true;
-          this.submit(isTimeout);
+          let isMust = true;
+          this.submit(isMust);
         }
       }
     },
@@ -228,21 +228,31 @@
        * 提交试卷
        * @return {[type]} [description]
        */
-      submit(isTimeout){
+      submit(isMust){
         let isAllAnswer = true;
+        let single = true;
+        let mutil = true;
+        let judge = true;
+        let QA = true;
         this.singleQuestions.some((item) => {
-          isAllAnswer = !item.sanswer == '';
+          single = !item.sanswer == '';
         })
         this.multiQuestions.some((item) => {
-          isAllAnswer = !item.sanswer.length == 0;
+          mutil = !item.sanswer.length == 0;
         })
         this.judgeQuestions.some((item) => {
-          isAllAnswer = !item.sanswer == '';
+          judge = !item.sanswer == '';
         })
         this.QAQuestions.some((item) => {
-          isAllAnswer = !item.sanswer == '';
+          QA = !item.sanswer == '';
         })
-        if(!isAllAnswer && !isTimeout){
+        if(single&&mutil&&judge&&QA){
+          isAllAnswer = true;
+        } else {
+          isAllAnswer = false;
+        }
+        console.log(isAllAnswer,isMust);
+        if(isAllAnswer === false && isMust !== true){
           this.$message.warning('考试时间未到，请完成所有题目!');
         } else {
           let score = 0; // 得分
@@ -271,7 +281,7 @@
               })
             })
           }
-          if(isTimeout === true){
+          if(isMust === true){
             this.submitApi(score,answers);
           } else {
             this.$confirm('是否提前交卷？', '提示', {
